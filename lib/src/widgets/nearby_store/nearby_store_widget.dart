@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -5,14 +7,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 
+import '../../features/get_location/domain/get_location_domain.dart';
 import '../../features/nearby_stores/domain/stores_repository.dart';
 import '../categories/categories_widget.dart';
 
-class NearbyStoreMap extends HookWidget {
+class NearbyStoreMap extends StatefulHookConsumerWidget {
   NearbyStoreMap({
     super.key,
-    required this.lat,
-    required this.long,
+    required this.initialLocation,
     required this.markers,
     required this.message,
     required this.categoryName,
@@ -21,19 +23,33 @@ class NearbyStoreMap extends HookWidget {
     required this.isBottomSheetOpen,
     required this.onCameraMove,
     required this.onMapCreated,
+    required this.onCameraIdle,
   });
 
-  final double? lat;
-  final double? long;
+  final LatLng initialLocation;
   final Set<Marker> markers;
   final int dataLength;
   final String message;
   final List categoryName;
   final Set<Polygon>? polygons;
   final isBottomSheetOpen;
+  final Function()? onCameraIdle;
   final Function(CameraPosition)? onCameraMove;
+
   final Function(GoogleMapController)? onMapCreated;
 
+  @override
+  ConsumerState<NearbyStoreMap> createState() => _NearbyStoryMapState();
+}
+
+class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
+  GoogleMapController? mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() {
+      mapController = controller;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,23 +59,32 @@ class NearbyStoreMap extends HookWidget {
     final isCategoryClicked = useState(false);
     final isSubCategoryClicked = useState(false);
     final subCatIndex = useState(0);
-    final subCatsCloned = categoryName.isEmpty
+    final subCatsCloned = widget.categoryName.isEmpty
         ? useState([])
-        : useState([...categoryName[category.value].sub_categories]);
-
+        : useState([...widget.categoryName[category.value].sub_categories]);
+    final userLocation = useState(LatLng(0.0, 0.0));
+    final isPicking = ref.watch(isPickingLocationProvider);
+    final isSelectLocation = ref.watch(isLocationSelectedProvider);
+    ref.listen(
+        getUserLocationTempProvider,
+        (oldValue, newValue) => mapController?.animateCamera(
+            CameraUpdate.newCameraPosition(
+                CameraPosition(target: newValue, zoom: 14.74))));
     return SafeArea(
       child: Stack(
         children: [
           GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(lat ?? 0.0, long ?? 0.0),
+              target: widget.initialLocation,
               zoom: 14.4746,
             ),
-            polygons: polygons ?? {},
+            polygons: widget.polygons ?? {},
             mapType: MapType.normal,
-            markers: markers,
-            onCameraMove: onCameraMove,
-            onMapCreated: onMapCreated,
+            markers: widget.markers,
+            onCameraMove: (position) {
+              userLocation.value = position.target;
+            },
+            onMapCreated: (controller) => _onMapCreated(controller),
             myLocationEnabled: false,
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
@@ -67,10 +92,18 @@ class NearbyStoreMap extends HookWidget {
             rotateGesturesEnabled: true,
             zoomControlsEnabled: false,
           ),
-          Align(
-            alignment: Alignment.center,
-            child: CircleAvatar(
-              child: Icon(Icons.approval),
+          Visibility(
+            visible: isPicking,
+            child: Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: Icon(
+                  Icons.location_on,
+                  size: 50,
+                  color: Colors.red,
+                ),
+              ),
             ),
           ),
           Padding(
@@ -78,47 +111,53 @@ class NearbyStoreMap extends HookWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(Icons.face),
-                        SizedBox(width: 10),
-                        Consumer(
-                          builder: (context, ref, child) => DropdownButton(
-                            underline: SizedBox(),
-                            value: method.value,
-                            items: [
-                              DropdownMenuItem(
-                                child: Text("Pickup"),
-                                value: "pickup",
-                              ),
-                              DropdownMenuItem(
-                                child: Text("Delivery"),
-                                value: "delivery",
-                              ),
-                            ],
-                            onChanged: (v) {
-                              ref
-                                  .read(methodProvider.notifier)
-                                  .update((state) => v.toString());
-                              method.value = v.toString();
-                              ref
-                                  .refresh(getNearbyStoresProvider(
-                                      context: context,
-                                      isBottomSheetOpen: isBottomSheetOpen))
-                                  .value;
-                              ;
-                            },
+                Visibility(
+                  visible: !isPicking,
+                  child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 25),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(Icons.face),
+                          SizedBox(width: 10),
+                          Consumer(
+                            builder: (context, ref, child) => DropdownButton(
+                              underline: SizedBox(),
+                              value: method.value,
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text("Pickup"),
+                                  value: "pickup",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("Delivery"),
+                                  value: "delivery",
+                                ),
+                              ],
+                              onChanged: (v) {
+                                ref
+                                    .read(methodProvider.notifier)
+                                    .update((state) => v.toString());
+                                method.value = v.toString();
+                                ref
+                                    .refresh(getNearbyStoresProvider(
+                                        context: context,
+                                        isBottomSheetOpen:
+                                            widget.isBottomSheetOpen,
+                                        userLocation: userLocation))
+                                    .value;
+                                ;
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
+                        ],
+                      )),
+                ),
                 SizedBox(width: 100),
                 IconButton(
                     onPressed: () {},
@@ -146,12 +185,10 @@ class NearbyStoreMap extends HookWidget {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       showModalBottomSheet(
-                          showDragHandle: true,
-                          enableDrag: true,
-                          isScrollControlled: true,
                           context: context,
+                          isScrollControlled: true,
                           builder: (context) => SearchWidget());
                     },
                     icon: Icon(Icons.search)),
@@ -174,7 +211,7 @@ class NearbyStoreMap extends HookWidget {
                 children: [
                   Icon(Icons.download),
                   SizedBox(width: 3),
-                  Text(message),
+                  Text(widget.message),
                   SizedBox(width: 10),
                   Icon(Icons.favorite_border)
                 ],
@@ -188,13 +225,13 @@ class NearbyStoreMap extends HookWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 10),
-                  child: categoryName.isNotEmpty
+                  child: widget.categoryName.isNotEmpty
                       ? CategoriesWidget(
                           isClicked: isClicked,
                           isSubCategoryClicked: isSubCategoryClicked,
-                          dataLength: dataLength,
+                          dataLength: widget.dataLength,
                           category: category,
-                          categoryName: categoryName)
+                          categoryName: widget.categoryName)
                       : Container(),
                 ),
                 Row(
@@ -206,13 +243,14 @@ class NearbyStoreMap extends HookWidget {
                       child: Flexible(
                         child: Visibility(
                             visible: isClicked.value,
-                            child: categoryName.isNotEmpty
+                            child: widget.categoryName.isNotEmpty
                                 ? Container(
                                     height: 110,
                                     width:
                                         MediaQuery.of(context).size.width * 0.5,
                                     child: ListView.separated(
-                                        itemCount: categoryName[category.value]
+                                        itemCount: widget
+                                            .categoryName[category.value]
                                             .sub_categories
                                             .length,
                                         scrollDirection: Axis.horizontal,
@@ -231,16 +269,18 @@ class NearbyStoreMap extends HookWidget {
 
                                               if (isSubCategoryClicked.value) {
                                                 subCatsCloned.value = [
-                                                  ...categoryName[
+                                                  ...widget
+                                                      .categoryName[
                                                           category.value]
                                                       .sub_categories
                                                 ];
                                                 subCatsCloned.value.removeAt(
                                                     subCatIndex.value);
-                                                subCatsCloned.value.add(
-                                                    categoryName[category.value]
-                                                            .sub_categories[
-                                                        subCatIndex.value]);
+                                                subCatsCloned.value.add(widget
+                                                        .categoryName[
+                                                            category.value]
+                                                        .sub_categories[
+                                                    subCatIndex.value]);
                                               }
                                             },
                                             child: AnimatedAlign(
@@ -276,7 +316,8 @@ class NearbyStoreMap extends HookWidget {
                                                                             index]
                                                                         .image ??
                                                                     ""
-                                                                : categoryName[category
+                                                                : widget
+                                                                        .categoryName[category
                                                                             .value]
                                                                         .sub_categories[
                                                                             index]
@@ -319,7 +360,8 @@ class NearbyStoreMap extends HookWidget {
                                                             ? subCatsCloned
                                                                 .value[index]
                                                                 .name["en"]
-                                                            : categoryName[
+                                                            : widget
+                                                                .categoryName[
                                                                     category
                                                                         .value]
                                                                 .sub_categories[
@@ -333,6 +375,35 @@ class NearbyStoreMap extends HookWidget {
                                         }),
                                   )
                                 : Container()),
+                      ),
+                    ),
+                    Visibility(
+                      visible: isPicking,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: 50,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                ref.watch(getUserLocation.notifier).update(
+                                    (state) =>
+                                        ref.watch(getUserLocationTempProvider));
+                                ref
+                                    .read(isPickingLocationProvider.notifier)
+                                    .update((state) => false);
+                                await ref
+                                    .refresh(getNearbyStoresProvider(
+                                        context: context,
+                                        isBottomSheetOpen:
+                                            widget.isBottomSheetOpen,
+                                        userLocation: userLocation))
+                                    .value;
+                                // await goToLocation();
+                                print("User Location: ${userLocation.value}");
+                              },
+                              child: Text("Confirm Location")),
+                        ),
                       ),
                     ),
                     Flexible(

@@ -7,7 +7,7 @@ part of 'stores_repository.dart';
 // **************************************************************************
 
 String _$getNearbyStoresStreamHash() =>
-    r'da242d59e77ffca2c495e82abe1331217539826a';
+    r'7bcf344ee16e8c62c38b2ad5a8f03b982df36eeb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -45,10 +45,12 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
   GetNearbyStoresStreamProvider call({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
+    required ValueNotifier<LatLng> userLocation,
   }) {
     return GetNearbyStoresStreamProvider(
       context: context,
       isBottomSheetOpen: isBottomSheetOpen,
+      userLocation: userLocation,
     );
   }
 
@@ -59,6 +61,7 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
     return call(
       context: provider.context,
       isBottomSheetOpen: provider.isBottomSheetOpen,
+      userLocation: provider.userLocation,
     );
   }
 
@@ -83,11 +86,13 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
   GetNearbyStoresStreamProvider({
     required this.context,
     required this.isBottomSheetOpen,
+    required this.userLocation,
   }) : super.internal(
           (ref) => getNearbyStoresStream(
             ref,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
+            userLocation: userLocation,
           ),
           from: getNearbyStoresStreamProvider,
           name: r'getNearbyStoresStreamProvider',
@@ -102,12 +107,14 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
+  final ValueNotifier<LatLng> userLocation;
 
   @override
   bool operator ==(Object other) {
     return other is GetNearbyStoresStreamProvider &&
         other.context == context &&
-        other.isBottomSheetOpen == isBottomSheetOpen;
+        other.isBottomSheetOpen == isBottomSheetOpen &&
+        other.userLocation == userLocation;
   }
 
   @override
@@ -115,20 +122,21 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, context.hashCode);
     hash = _SystemHash.combine(hash, isBottomSheetOpen.hashCode);
+    hash = _SystemHash.combine(hash, userLocation.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-String _$getNearbyStoresHash() => r'86d3dd032ddf40cc8e6b6f95c1bee9647c00d9eb';
-typedef GetNearbyStoresRef = AutoDisposeFutureProviderRef<Map<String, dynamic>>;
+String _$getNearbyStoresHash() => r'dffb3020e6c2f5afd1fa8b848d7cfea7d5bffb4b';
+typedef GetNearbyStoresRef = AutoDisposeFutureProviderRef<dynamic>;
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)
 const getNearbyStoresProvider = GetNearbyStoresFamily();
 
 /// See also [getNearbyStores].
-class GetNearbyStoresFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
   /// See also [getNearbyStores].
   const GetNearbyStoresFamily();
 
@@ -136,10 +144,12 @@ class GetNearbyStoresFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   GetNearbyStoresProvider call({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
+    required ValueNotifier<LatLng> userLocation,
   }) {
     return GetNearbyStoresProvider(
       context: context,
       isBottomSheetOpen: isBottomSheetOpen,
+      userLocation: userLocation,
     );
   }
 
@@ -150,6 +160,7 @@ class GetNearbyStoresFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     return call(
       context: provider.context,
       isBottomSheetOpen: provider.isBottomSheetOpen,
+      userLocation: provider.userLocation,
     );
   }
 
@@ -169,17 +180,18 @@ class GetNearbyStoresFamily extends Family<AsyncValue<Map<String, dynamic>>> {
 }
 
 /// See also [getNearbyStores].
-class GetNearbyStoresProvider
-    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [getNearbyStores].
   GetNearbyStoresProvider({
     required this.context,
     required this.isBottomSheetOpen,
+    required this.userLocation,
   }) : super.internal(
           (ref) => getNearbyStores(
             ref,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
+            userLocation: userLocation,
           ),
           from: getNearbyStoresProvider,
           name: r'getNearbyStoresProvider',
@@ -194,12 +206,14 @@ class GetNearbyStoresProvider
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
+  final ValueNotifier<LatLng> userLocation;
 
   @override
   bool operator ==(Object other) {
     return other is GetNearbyStoresProvider &&
         other.context == context &&
-        other.isBottomSheetOpen == isBottomSheetOpen;
+        other.isBottomSheetOpen == isBottomSheetOpen &&
+        other.userLocation == userLocation;
   }
 
   @override
@@ -207,6 +221,7 @@ class GetNearbyStoresProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, context.hashCode);
     hash = _SystemHash.combine(hash, isBottomSheetOpen.hashCode);
+    hash = _SystemHash.combine(hash, userLocation.hashCode);
 
     return _SystemHash.finish(hash);
   }

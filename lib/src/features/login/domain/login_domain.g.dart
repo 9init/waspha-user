@@ -6,7 +6,7 @@ part of 'login_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendLogHash() => r'15fc74c20137bef20f21e0ba9b506d684c2e09c5';
+String _$sendLogHash() => r'25d48523b5b79c462ddee4d6d29ea5d347b445b1';
 
 /// Copied from Dart SDK
 class _SystemHash {

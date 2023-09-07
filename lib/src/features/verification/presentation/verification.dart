@@ -7,6 +7,7 @@ import 'package:waspha/src/features/verification/domain/verify_domain.dart';
 import 'package:waspha/src/widgets/auth_btn/auth_btn.dart';
 import 'package:waspha/src/widgets/auth_container/auth_container.dart';
 
+// ignore: must_be_immutable
 class VerificationScreen extends HookConsumerWidget {
   dynamic fullNumber;
 

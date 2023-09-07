@@ -10,9 +10,9 @@ import '../../../widgets/social_media/social_media.dart';
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({super.key});
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

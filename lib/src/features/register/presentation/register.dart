@@ -11,14 +11,14 @@ import 'package:phone_form_field/phone_form_field.dart';
 class RegisterScreen extends ConsumerWidget {
   RegisterScreen({super.key});
 
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
-  PhoneController mobileController = PhoneController(null);
-  TextEditingController referralController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final PhoneController mobileController = PhoneController(null);
+  final TextEditingController referralController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
