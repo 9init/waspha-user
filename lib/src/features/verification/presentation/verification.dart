@@ -12,13 +12,13 @@ class VerificationScreen extends HookConsumerWidget {
   dynamic fullNumber;
 
   VerificationScreen({super.key, required this.fullNumber});
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  OtpFieldController otpController = OtpFieldController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pinsState = useState('');
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-    OtpFieldController otpController = OtpFieldController();
 
     validateForm() {
       if (_formKey.currentState!.validate()) {
@@ -75,7 +75,22 @@ class VerificationScreen extends HookConsumerWidget {
               SizedBox(
                 height: 20,
               ),
-              AuthButton(onTap: () => validateForm(), text: "Verify")
+              AuthButton(onTap: () => validateForm(), text: "Verify"),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Didn't receive the code?"),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  int userID = ref.watch(userIDProvider);
+                  print("ID: $userID");
+                  ref.watch(resendOTPProvider);
+                },
+                child: Text("Resend OTP"),
+              )
             ],
           ),
         ),

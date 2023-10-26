@@ -7,7 +7,7 @@ part of 'stores_repository.dart';
 // **************************************************************************
 
 String _$getNearbyStoresStreamHash() =>
-    r'7bcf344ee16e8c62c38b2ad5a8f03b982df36eeb';
+    r'b487d72936aa667e58a4b8b1282cad4769cbb319';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
   }
 }
 
-typedef GetNearbyStoresStreamRef = AutoDisposeStreamProviderRef<dynamic>;
+typedef GetNearbyStoresStreamRef = StreamProviderRef<dynamic>;
 
 /// See also [getNearbyStoresStream].
 @ProviderFor(getNearbyStoresStream)
@@ -81,7 +81,7 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [getNearbyStoresStream].
-class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
+class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
   /// See also [getNearbyStoresStream].
   GetNearbyStoresStreamProvider({
     required this.context,
@@ -128,8 +128,8 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
   }
 }
 
-String _$getNearbyStoresHash() => r'dffb3020e6c2f5afd1fa8b848d7cfea7d5bffb4b';
-typedef GetNearbyStoresRef = AutoDisposeFutureProviderRef<dynamic>;
+String _$getNearbyStoresHash() => r'330c313ba6894c79502ff2e5e6a8bcf8eb2834b7';
+typedef GetNearbyStoresRef = FutureProviderRef<dynamic>;
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)
@@ -180,7 +180,7 @@ class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [getNearbyStores].
-class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
+class GetNearbyStoresProvider extends FutureProvider<dynamic> {
   /// See also [getNearbyStores].
   GetNearbyStoresProvider({
     required this.context,
@@ -222,88 +222,6 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
     hash = _SystemHash.combine(hash, context.hashCode);
     hash = _SystemHash.combine(hash, isBottomSheetOpen.hashCode);
     hash = _SystemHash.combine(hash, userLocation.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-String _$imageBytesHash() => r'79daf3e7cba98b4b0ab119b3fd2a62190643f474';
-typedef ImageBytesRef = AutoDisposeFutureProviderRef<BitmapDescriptor>;
-
-/// See also [imageBytes].
-@ProviderFor(imageBytes)
-const imageBytesProvider = ImageBytesFamily();
-
-/// See also [imageBytes].
-class ImageBytesFamily extends Family<AsyncValue<BitmapDescriptor>> {
-  /// See also [imageBytes].
-  const ImageBytesFamily();
-
-  /// See also [imageBytes].
-  ImageBytesProvider call({
-    required dynamic imageURL,
-  }) {
-    return ImageBytesProvider(
-      imageURL: imageURL,
-    );
-  }
-
-  @override
-  ImageBytesProvider getProviderOverride(
-    covariant ImageBytesProvider provider,
-  ) {
-    return call(
-      imageURL: provider.imageURL,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'imageBytesProvider';
-}
-
-/// See also [imageBytes].
-class ImageBytesProvider extends AutoDisposeFutureProvider<BitmapDescriptor> {
-  /// See also [imageBytes].
-  ImageBytesProvider({
-    required this.imageURL,
-  }) : super.internal(
-          (ref) => imageBytes(
-            ref,
-            imageURL: imageURL,
-          ),
-          from: imageBytesProvider,
-          name: r'imageBytesProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$imageBytesHash,
-          dependencies: ImageBytesFamily._dependencies,
-          allTransitiveDependencies:
-              ImageBytesFamily._allTransitiveDependencies,
-        );
-
-  final dynamic imageURL;
-
-  @override
-  bool operator ==(Object other) {
-    return other is ImageBytesProvider && other.imageURL == imageURL;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, imageURL.hashCode);
 
     return _SystemHash.finish(hash);
   }

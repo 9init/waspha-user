@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
@@ -7,8 +8,9 @@ import '../../../widgets/auth_btn/auth_btn.dart';
 import '../../../widgets/auth_container/auth_container.dart';
 import '../../../widgets/custom_field/custom_field.dart';
 import '../../../widgets/social_media/social_media.dart';
+import '../domain/social_service.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -16,11 +18,14 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isRememberBoxChecked = useState(false);
+
     Future validateForm() async {
       if (_formKey.currentState!.validate()) {
         ref.watch(sendLogProvider(
             mobile: mobileController.text,
             password: passwordController.text,
+            keepLogin: isRememberBoxChecked.value,
             context: context));
       }
     }
@@ -39,7 +44,12 @@ class LoginScreen extends ConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            SocialMedia(),
+            SocialMedia(
+              googleOnTap: () =>
+                  ref.watch(googleServiceProvider).signIn(context),
+              facebookOnTap: () {},
+              appleOnTap: () => ref.watch(appleServiceProvider).signIn(),
+            ),
             SizedBox(
               height: 10,
             ),
@@ -57,14 +67,22 @@ class LoginScreen extends ConsumerWidget {
                 text: "Password",
                 isPassword: true),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("Forgot Password?"),
+                  Checkbox(
+                      value: isRememberBoxChecked.value,
+                      onChanged: (value) {
+                        isRememberBoxChecked.value = value!;
+                      }),
+                  Text("Remember me"),
+                  Spacer(),
+                  GestureDetector(
+                      onTap: () => context.push("/forget_password"),
+                      child: Text("Forgot Password?")),
                 ],
               ),
             ),

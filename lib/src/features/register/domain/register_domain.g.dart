@@ -6,7 +6,7 @@ part of 'register_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendRegisterHash() => r'dbcadfd217d86f08209a26bd29193808d95e6315';
+String _$sendRegisterHash() => r'41baa84cfe05de6630518dc635286e59ae6950f1';
 
 /// Copied from Dart SDK
 class _SystemHash {

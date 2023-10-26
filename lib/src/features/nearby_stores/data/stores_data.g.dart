@@ -8,21 +8,24 @@ part of 'stores_data.dart';
 
 _$_Stores _$$_StoresFromJson(Map<String, dynamic> json) => _$_Stores(
       id: json['id'] as int,
-      business_name: Map<String, String>.from(json['business_name'] as Map),
-      ar: json['ar'] as String,
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
+      business_name: (json['business_name'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      ar: json['ar'] as String?,
+      lat: (json['lat'] as num?)?.toDouble(),
+      lng: (json['lng'] as num?)?.toDouble(),
       timings: json['timings'],
-      image: json['image'] as String,
-      delivery: json['delivery'] as bool,
-      pickup: json['pickup'] as bool,
-      vendor_id: json['vendor_id'] as int,
-      category_id: json['category_id'] as int,
-      category_ids:
-          (json['category_ids'] as List<dynamic>).map((e) => e as int).toList(),
-      distance: (json['distance'] as num).toDouble(),
-      average_rating: (json['average_rating'] as num).toDouble(),
-      has_menu: json['has_menu'] as bool,
+      image: json['image'] as String?,
+      delivery: json['delivery'] as bool?,
+      pickup: json['pickup'] as bool?,
+      vendor_id: json['vendor_id'] as int?,
+      category_id: json['category_id'] as int?,
+      category_ids: (json['category_ids'] as List<dynamic>?)
+          ?.map((e) => e as int)
+          .toList(),
+      distance: (json['distance'] as num?)?.toDouble(),
+      average_rating: (json['average_rating'] as num?)?.toDouble(),
+      has_menu: json['has_menu'] as bool?,
     );
 
 Map<String, dynamic> _$$_StoresToJson(_$_Stores instance) => <String, dynamic>{
@@ -46,12 +49,14 @@ Map<String, dynamic> _$$_StoresToJson(_$_Stores instance) => <String, dynamic>{
 _$_Categories _$$_CategoriesFromJson(Map<String, dynamic> json) =>
     _$_Categories(
       id: json['id'] as int,
-      name: Map<String, String>.from(json['name'] as Map),
-      slug: json['slug'] as String,
+      name: (json['name'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      slug: json['slug'] as String?,
       image: json['image'] as String?,
       secondary_image: json['secondary_image'],
-      sub_categories: (json['sub_categories'] as List<dynamic>)
-          .map(SubCategories.fromJson)
+      sub_categories: (json['sub_categories'] as List<dynamic>?)
+          ?.map(SubCategories.fromJson)
           .toList(),
     );
 
@@ -81,4 +86,26 @@ Map<String, dynamic> _$$_StoresDataToJson(_$_StoresData instance) =>
       'slug': instance.slug,
       'image': instance.image,
       'secondary_image': instance.secondary_image,
+    };
+
+_$_StoreCategory _$$_StoreCategoryFromJson(Map<String, dynamic> json) =>
+    _$_StoreCategory(
+      id: json['id'] as int,
+      name: json['name'],
+      is_enabled: json['is_enabled'] as bool,
+      slug: json['slug'] as String?,
+      image: json['image'],
+      description: json['description'],
+      parent_id: json['parent_id'],
+    );
+
+Map<String, dynamic> _$$_StoreCategoryToJson(_$_StoreCategory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'is_enabled': instance.is_enabled,
+      'slug': instance.slug,
+      'image': instance.image,
+      'description': instance.description,
+      'parent_id': instance.parent_id,
     };

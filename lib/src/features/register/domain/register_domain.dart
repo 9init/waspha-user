@@ -8,8 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/features/verification/domain/verify_domain.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 
-import '../../../constants/constants.dart';
-
 part 'register_domain.g.dart';
 
 @riverpod
@@ -23,10 +21,10 @@ Future sendRegister(
   required String fullNumber,
   required BuildContext context,
 }) async {
-  final url = "$restAPI/user/signup-request";
+  final url = "user/signup-request";
 
   try {
-    var request = await DioHelper().post(
+    var request = await ref.watch(dioProvider).post(
         url,
         json.encode({
           "name": name,
@@ -46,18 +44,19 @@ Future sendRegister(
       content: Text(message),
     ));
     print(response);
-    if (request.statusCode == 200) {
-      // String accessToken = response["data"]["access_token"];
-      // print(accessToken);
-      // await CacheHelper.setString("accessToken", accessToken);
-      // await ref
-      //     .watch(accessTokenProvider.notifier)
-      //     .update((state) => accessToken);
-      var otp = response["data"]["otp"];
-      print(otp);
-      context.goNamed('Verification OTP', extra: fullNumber);
-      await ref.watch(getEmailProvider.notifier).update((state) => email);
-    }
+
+    // String accessToken = response["data"]["access_token"];
+    // print(accessToken);
+    // await CacheHelper.setString("accessToken", accessToken);
+    // await ref
+    //     .watch(accessTokenProvider.notifier)
+    //     .update((state) => accessToken);
+    var otp = response["data"]["otp"];
+    print(otp);
+    context.goNamed('Verification OTP', extra: fullNumber);
+    await ref.watch(getEmailProvider.notifier).update((state) => email);
+    int userID = response["data"]["id"];
+    await ref.watch(userIDProvider.notifier).update((state) => userID);
   } on DioError catch (e) {
     print(e.response?.data);
     String message = e.response?.data["message"];

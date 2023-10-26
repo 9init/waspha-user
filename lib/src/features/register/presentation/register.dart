@@ -14,7 +14,8 @@ class RegisterScreen extends ConsumerWidget {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   final PhoneController mobileController = PhoneController(null);
   final TextEditingController referralController = TextEditingController();
@@ -51,7 +52,11 @@ class RegisterScreen extends ConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            SocialMedia(),
+            SocialMedia(
+              googleOnTap: () {},
+              facebookOnTap: () {},
+              appleOnTap: () {},
+            ),
             SizedBox(
               height: 10,
             ),

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +8,9 @@ import 'package:waspha/src/features/get_location/domain/get_location_domain.dart
 import 'package:waspha/src/widgets/get_location_text/get_location_text.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 
-import '../../features/nearby_stores/domain/stores_repository.dart';
+final currentPlaceDescription = StateProvider<String>((ref) {
+  return "";
+});
 
 class SearchWidget extends HookWidget {
   // final Future<void> Function() goToLocation;
@@ -20,11 +20,9 @@ class SearchWidget extends HookWidget {
   Widget build(BuildContext context) {
     const String APIKEY = "AIzaSyDhcLh_fWE4yEscpdIKQ-AoJKrd5ycdwcU";
     TextEditingController searchController = TextEditingController();
-    final isBottomSheetOpen = useState(false);
-    final userLocation = useState(LatLng(0.0, 0.0));
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
         child: Consumer(
@@ -34,6 +32,8 @@ class SearchWidget extends HookWidget {
               children: [
                 GooglePlaceAutoCompleteTextField(
                     textEditingController: searchController,
+                    boxDecoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent)),
                     getPlaceDetailWithLatLng: (Prediction prediction) async {
                       double lat = double.parse(prediction.lat ?? '0.0');
                       double lng = double.parse(prediction.lng ?? '0.0');
@@ -45,16 +45,20 @@ class SearchWidget extends HookWidget {
                     itemClick: (Prediction prediction) async {
                       context.pop();
                       await ref
+                          .watch(currentPlaceDescription.notifier)
+                          .update((state) => prediction.description ?? "");
+                      await ref
                           .watch(isPickingLocationProvider.notifier)
                           .update((state) => true);
                     },
-                    seperatedBuilder: Divider(),
+                   
                     itemBuilder: (context, index, prediction) {
                       print("LAT2 : ${prediction.lat ?? '0.0'}");
                       return Column(
                         children: [
                           Container(
                             padding: EdgeInsets.all(10),
+                            color: Color.fromRGBO(243, 241, 251, 1),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -69,6 +73,7 @@ class SearchWidget extends HookWidget {
                                             "${prediction.description ?? ""}")),
                                   ],
                                 ),
+                                Divider(),
                                 if (index == 4) GetLocationText()
                               ],
                             ),
@@ -76,10 +81,17 @@ class SearchWidget extends HookWidget {
                         ],
                       );
                     },
-                    inputDecoration: InputDecoration(),
+                    inputDecoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        border: UnderlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: "Search for a location"),
                     debounceTime: 800,
                     googleAPIKey: APIKEY),
-                GetLocationText(),
+                Padding(
+                  padding: const EdgeInsets.only(left:20),
+                  child: GetLocationText(),
+                ),
               ],
             ),
           ),

@@ -21,20 +21,20 @@ Stores _$StoresFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Stores {
   int get id => throw _privateConstructorUsedError;
-  Map<String, String> get business_name => throw _privateConstructorUsedError;
-  String get ar => throw _privateConstructorUsedError;
-  double get lat => throw _privateConstructorUsedError;
-  double get lng => throw _privateConstructorUsedError;
+  Map<String, String>? get business_name => throw _privateConstructorUsedError;
+  String? get ar => throw _privateConstructorUsedError;
+  double? get lat => throw _privateConstructorUsedError;
+  double? get lng => throw _privateConstructorUsedError;
   dynamic get timings => throw _privateConstructorUsedError;
-  String get image => throw _privateConstructorUsedError;
-  bool get delivery => throw _privateConstructorUsedError;
-  bool get pickup => throw _privateConstructorUsedError;
-  int get vendor_id => throw _privateConstructorUsedError;
-  int get category_id => throw _privateConstructorUsedError;
-  List<int> get category_ids => throw _privateConstructorUsedError;
-  double get distance => throw _privateConstructorUsedError;
-  double get average_rating => throw _privateConstructorUsedError;
-  bool get has_menu => throw _privateConstructorUsedError;
+  String? get image => throw _privateConstructorUsedError;
+  bool? get delivery => throw _privateConstructorUsedError;
+  bool? get pickup => throw _privateConstructorUsedError;
+  int? get vendor_id => throw _privateConstructorUsedError;
+  int? get category_id => throw _privateConstructorUsedError;
+  List<int>? get category_ids => throw _privateConstructorUsedError;
+  double? get distance => throw _privateConstructorUsedError;
+  double? get average_rating => throw _privateConstructorUsedError;
+  bool? get has_menu => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,20 +48,20 @@ abstract class $StoresCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      Map<String, String> business_name,
-      String ar,
-      double lat,
-      double lng,
+      Map<String, String>? business_name,
+      String? ar,
+      double? lat,
+      double? lng,
       dynamic timings,
-      String image,
-      bool delivery,
-      bool pickup,
-      int vendor_id,
-      int category_id,
-      List<int> category_ids,
-      double distance,
-      double average_rating,
-      bool has_menu});
+      String? image,
+      bool? delivery,
+      bool? pickup,
+      int? vendor_id,
+      int? category_id,
+      List<int>? category_ids,
+      double? distance,
+      double? average_rating,
+      bool? has_menu});
 }
 
 /// @nodoc
@@ -78,82 +78,82 @@ class _$StoresCopyWithImpl<$Res, $Val extends Stores>
   @override
   $Res call({
     Object? id = null,
-    Object? business_name = null,
-    Object? ar = null,
-    Object? lat = null,
-    Object? lng = null,
+    Object? business_name = freezed,
+    Object? ar = freezed,
+    Object? lat = freezed,
+    Object? lng = freezed,
     Object? timings = freezed,
-    Object? image = null,
-    Object? delivery = null,
-    Object? pickup = null,
-    Object? vendor_id = null,
-    Object? category_id = null,
-    Object? category_ids = null,
-    Object? distance = null,
-    Object? average_rating = null,
-    Object? has_menu = null,
+    Object? image = freezed,
+    Object? delivery = freezed,
+    Object? pickup = freezed,
+    Object? vendor_id = freezed,
+    Object? category_id = freezed,
+    Object? category_ids = freezed,
+    Object? distance = freezed,
+    Object? average_rating = freezed,
+    Object? has_menu = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      business_name: null == business_name
+      business_name: freezed == business_name
           ? _value.business_name
           : business_name // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      ar: null == ar
+              as Map<String, String>?,
+      ar: freezed == ar
           ? _value.ar
           : ar // ignore: cast_nullable_to_non_nullable
-              as String,
-      lat: null == lat
+              as String?,
+      lat: freezed == lat
           ? _value.lat
           : lat // ignore: cast_nullable_to_non_nullable
-              as double,
-      lng: null == lng
+              as double?,
+      lng: freezed == lng
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       timings: freezed == timings
           ? _value.timings
           : timings // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      image: null == image
+      image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      delivery: null == delivery
+              as String?,
+      delivery: freezed == delivery
           ? _value.delivery
           : delivery // ignore: cast_nullable_to_non_nullable
-              as bool,
-      pickup: null == pickup
+              as bool?,
+      pickup: freezed == pickup
           ? _value.pickup
           : pickup // ignore: cast_nullable_to_non_nullable
-              as bool,
-      vendor_id: null == vendor_id
+              as bool?,
+      vendor_id: freezed == vendor_id
           ? _value.vendor_id
           : vendor_id // ignore: cast_nullable_to_non_nullable
-              as int,
-      category_id: null == category_id
+              as int?,
+      category_id: freezed == category_id
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
-              as int,
-      category_ids: null == category_ids
+              as int?,
+      category_ids: freezed == category_ids
           ? _value.category_ids
           : category_ids // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      distance: null == distance
+              as List<int>?,
+      distance: freezed == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
-              as double,
-      average_rating: null == average_rating
+              as double?,
+      average_rating: freezed == average_rating
           ? _value.average_rating
           : average_rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      has_menu: null == has_menu
+              as double?,
+      has_menu: freezed == has_menu
           ? _value.has_menu
           : has_menu // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ) as $Val);
   }
 }
@@ -166,20 +166,20 @@ abstract class _$$_StoresCopyWith<$Res> implements $StoresCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      Map<String, String> business_name,
-      String ar,
-      double lat,
-      double lng,
+      Map<String, String>? business_name,
+      String? ar,
+      double? lat,
+      double? lng,
       dynamic timings,
-      String image,
-      bool delivery,
-      bool pickup,
-      int vendor_id,
-      int category_id,
-      List<int> category_ids,
-      double distance,
-      double average_rating,
-      bool has_menu});
+      String? image,
+      bool? delivery,
+      bool? pickup,
+      int? vendor_id,
+      int? category_id,
+      List<int>? category_ids,
+      double? distance,
+      double? average_rating,
+      bool? has_menu});
 }
 
 /// @nodoc
@@ -193,82 +193,82 @@ class __$$_StoresCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? business_name = null,
-    Object? ar = null,
-    Object? lat = null,
-    Object? lng = null,
+    Object? business_name = freezed,
+    Object? ar = freezed,
+    Object? lat = freezed,
+    Object? lng = freezed,
     Object? timings = freezed,
-    Object? image = null,
-    Object? delivery = null,
-    Object? pickup = null,
-    Object? vendor_id = null,
-    Object? category_id = null,
-    Object? category_ids = null,
-    Object? distance = null,
-    Object? average_rating = null,
-    Object? has_menu = null,
+    Object? image = freezed,
+    Object? delivery = freezed,
+    Object? pickup = freezed,
+    Object? vendor_id = freezed,
+    Object? category_id = freezed,
+    Object? category_ids = freezed,
+    Object? distance = freezed,
+    Object? average_rating = freezed,
+    Object? has_menu = freezed,
   }) {
     return _then(_$_Stores(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      business_name: null == business_name
+      business_name: freezed == business_name
           ? _value._business_name
           : business_name // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      ar: null == ar
+              as Map<String, String>?,
+      ar: freezed == ar
           ? _value.ar
           : ar // ignore: cast_nullable_to_non_nullable
-              as String,
-      lat: null == lat
+              as String?,
+      lat: freezed == lat
           ? _value.lat
           : lat // ignore: cast_nullable_to_non_nullable
-              as double,
-      lng: null == lng
+              as double?,
+      lng: freezed == lng
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       timings: freezed == timings
           ? _value.timings
           : timings // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      image: null == image
+      image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      delivery: null == delivery
+              as String?,
+      delivery: freezed == delivery
           ? _value.delivery
           : delivery // ignore: cast_nullable_to_non_nullable
-              as bool,
-      pickup: null == pickup
+              as bool?,
+      pickup: freezed == pickup
           ? _value.pickup
           : pickup // ignore: cast_nullable_to_non_nullable
-              as bool,
-      vendor_id: null == vendor_id
+              as bool?,
+      vendor_id: freezed == vendor_id
           ? _value.vendor_id
           : vendor_id // ignore: cast_nullable_to_non_nullable
-              as int,
-      category_id: null == category_id
+              as int?,
+      category_id: freezed == category_id
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
-              as int,
-      category_ids: null == category_ids
+              as int?,
+      category_ids: freezed == category_ids
           ? _value._category_ids
           : category_ids // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      distance: null == distance
+              as List<int>?,
+      distance: freezed == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
-              as double,
-      average_rating: null == average_rating
+              as double?,
+      average_rating: freezed == average_rating
           ? _value.average_rating
           : average_rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      has_menu: null == has_menu
+              as double?,
+      has_menu: freezed == has_menu
           ? _value.has_menu
           : has_menu // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ));
   }
 }
@@ -278,20 +278,20 @@ class __$$_StoresCopyWithImpl<$Res>
 class _$_Stores implements _Stores {
   const _$_Stores(
       {required this.id,
-      required final Map<String, String> business_name,
-      required this.ar,
-      required this.lat,
-      required this.lng,
-      required this.timings,
-      required this.image,
-      required this.delivery,
-      required this.pickup,
-      required this.vendor_id,
-      required this.category_id,
-      required final List<int> category_ids,
-      required this.distance,
-      required this.average_rating,
-      required this.has_menu})
+      final Map<String, String>? business_name,
+      this.ar,
+      this.lat,
+      this.lng,
+      this.timings,
+      this.image,
+      this.delivery,
+      this.pickup,
+      this.vendor_id,
+      this.category_id,
+      final List<int>? category_ids,
+      this.distance,
+      this.average_rating,
+      this.has_menu})
       : _business_name = business_name,
         _category_ids = category_ids;
 
@@ -300,46 +300,50 @@ class _$_Stores implements _Stores {
 
   @override
   final int id;
-  final Map<String, String> _business_name;
+  final Map<String, String>? _business_name;
   @override
-  Map<String, String> get business_name {
+  Map<String, String>? get business_name {
+    final value = _business_name;
+    if (value == null) return null;
     if (_business_name is EqualUnmodifiableMapView) return _business_name;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_business_name);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final String ar;
+  final String? ar;
   @override
-  final double lat;
+  final double? lat;
   @override
-  final double lng;
+  final double? lng;
   @override
   final dynamic timings;
   @override
-  final String image;
+  final String? image;
   @override
-  final bool delivery;
+  final bool? delivery;
   @override
-  final bool pickup;
+  final bool? pickup;
   @override
-  final int vendor_id;
+  final int? vendor_id;
   @override
-  final int category_id;
-  final List<int> _category_ids;
+  final int? category_id;
+  final List<int>? _category_ids;
   @override
-  List<int> get category_ids {
+  List<int>? get category_ids {
+    final value = _category_ids;
+    if (value == null) return null;
     if (_category_ids is EqualUnmodifiableListView) return _category_ids;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_category_ids);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
-  final double distance;
+  final double? distance;
   @override
-  final double average_rating;
+  final double? average_rating;
   @override
-  final bool has_menu;
+  final bool? has_menu;
 
   @override
   String toString() {
@@ -413,53 +417,53 @@ class _$_Stores implements _Stores {
 abstract class _Stores implements Stores {
   const factory _Stores(
       {required final int id,
-      required final Map<String, String> business_name,
-      required final String ar,
-      required final double lat,
-      required final double lng,
-      required final dynamic timings,
-      required final String image,
-      required final bool delivery,
-      required final bool pickup,
-      required final int vendor_id,
-      required final int category_id,
-      required final List<int> category_ids,
-      required final double distance,
-      required final double average_rating,
-      required final bool has_menu}) = _$_Stores;
+      final Map<String, String>? business_name,
+      final String? ar,
+      final double? lat,
+      final double? lng,
+      final dynamic timings,
+      final String? image,
+      final bool? delivery,
+      final bool? pickup,
+      final int? vendor_id,
+      final int? category_id,
+      final List<int>? category_ids,
+      final double? distance,
+      final double? average_rating,
+      final bool? has_menu}) = _$_Stores;
 
   factory _Stores.fromJson(Map<String, dynamic> json) = _$_Stores.fromJson;
 
   @override
   int get id;
   @override
-  Map<String, String> get business_name;
+  Map<String, String>? get business_name;
   @override
-  String get ar;
+  String? get ar;
   @override
-  double get lat;
+  double? get lat;
   @override
-  double get lng;
+  double? get lng;
   @override
   dynamic get timings;
   @override
-  String get image;
+  String? get image;
   @override
-  bool get delivery;
+  bool? get delivery;
   @override
-  bool get pickup;
+  bool? get pickup;
   @override
-  int get vendor_id;
+  int? get vendor_id;
   @override
-  int get category_id;
+  int? get category_id;
   @override
-  List<int> get category_ids;
+  List<int>? get category_ids;
   @override
-  double get distance;
+  double? get distance;
   @override
-  double get average_rating;
+  double? get average_rating;
   @override
-  bool get has_menu;
+  bool? get has_menu;
   @override
   @JsonKey(ignore: true)
   _$$_StoresCopyWith<_$_Stores> get copyWith =>
@@ -473,11 +477,11 @@ Categories _$CategoriesFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Categories {
   int get id => throw _privateConstructorUsedError;
-  Map<String, String> get name => throw _privateConstructorUsedError;
-  String get slug => throw _privateConstructorUsedError;
+  Map<String, String>? get name => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
   dynamic get secondary_image => throw _privateConstructorUsedError;
-  List<SubCategories> get sub_categories => throw _privateConstructorUsedError;
+  List<SubCategories>? get sub_categories => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -493,11 +497,11 @@ abstract class $CategoriesCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      Map<String, String> name,
-      String slug,
+      Map<String, String>? name,
+      String? slug,
       String? image,
       dynamic secondary_image,
-      List<SubCategories> sub_categories});
+      List<SubCategories>? sub_categories});
 }
 
 /// @nodoc
@@ -514,25 +518,25 @@ class _$CategoriesCopyWithImpl<$Res, $Val extends Categories>
   @override
   $Res call({
     Object? id = null,
-    Object? name = null,
-    Object? slug = null,
+    Object? name = freezed,
+    Object? slug = freezed,
     Object? image = freezed,
     Object? secondary_image = freezed,
-    Object? sub_categories = null,
+    Object? sub_categories = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      slug: null == slug
+              as Map<String, String>?,
+      slug: freezed == slug
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -541,10 +545,10 @@ class _$CategoriesCopyWithImpl<$Res, $Val extends Categories>
           ? _value.secondary_image
           : secondary_image // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      sub_categories: null == sub_categories
+      sub_categories: freezed == sub_categories
           ? _value.sub_categories
           : sub_categories // ignore: cast_nullable_to_non_nullable
-              as List<SubCategories>,
+              as List<SubCategories>?,
     ) as $Val);
   }
 }
@@ -559,11 +563,11 @@ abstract class _$$_CategoriesCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
-      Map<String, String> name,
-      String slug,
+      Map<String, String>? name,
+      String? slug,
       String? image,
       dynamic secondary_image,
-      List<SubCategories> sub_categories});
+      List<SubCategories>? sub_categories});
 }
 
 /// @nodoc
@@ -578,25 +582,25 @@ class __$$_CategoriesCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? name = null,
-    Object? slug = null,
+    Object? name = freezed,
+    Object? slug = freezed,
     Object? image = freezed,
     Object? secondary_image = freezed,
-    Object? sub_categories = null,
+    Object? sub_categories = freezed,
   }) {
     return _then(_$_Categories(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      name: null == name
+      name: freezed == name
           ? _value._name
           : name // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      slug: null == slug
+              as Map<String, String>?,
+      slug: freezed == slug
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -604,10 +608,10 @@ class __$$_CategoriesCopyWithImpl<$Res>
       secondary_image: freezed == secondary_image
           ? _value.secondary_image!
           : secondary_image,
-      sub_categories: null == sub_categories
+      sub_categories: freezed == sub_categories
           ? _value._sub_categories
           : sub_categories // ignore: cast_nullable_to_non_nullable
-              as List<SubCategories>,
+              as List<SubCategories>?,
     ));
   }
 }
@@ -617,11 +621,11 @@ class __$$_CategoriesCopyWithImpl<$Res>
 class _$_Categories implements _Categories {
   const _$_Categories(
       {required this.id,
-      required final Map<String, String> name,
-      required this.slug,
+      final Map<String, String>? name,
+      this.slug,
       this.image,
       this.secondary_image,
-      required final List<SubCategories> sub_categories})
+      final List<SubCategories>? sub_categories})
       : _name = name,
         _sub_categories = sub_categories;
 
@@ -630,26 +634,30 @@ class _$_Categories implements _Categories {
 
   @override
   final int id;
-  final Map<String, String> _name;
+  final Map<String, String>? _name;
   @override
-  Map<String, String> get name {
+  Map<String, String>? get name {
+    final value = _name;
+    if (value == null) return null;
     if (_name is EqualUnmodifiableMapView) return _name;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_name);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final String slug;
+  final String? slug;
   @override
   final String? image;
   @override
   final dynamic secondary_image;
-  final List<SubCategories> _sub_categories;
+  final List<SubCategories>? _sub_categories;
   @override
-  List<SubCategories> get sub_categories {
+  List<SubCategories>? get sub_categories {
+    final value = _sub_categories;
+    if (value == null) return null;
     if (_sub_categories is EqualUnmodifiableListView) return _sub_categories;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sub_categories);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -700,11 +708,11 @@ class _$_Categories implements _Categories {
 abstract class _Categories implements Categories {
   const factory _Categories(
       {required final int id,
-      required final Map<String, String> name,
-      required final String slug,
+      final Map<String, String>? name,
+      final String? slug,
       final String? image,
       final dynamic secondary_image,
-      required final List<SubCategories> sub_categories}) = _$_Categories;
+      final List<SubCategories>? sub_categories}) = _$_Categories;
 
   factory _Categories.fromJson(Map<String, dynamic> json) =
       _$_Categories.fromJson;
@@ -712,15 +720,15 @@ abstract class _Categories implements Categories {
   @override
   int get id;
   @override
-  Map<String, String> get name;
+  Map<String, String>? get name;
   @override
-  String get slug;
+  String? get slug;
   @override
   String? get image;
   @override
   dynamic get secondary_image;
   @override
-  List<SubCategories> get sub_categories;
+  List<SubCategories>? get sub_categories;
   @override
   @JsonKey(ignore: true)
   _$$_CategoriesCopyWith<_$_Categories> get copyWith =>
@@ -957,5 +965,275 @@ abstract class _StoresData implements SubCategories {
   @override
   @JsonKey(ignore: true)
   _$$_StoresDataCopyWith<_$_StoresData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+StoreCategory _$StoreCategoryFromJson(Map<String, dynamic> json) {
+  return _StoreCategory.fromJson(json);
+}
+
+/// @nodoc
+mixin _$StoreCategory {
+  int get id => throw _privateConstructorUsedError;
+  dynamic get name => throw _privateConstructorUsedError;
+  bool get is_enabled => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
+  dynamic get image => throw _privateConstructorUsedError;
+  dynamic get description => throw _privateConstructorUsedError;
+  dynamic get parent_id => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $StoreCategoryCopyWith<StoreCategory> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $StoreCategoryCopyWith<$Res> {
+  factory $StoreCategoryCopyWith(
+          StoreCategory value, $Res Function(StoreCategory) then) =
+      _$StoreCategoryCopyWithImpl<$Res, StoreCategory>;
+  @useResult
+  $Res call(
+      {int id,
+      dynamic name,
+      bool is_enabled,
+      String? slug,
+      dynamic image,
+      dynamic description,
+      dynamic parent_id});
+}
+
+/// @nodoc
+class _$StoreCategoryCopyWithImpl<$Res, $Val extends StoreCategory>
+    implements $StoreCategoryCopyWith<$Res> {
+  _$StoreCategoryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = freezed,
+    Object? is_enabled = null,
+    Object? slug = freezed,
+    Object? image = freezed,
+    Object? description = freezed,
+    Object? parent_id = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      is_enabled: null == is_enabled
+          ? _value.is_enabled
+          : is_enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      parent_id: freezed == parent_id
+          ? _value.parent_id
+          : parent_id // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_StoreCategoryCopyWith<$Res>
+    implements $StoreCategoryCopyWith<$Res> {
+  factory _$$_StoreCategoryCopyWith(
+          _$_StoreCategory value, $Res Function(_$_StoreCategory) then) =
+      __$$_StoreCategoryCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      dynamic name,
+      bool is_enabled,
+      String? slug,
+      dynamic image,
+      dynamic description,
+      dynamic parent_id});
+}
+
+/// @nodoc
+class __$$_StoreCategoryCopyWithImpl<$Res>
+    extends _$StoreCategoryCopyWithImpl<$Res, _$_StoreCategory>
+    implements _$$_StoreCategoryCopyWith<$Res> {
+  __$$_StoreCategoryCopyWithImpl(
+      _$_StoreCategory _value, $Res Function(_$_StoreCategory) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = freezed,
+    Object? is_enabled = null,
+    Object? slug = freezed,
+    Object? image = freezed,
+    Object? description = freezed,
+    Object? parent_id = freezed,
+  }) {
+    return _then(_$_StoreCategory(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      is_enabled: null == is_enabled
+          ? _value.is_enabled
+          : is_enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      parent_id: freezed == parent_id
+          ? _value.parent_id
+          : parent_id // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_StoreCategory implements _StoreCategory {
+  const _$_StoreCategory(
+      {required this.id,
+      this.name,
+      required this.is_enabled,
+      this.slug,
+      this.image,
+      this.description,
+      this.parent_id});
+
+  factory _$_StoreCategory.fromJson(Map<String, dynamic> json) =>
+      _$$_StoreCategoryFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final dynamic name;
+  @override
+  final bool is_enabled;
+  @override
+  final String? slug;
+  @override
+  final dynamic image;
+  @override
+  final dynamic description;
+  @override
+  final dynamic parent_id;
+
+  @override
+  String toString() {
+    return 'StoreCategory(id: $id, name: $name, is_enabled: $is_enabled, slug: $slug, image: $image, description: $description, parent_id: $parent_id)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_StoreCategory &&
+            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            (identical(other.is_enabled, is_enabled) ||
+                other.is_enabled == is_enabled) &&
+            (identical(other.slug, slug) || other.slug == slug) &&
+            const DeepCollectionEquality().equals(other.image, image) &&
+            const DeepCollectionEquality()
+                .equals(other.description, description) &&
+            const DeepCollectionEquality().equals(other.parent_id, parent_id));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      const DeepCollectionEquality().hash(name),
+      is_enabled,
+      slug,
+      const DeepCollectionEquality().hash(image),
+      const DeepCollectionEquality().hash(description),
+      const DeepCollectionEquality().hash(parent_id));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_StoreCategoryCopyWith<_$_StoreCategory> get copyWith =>
+      __$$_StoreCategoryCopyWithImpl<_$_StoreCategory>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_StoreCategoryToJson(
+      this,
+    );
+  }
+}
+
+abstract class _StoreCategory implements StoreCategory {
+  const factory _StoreCategory(
+      {required final int id,
+      final dynamic name,
+      required final bool is_enabled,
+      final String? slug,
+      final dynamic image,
+      final dynamic description,
+      final dynamic parent_id}) = _$_StoreCategory;
+
+  factory _StoreCategory.fromJson(Map<String, dynamic> json) =
+      _$_StoreCategory.fromJson;
+
+  @override
+  int get id;
+  @override
+  dynamic get name;
+  @override
+  bool get is_enabled;
+  @override
+  String? get slug;
+  @override
+  dynamic get image;
+  @override
+  dynamic get description;
+  @override
+  dynamic get parent_id;
+  @override
+  @JsonKey(ignore: true)
+  _$$_StoreCategoryCopyWith<_$_StoreCategory> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,4 +1,4 @@
-package com.example.waspha
+package com.waspha.app
 
 import io.flutter.embedding.android.FlutterActivity
 

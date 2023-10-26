@@ -6,7 +6,7 @@ part of 'login_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendLogHash() => r'25d48523b5b79c462ddee4d6d29ea5d347b445b1';
+String _$sendLogHash() => r'c335b1d420963b40a1e072a20ac0d42d6cadf70b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -45,7 +45,7 @@ class SendLogFamily extends Family<AsyncValue<dynamic>> {
     required String mobile,
     required String password,
     required BuildContext context,
-    bool keepLogin = false,
+    required bool keepLogin,
   }) {
     return SendLogProvider(
       mobile: mobile,
@@ -89,7 +89,7 @@ class SendLogProvider extends AutoDisposeFutureProvider<dynamic> {
     required this.mobile,
     required this.password,
     required this.context,
-    this.keepLogin = false,
+    required this.keepLogin,
   }) : super.internal(
           (ref) => sendLog(
             ref,
@@ -133,5 +133,35 @@ class SendLogProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+String _$getUserAvatarHash() => r'7efb11f3bf7f83c9604364b6efc938e8726d3388';
+
+/// See also [getUserAvatar].
+@ProviderFor(getUserAvatar)
+final getUserAvatarProvider = AutoDisposeFutureProvider<String?>.internal(
+  getUserAvatar,
+  name: r'getUserAvatarProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getUserAvatarHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetUserAvatarRef = AutoDisposeFutureProviderRef<String?>;
+String _$isLoggedInHash() => r'41d84a952a00d230e13a4cc39f0fc1b209865673';
+
+/// See also [isLoggedIn].
+@ProviderFor(isLoggedIn)
+final isLoggedInProvider = AutoDisposeFutureProvider<bool>.internal(
+  isLoggedIn,
+  name: r'isLoggedInProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$isLoggedInHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef IsLoggedInRef = AutoDisposeFutureProviderRef<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
