@@ -103,9 +103,10 @@ class _$CreditCopyWithImpl<$Res, $Val extends Credit>
 }
 
 /// @nodoc
-abstract class _$$_CreditCopyWith<$Res> implements $CreditCopyWith<$Res> {
-  factory _$$_CreditCopyWith(_$_Credit value, $Res Function(_$_Credit) then) =
-      __$$_CreditCopyWithImpl<$Res>;
+abstract class _$$CreditImplCopyWith<$Res> implements $CreditCopyWith<$Res> {
+  factory _$$CreditImplCopyWith(
+          _$CreditImpl value, $Res Function(_$CreditImpl) then) =
+      __$$CreditImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -119,10 +120,11 @@ abstract class _$$_CreditCopyWith<$Res> implements $CreditCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_CreditCopyWithImpl<$Res>
-    extends _$CreditCopyWithImpl<$Res, _$_Credit>
-    implements _$$_CreditCopyWith<$Res> {
-  __$$_CreditCopyWithImpl(_$_Credit _value, $Res Function(_$_Credit) _then)
+class __$$CreditImplCopyWithImpl<$Res>
+    extends _$CreditCopyWithImpl<$Res, _$CreditImpl>
+    implements _$$CreditImplCopyWith<$Res> {
+  __$$CreditImplCopyWithImpl(
+      _$CreditImpl _value, $Res Function(_$CreditImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -136,7 +138,7 @@ class __$$_CreditCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_Credit(
+    return _then(_$CreditImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -171,8 +173,8 @@ class __$$_CreditCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Credit implements _Credit {
-  const _$_Credit(
+class _$CreditImpl implements _Credit {
+  const _$CreditImpl(
       {required this.id,
       required this.card_number,
       required this.cardholder_name,
@@ -181,8 +183,8 @@ class _$_Credit implements _Credit {
       required this.createdAt,
       required this.updatedAt});
 
-  factory _$_Credit.fromJson(Map<String, dynamic> json) =>
-      _$$_CreditFromJson(json);
+  factory _$CreditImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CreditImplFromJson(json);
 
   @override
   final int id;
@@ -208,7 +210,7 @@ class _$_Credit implements _Credit {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Credit &&
+            other is _$CreditImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.card_number, card_number) ||
                 other.card_number == card_number) &&
@@ -232,12 +234,12 @@ class _$_Credit implements _Credit {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CreditCopyWith<_$_Credit> get copyWith =>
-      __$$_CreditCopyWithImpl<_$_Credit>(this, _$identity);
+  _$$CreditImplCopyWith<_$CreditImpl> get copyWith =>
+      __$$CreditImplCopyWithImpl<_$CreditImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CreditToJson(
+    return _$$CreditImplToJson(
       this,
     );
   }
@@ -251,9 +253,9 @@ abstract class _Credit implements Credit {
       required final int expiration_month,
       required final int expiration_year,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Credit;
+      required final DateTime updatedAt}) = _$CreditImpl;
 
-  factory _Credit.fromJson(Map<String, dynamic> json) = _$_Credit.fromJson;
+  factory _Credit.fromJson(Map<String, dynamic> json) = _$CreditImpl.fromJson;
 
   @override
   int get id;
@@ -271,6 +273,6 @@ abstract class _Credit implements Credit {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_CreditCopyWith<_$_Credit> get copyWith =>
+  _$$CreditImplCopyWith<_$CreditImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

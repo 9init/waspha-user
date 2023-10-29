@@ -7,7 +7,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/get_location/domain/get_location_domain.dart';
-import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';

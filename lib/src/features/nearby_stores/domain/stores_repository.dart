@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui' as ui;
 
 import 'package:bitmap/bitmap.dart';
@@ -15,6 +14,7 @@ import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 
+import '../../../routes/routes.dart';
 import '../../get_location/domain/get_location_domain.dart';
 import '../presentation/rounded_marker.dart';
 part 'stores_repository.g.dart';
@@ -36,7 +36,7 @@ class NearbyData {
 }
 
 @Riverpod(keepAlive: true)
-Stream getNearbyStoresStream(
+Stream<dynamic> getNearbyStoresStream(
   Ref ref, {
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
@@ -86,7 +86,7 @@ Future<LocationData> getLocation() async {
 }
 
 @Riverpod(keepAlive: true)
-Future getNearbyStores(
+Future<dynamic> getNearbyStores(
   Ref ref, {
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
@@ -132,12 +132,14 @@ Future getNearbyStores(
           categoriesList.map((job) => Categories.fromJson(job)).toList(),
     };
   } on DioError catch (e) {
-    log("STORE ERROR:", error: e);
+    print("STORE ERROR:${e.response?.data}");
     if (!isBottomSheetOpen.value) {
       isBottomSheetOpen.value = true;
+      final context = rootNavigatorKey.currentState?.overlay?.context;
+
       showModalBottomSheet(
           enableDrag: false,
-          context: context,
+          context: context!,
           builder: (context) => Container(
                 height: 200,
                 child: Padding(
@@ -181,8 +183,8 @@ Future getNearbyStores(
   };
 }
 
-final imageBytesProvider =
-    FutureProvider.family<BitmapDescriptor, String>((ref,String imageURL) async {
+final imageBytesProvider = FutureProvider.family<BitmapDescriptor, String>(
+    (ref, String imageURL) async {
   return await imageBytes(imageURL: imageURL);
 });
 
@@ -238,7 +240,7 @@ final userLocationProvider = FutureProvider<LatLng>((ref) async {
       : chosenLocation;
 });
 
-Future<String> getPlaceDetails(ref,{required LatLng location}) async {
+Future<String> getPlaceDetails(ref, {required LatLng location}) async {
   const googelApiKey = 'AIzaSyCvpTXATfxER0gnLrqbQ1FJmSVtA2-5KXo';
 
   GeoData data = await Geocoder2.getDataFromCoordinates(

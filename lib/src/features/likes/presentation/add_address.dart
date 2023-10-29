@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -92,6 +94,7 @@ class AddAddressScreen extends HookWidget {
                                     if (value!.isEmpty) {
                                       return "Title is required";
                                     }
+                                    return null;
                                   },
                                   decoration: InputDecoration(
                                       labelText: "Address Title",
@@ -181,6 +184,7 @@ class AddAddressScreen extends HookWidget {
                                           if (value!.isEmpty) {
                                             return "Landmark is required";
                                           }
+                                          return null;
                                         },
                                         decoration: InputDecoration(
                                             labelText: "Landmark",

@@ -2,6 +2,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 
+import '../data/credit_data.dart';
+
 
 part 'credit_domain.g.dart';
 
@@ -14,7 +16,6 @@ Future<String> addCreditCard(Ref ref,
     required int expYear}) async {
   final url = "user/credit-card";
   try {
-    print("Hi");
     final request = await ref.watch(dioProvider).post(url, {
       "cardNumber": cardNumber, 
       "cardholderName": cardName,
@@ -29,11 +30,11 @@ Future<String> addCreditCard(Ref ref,
 }
 
 @riverpod
-Future getCreditCards(Ref ref) async {
+Future<dynamic> getCreditCards(Ref ref) async {
   final url = "user/credit-cards";
   try {
     final request = await ref.watch(dioProvider).get(url);
-    return request.data["data"];
+    return request.data["data"].map((e) => Credit.fromJson(e)).toList();
   } catch (e) {}
   return [];
 }

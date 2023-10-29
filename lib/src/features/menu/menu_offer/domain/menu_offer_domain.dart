@@ -21,7 +21,7 @@ final getStoresCategoriesProvider = FutureProvider.family((ref, id) async {
 });
 
 @riverpod
-Future getStoresProducts(Ref ref, {required int storeID,required int categoryID}) async {
+Future<dynamic> getStoresProducts(Ref ref, {required int storeID,required int categoryID}) async {
   const url = 'user/store-products';
 
   try {

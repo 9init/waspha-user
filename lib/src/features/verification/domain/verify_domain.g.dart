@@ -29,14 +29,12 @@ class _SystemHash {
   }
 }
 
-typedef VerifyOTPRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [verifyOTP].
 @ProviderFor(verifyOTP)
 const verifyOTPProvider = VerifyOTPFamily();
 
 /// See also [verifyOTP].
-class VerifyOTPFamily extends Family<AsyncValue<dynamic>> {
+class VerifyOTPFamily extends Family<AsyncValue> {
   /// See also [verifyOTP].
   const VerifyOTPFamily();
 
@@ -77,14 +75,14 @@ class VerifyOTPFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [verifyOTP].
-class VerifyOTPProvider extends AutoDisposeFutureProvider<dynamic> {
+class VerifyOTPProvider extends AutoDisposeFutureProvider<Object?> {
   /// See also [verifyOTP].
   VerifyOTPProvider({
-    required this.otp,
-    required this.context,
-  }) : super.internal(
+    required String otp,
+    required BuildContext context,
+  }) : this._internal(
           (ref) => verifyOTP(
-            ref,
+            ref as VerifyOTPRef,
             otp: otp,
             context: context,
           ),
@@ -96,10 +94,47 @@ class VerifyOTPProvider extends AutoDisposeFutureProvider<dynamic> {
                   : _$verifyOTPHash,
           dependencies: VerifyOTPFamily._dependencies,
           allTransitiveDependencies: VerifyOTPFamily._allTransitiveDependencies,
+          otp: otp,
+          context: context,
         );
+
+  VerifyOTPProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.otp,
+    required this.context,
+  }) : super.internal();
 
   final String otp;
   final BuildContext context;
+
+  @override
+  Override overrideWith(
+    FutureOr<Object?> Function(VerifyOTPRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: VerifyOTPProvider._internal(
+        (ref) => create(ref as VerifyOTPRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        otp: otp,
+        context: context,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Object?> createElement() {
+    return _VerifyOTPProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -117,5 +152,23 @@ class VerifyOTPProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin VerifyOTPRef on AutoDisposeFutureProviderRef<Object?> {
+  /// The parameter `otp` of this provider.
+  String get otp;
+
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+}
+
+class _VerifyOTPProviderElement
+    extends AutoDisposeFutureProviderElement<Object?> with VerifyOTPRef {
+  _VerifyOTPProviderElement(super.provider);
+
+  @override
+  String get otp => (origin as VerifyOTPProvider).otp;
+  @override
+  BuildContext get context => (origin as VerifyOTPProvider).context;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
+import '../../../widgets/need_login.dart';
 import '../../login/domain/login_domain.dart';
 import '../../menu/presentation/menu.dart';
-import '../../nearby_stores/presentation/nearby_stores.dart';
 import '../domain/likes_domain.dart';
 
 class LikesScreen extends ConsumerStatefulWidget {
@@ -16,27 +16,26 @@ class LikesScreen extends ConsumerStatefulWidget {
 }
 
 class _LikesScreenState extends ConsumerState<LikesScreen> {
-  isLogged() {
-    return ref.read(isLoggedInProvider.future).then((value) {
-      if (value == false) {
-        return showAdaptiveDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                isLogged: true,
-                content: "Please login to see your credit cards",
-              );
-            });
+  @override
+  Widget build(BuildContext context) {
+    final isLogged = ref.watch(isLoggedInProvider);
+    return isLogged.when(data: (data) {
+      if (data == false) {
+        return NeedLoginScreen();
       }
+      return LikesBody();
+    }, error: (e, s) {
+      return Text("Error");
+    }, loading: () {
+      return Center(child: CircularProgressIndicator());
     });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-    isLogged();
-  }
+class LikesBody extends StatelessWidget {
+  const LikesBody({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

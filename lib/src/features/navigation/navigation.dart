@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 
 import '../creditcard/presentation/creditcard.dart';
@@ -26,8 +26,6 @@ class _NavigationState extends State<Navigation> {
       loadedPages.contains(1) ? const Activity() : Container(),
       loadedPages.contains(2) ? const LikesScreen() : Container(),
       loadedPages.contains(3) ? const CreditCardScreen() : Container(),
-
-   
     ];
 
     return Scaffold(
@@ -52,6 +50,44 @@ class _NavigationState extends State<Navigation> {
             loadedPages = screens;
           });
         },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.local_activity), label: "Activity"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Likes"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.credit_card), label: "Credit"),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomNavigation extends StatelessWidget {
+  const CustomNavigation({super.key, required this.navigationShell});
+  final StatefulNavigationShell navigationShell;
+  void _goBranch(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: navigationShell,
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        currentIndex: navigationShell.currentIndex,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        selectedItemColor: Colors.purple,
+        unselectedItemColor: Colors.grey,
+        onTap: _goBranch,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

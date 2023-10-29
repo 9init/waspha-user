@@ -1,6 +1,4 @@
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -31,7 +29,7 @@ Future<bool> deleteStoreFav(Ref ref, {required int id}) async {
 }
 
 @riverpod
-Future getFavStores(Ref ref) async {
+Future<dynamic> getFavStores(Ref ref) async {
   final url = "user/fav-stores";
   try {
     final request = await ref.watch(dioProvider).get(url);

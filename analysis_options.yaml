@@ -21,9 +21,6 @@ linter:
   # or a specific dart file by using the `// ignore: name_of_lint` and
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
-  plugins:
-    - custom_lint
-
   rules:
     exclude:
     - '**.freezed.dart'
@@ -34,3 +31,10 @@ linter:
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+  custom_lint:
+    # Forcibly disable lint rules by default
+    enable_all_lint_rules: false
+    rules:
+      # You can now enable one specific rule in the "rules" list
+      - missing_provider_scope
+

@@ -6,7 +6,8 @@ part of 'login_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_LoginData _$$_LoginDataFromJson(Map<String, dynamic> json) => _$_LoginData(
+_$LoginDataImpl _$$LoginDataImplFromJson(Map<String, dynamic> json) =>
+    _$LoginDataImpl(
       id: json['id'] as int,
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
@@ -49,7 +50,7 @@ _$_LoginData _$$_LoginDataFromJson(Map<String, dynamic> json) => _$_LoginData(
       unverified: json['unverified'],
     );
 
-Map<String, dynamic> _$$_LoginDataToJson(_$_LoginData instance) =>
+Map<String, dynamic> _$$LoginDataImplToJson(_$LoginDataImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt,

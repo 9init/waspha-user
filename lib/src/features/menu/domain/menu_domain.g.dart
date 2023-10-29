@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef GetMenuCategoriesRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [getMenuCategories].
 @ProviderFor(getMenuCategories)
 const getMenuCategoriesProvider = GetMenuCategoriesFamily();
@@ -77,10 +75,10 @@ class GetMenuCategoriesFamily extends Family<AsyncValue<dynamic>> {
 class GetMenuCategoriesProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [getMenuCategories].
   GetMenuCategoriesProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => getMenuCategories(
-            ref,
+            ref as GetMenuCategoriesRef,
             id: id,
           ),
           from: getMenuCategoriesProvider,
@@ -92,9 +90,43 @@ class GetMenuCategoriesProvider extends AutoDisposeFutureProvider<dynamic> {
           dependencies: GetMenuCategoriesFamily._dependencies,
           allTransitiveDependencies:
               GetMenuCategoriesFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  GetMenuCategoriesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<dynamic> Function(GetMenuCategoriesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetMenuCategoriesProvider._internal(
+        (ref) => create(ref as GetMenuCategoriesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<dynamic> createElement() {
+    return _GetMenuCategoriesProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -109,5 +141,19 @@ class GetMenuCategoriesProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin GetMenuCategoriesRef on AutoDisposeFutureProviderRef<dynamic> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _GetMenuCategoriesProviderElement
+    extends AutoDisposeFutureProviderElement<dynamic>
+    with GetMenuCategoriesRef {
+  _GetMenuCategoriesProviderElement(super.provider);
+
+  @override
+  int get id => (origin as GetMenuCategoriesProvider).id;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

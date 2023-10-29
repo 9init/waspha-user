@@ -6,7 +6,7 @@ part of 'profile_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$editProfileHash() => r'da8c6d6343e07a71c80b613a41e029fd845b8639';
+String _$editProfileHash() => r'fcafdc815372c4671e8804e66c4c248950f16e3e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,27 +29,25 @@ class _SystemHash {
   }
 }
 
-typedef EditProfileRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [editProfile].
 @ProviderFor(editProfile)
 const editProfileProvider = EditProfileFamily();
 
 /// See also [editProfile].
-class EditProfileFamily extends Family<AsyncValue<dynamic>> {
+class EditProfileFamily extends Family<AsyncValue<bool>> {
   /// See also [editProfile].
   const EditProfileFamily();
 
   /// See also [editProfile].
   EditProfileProvider call({
-    required String name,
+    required String userName,
     required String dob,
     String language = "en",
     String gender = "male",
     required BuildContext context,
   }) {
     return EditProfileProvider(
-      name: name,
+      userName: userName,
       dob: dob,
       language: language,
       gender: gender,
@@ -62,7 +60,7 @@ class EditProfileFamily extends Family<AsyncValue<dynamic>> {
     covariant EditProfileProvider provider,
   ) {
     return call(
-      name: provider.name,
+      userName: provider.userName,
       dob: provider.dob,
       language: provider.language,
       gender: provider.gender,
@@ -86,18 +84,18 @@ class EditProfileFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [editProfile].
-class EditProfileProvider extends AutoDisposeFutureProvider<dynamic> {
+class EditProfileProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [editProfile].
   EditProfileProvider({
-    required this.name,
-    required this.dob,
-    this.language = "en",
-    this.gender = "male",
-    required this.context,
-  }) : super.internal(
+    required String userName,
+    required String dob,
+    String language = "en",
+    String gender = "male",
+    required BuildContext context,
+  }) : this._internal(
           (ref) => editProfile(
-            ref,
-            name: name,
+            ref as EditProfileRef,
+            userName: userName,
             dob: dob,
             language: language,
             gender: gender,
@@ -112,18 +110,64 @@ class EditProfileProvider extends AutoDisposeFutureProvider<dynamic> {
           dependencies: EditProfileFamily._dependencies,
           allTransitiveDependencies:
               EditProfileFamily._allTransitiveDependencies,
+          userName: userName,
+          dob: dob,
+          language: language,
+          gender: gender,
+          context: context,
         );
 
-  final String name;
+  EditProfileProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userName,
+    required this.dob,
+    required this.language,
+    required this.gender,
+    required this.context,
+  }) : super.internal();
+
+  final String userName;
   final String dob;
   final String language;
   final String gender;
   final BuildContext context;
 
   @override
+  Override overrideWith(
+    FutureOr<bool> Function(EditProfileRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditProfileProvider._internal(
+        (ref) => create(ref as EditProfileRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userName: userName,
+        dob: dob,
+        language: language,
+        gender: gender,
+        context: context,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _EditProfileProviderElement(this);
+  }
+
+  @override
   bool operator ==(Object other) {
     return other is EditProfileProvider &&
-        other.name == name &&
+        other.userName == userName &&
         other.dob == dob &&
         other.language == language &&
         other.gender == gender &&
@@ -133,7 +177,7 @@ class EditProfileProvider extends AutoDisposeFutureProvider<dynamic> {
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, name.hashCode);
+    hash = _SystemHash.combine(hash, userName.hashCode);
     hash = _SystemHash.combine(hash, dob.hashCode);
     hash = _SystemHash.combine(hash, language.hashCode);
     hash = _SystemHash.combine(hash, gender.hashCode);
@@ -142,5 +186,38 @@ class EditProfileProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin EditProfileRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `userName` of this provider.
+  String get userName;
+
+  /// The parameter `dob` of this provider.
+  String get dob;
+
+  /// The parameter `language` of this provider.
+  String get language;
+
+  /// The parameter `gender` of this provider.
+  String get gender;
+
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+}
+
+class _EditProfileProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with EditProfileRef {
+  _EditProfileProviderElement(super.provider);
+
+  @override
+  String get userName => (origin as EditProfileProvider).userName;
+  @override
+  String get dob => (origin as EditProfileProvider).dob;
+  @override
+  String get language => (origin as EditProfileProvider).language;
+  @override
+  String get gender => (origin as EditProfileProvider).gender;
+  @override
+  BuildContext get context => (origin as EditProfileProvider).context;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

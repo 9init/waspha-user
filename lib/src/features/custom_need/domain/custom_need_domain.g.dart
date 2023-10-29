@@ -29,14 +29,12 @@ class _SystemHash {
   }
 }
 
-typedef CreateRFPRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [createRFP].
 @ProviderFor(createRFP)
 const createRFPProvider = CreateRFPFamily();
 
 /// See also [createRFP].
-class CreateRFPFamily extends Family<AsyncValue<dynamic>> {
+class CreateRFPFamily extends Family<AsyncValue> {
   /// See also [createRFP].
   const CreateRFPFamily();
 
@@ -80,15 +78,15 @@ class CreateRFPFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [createRFP].
-class CreateRFPProvider extends AutoDisposeFutureProvider<dynamic> {
+class CreateRFPProvider extends AutoDisposeFutureProvider<Object?> {
   /// See also [createRFP].
   CreateRFPProvider({
-    required this.items,
-    required this.context,
-    this.type = "delivery",
-  }) : super.internal(
+    required List<Map<String, dynamic>> items,
+    required BuildContext context,
+    String type = "delivery",
+  }) : this._internal(
           (ref) => createRFP(
-            ref,
+            ref as CreateRFPRef,
             items: items,
             context: context,
             type: type,
@@ -101,11 +99,51 @@ class CreateRFPProvider extends AutoDisposeFutureProvider<dynamic> {
                   : _$createRFPHash,
           dependencies: CreateRFPFamily._dependencies,
           allTransitiveDependencies: CreateRFPFamily._allTransitiveDependencies,
+          items: items,
+          context: context,
+          type: type,
         );
+
+  CreateRFPProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.items,
+    required this.context,
+    required this.type,
+  }) : super.internal();
 
   final List<Map<String, dynamic>> items;
   final BuildContext context;
   final String type;
+
+  @override
+  Override overrideWith(
+    FutureOr<Object?> Function(CreateRFPRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CreateRFPProvider._internal(
+        (ref) => create(ref as CreateRFPRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        items: items,
+        context: context,
+        type: type,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Object?> createElement() {
+    return _CreateRFPProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -125,5 +163,28 @@ class CreateRFPProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin CreateRFPRef on AutoDisposeFutureProviderRef<Object?> {
+  /// The parameter `items` of this provider.
+  List<Map<String, dynamic>> get items;
+
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+
+  /// The parameter `type` of this provider.
+  String get type;
+}
+
+class _CreateRFPProviderElement
+    extends AutoDisposeFutureProviderElement<Object?> with CreateRFPRef {
+  _CreateRFPProviderElement(super.provider);
+
+  @override
+  List<Map<String, dynamic>> get items => (origin as CreateRFPProvider).items;
+  @override
+  BuildContext get context => (origin as CreateRFPProvider).context;
+  @override
+  String get type => (origin as CreateRFPProvider).type;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

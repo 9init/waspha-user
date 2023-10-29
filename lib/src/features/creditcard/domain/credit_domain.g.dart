@@ -6,7 +6,7 @@ part of 'credit_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addCreditCardHash() => r'e48423874b911b20dff81227fdd0e442378d0733';
+String _$addCreditCardHash() => r'6a23e5179176608a4e64852ba4c393061f23c4f1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,8 +28,6 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
-
-typedef AddCreditCardRef = AutoDisposeFutureProviderRef<String>;
 
 /// See also [addCreditCard].
 @ProviderFor(addCreditCard)
@@ -89,14 +87,14 @@ class AddCreditCardFamily extends Family<AsyncValue<String>> {
 class AddCreditCardProvider extends AutoDisposeFutureProvider<String> {
   /// See also [addCreditCard].
   AddCreditCardProvider({
-    required this.cardNumber,
-    required this.cardName,
-    required this.cvv,
-    required this.expMonth,
-    required this.expYear,
-  }) : super.internal(
+    required String cardNumber,
+    required String cardName,
+    required String cvv,
+    required int expMonth,
+    required int expYear,
+  }) : this._internal(
           (ref) => addCreditCard(
-            ref,
+            ref as AddCreditCardRef,
             cardNumber: cardNumber,
             cardName: cardName,
             cvv: cvv,
@@ -112,13 +110,59 @@ class AddCreditCardProvider extends AutoDisposeFutureProvider<String> {
           dependencies: AddCreditCardFamily._dependencies,
           allTransitiveDependencies:
               AddCreditCardFamily._allTransitiveDependencies,
+          cardNumber: cardNumber,
+          cardName: cardName,
+          cvv: cvv,
+          expMonth: expMonth,
+          expYear: expYear,
         );
+
+  AddCreditCardProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.cardNumber,
+    required this.cardName,
+    required this.cvv,
+    required this.expMonth,
+    required this.expYear,
+  }) : super.internal();
 
   final String cardNumber;
   final String cardName;
   final String cvv;
   final int expMonth;
   final int expYear;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(AddCreditCardRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddCreditCardProvider._internal(
+        (ref) => create(ref as AddCreditCardRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        cardNumber: cardNumber,
+        cardName: cardName,
+        cvv: cvv,
+        expMonth: expMonth,
+        expYear: expYear,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _AddCreditCardProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -143,7 +187,40 @@ class AddCreditCardProvider extends AutoDisposeFutureProvider<String> {
   }
 }
 
-String _$getCreditCardsHash() => r'f3ada28bae254f66bc6f2565e31f49933104a571';
+mixin AddCreditCardRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `cardNumber` of this provider.
+  String get cardNumber;
+
+  /// The parameter `cardName` of this provider.
+  String get cardName;
+
+  /// The parameter `cvv` of this provider.
+  String get cvv;
+
+  /// The parameter `expMonth` of this provider.
+  int get expMonth;
+
+  /// The parameter `expYear` of this provider.
+  int get expYear;
+}
+
+class _AddCreditCardProviderElement
+    extends AutoDisposeFutureProviderElement<String> with AddCreditCardRef {
+  _AddCreditCardProviderElement(super.provider);
+
+  @override
+  String get cardNumber => (origin as AddCreditCardProvider).cardNumber;
+  @override
+  String get cardName => (origin as AddCreditCardProvider).cardName;
+  @override
+  String get cvv => (origin as AddCreditCardProvider).cvv;
+  @override
+  int get expMonth => (origin as AddCreditCardProvider).expMonth;
+  @override
+  int get expYear => (origin as AddCreditCardProvider).expYear;
+}
+
+String _$getCreditCardsHash() => r'beccb40c69afa2d60247f52e4f7b39d8f25b7109';
 
 /// See also [getCreditCards].
 @ProviderFor(getCreditCards)
@@ -159,7 +236,6 @@ final getCreditCardsProvider = AutoDisposeFutureProvider<dynamic>.internal(
 
 typedef GetCreditCardsRef = AutoDisposeFutureProviderRef<dynamic>;
 String _$deleteCreditCardHash() => r'987f7512b993fcd5e6d2d018ea4db4742d4d7945';
-typedef DeleteCreditCardRef = AutoDisposeFutureProviderRef<String>;
 
 /// See also [deleteCreditCard].
 @ProviderFor(deleteCreditCard)
@@ -207,10 +283,10 @@ class DeleteCreditCardFamily extends Family<AsyncValue<String>> {
 class DeleteCreditCardProvider extends AutoDisposeFutureProvider<String> {
   /// See also [deleteCreditCard].
   DeleteCreditCardProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => deleteCreditCard(
-            ref,
+            ref as DeleteCreditCardRef,
             id: id,
           ),
           from: deleteCreditCardProvider,
@@ -222,9 +298,43 @@ class DeleteCreditCardProvider extends AutoDisposeFutureProvider<String> {
           dependencies: DeleteCreditCardFamily._dependencies,
           allTransitiveDependencies:
               DeleteCreditCardFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  DeleteCreditCardProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(DeleteCreditCardRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteCreditCardProvider._internal(
+        (ref) => create(ref as DeleteCreditCardRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _DeleteCreditCardProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -239,5 +349,18 @@ class DeleteCreditCardProvider extends AutoDisposeFutureProvider<String> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin DeleteCreditCardRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _DeleteCreditCardProviderElement
+    extends AutoDisposeFutureProviderElement<String> with DeleteCreditCardRef {
+  _DeleteCreditCardProviderElement(super.provider);
+
+  @override
+  int get id => (origin as DeleteCreditCardProvider).id;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

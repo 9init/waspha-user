@@ -26,7 +26,7 @@ class RegisterScreen extends ConsumerWidget {
     validateForm() {
       if (_formKey.currentState!.validate()) {
         ref.watch(sendRegisterProvider(
-            name: fullNameController.text,
+            userName: fullNameController.text,
             email: emailController.text,
             countryCode: "+${mobileController.value?.countryCode}",
             phoneNumber: mobileController.value?.nsn ?? "",

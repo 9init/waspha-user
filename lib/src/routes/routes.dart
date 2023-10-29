@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
@@ -5,6 +6,7 @@ import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart'
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
+import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dart';
 import 'package:waspha/src/features/notification/presentation/notification.dart';
 import 'package:waspha/src/features/profile/presentation/legal.dart';
 import 'package:waspha/src/features/profile/presentation/pending_task.dart';
@@ -18,6 +20,7 @@ import 'package:waspha/src/features/verification/presentation/verification.dart'
 
 import '../features/category/presentation/category.dart';
 import '../features/creditcard/presentation/add_credit.dart';
+import '../features/creditcard/presentation/creditcard.dart';
 import '../features/creditcard/presentation/creditdetails.dart';
 import '../features/custom_need/presentation/custom_need.dart';
 import '../features/custom_need/presentation/select_date.dart';
@@ -25,6 +28,7 @@ import '../features/forget_password/presentation/forget_password.dart';
 import '../features/get_location/presentation/get_location_map.dart';
 import '../features/likes/presentation/add_address.dart';
 import '../features/likes/presentation/edit_location.dart';
+import '../features/likes/presentation/likes_screen.dart';
 import '../features/login/presentation/login.dart';
 import '../features/menu/menu_detail/presentation/menu_detail.dart';
 import '../features/menu/menu_offer/presentation/menu_offer.dart';
@@ -38,14 +42,76 @@ import '../features/profile/presentation/guest.dart';
 import '../features/profile/presentation/profile.dart';
 import '../features/profile/presentation/terms.dart';
 
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
+final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
+final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
+final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
+
 // GoRouter configuration
 final router = GoRouter(
   initialLocation: '/',
+  navigatorKey: rootNavigatorKey,
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const Navigation(),
-    ),
+    StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          // the UI shell
+          return CustomNavigation(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorAKey,
+            routes: [
+              // top route inside branch
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const NearbyStoreScreen(),
+                routes: [
+                  // child route
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorBKey,
+            routes: [
+              // top route inside branch
+              GoRoute(
+                path: '/activity',
+                builder: (context, state) => const Activity(),
+                routes: [
+                  // child route
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorCKey,
+            routes: [
+              // top route inside branch
+              GoRoute(
+                path: '/likes',
+                builder: (context, state) => const LikesScreen(),
+                routes: [
+                  // child route
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorDKey,
+            routes: [
+              // top route inside branch
+              GoRoute(
+                path: '/credit',
+                builder: (context, state) => const CreditCardScreen(),
+                routes: [
+                  // child route
+                ],
+              ),
+            ],
+          ),
+        ]),
     GoRoute(
       path: '/categories',
       builder: (context, state) => const CategoriesScreen(),
@@ -67,10 +133,12 @@ final router = GoRouter(
       builder: (context, state) => const ResetPasswordScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/menu-screen',
       builder: (context, state) => MenuScreen(data: state.extra),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/menu-detail',
       builder: (context, state) {
         int sample = state.extra! as int;
@@ -80,6 +148,7 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/menu-offer',
       builder: (context, state) {
         int sample = state.extra! as int;
@@ -107,46 +176,56 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/custom_need_screen',
       builder: (context, state) => CustomNeedScreen(isMenu: state.extra!),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/select_date',
       builder: (context, state) => SelectDateScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/product_details',
       builder: (context, state) => ProductDetails(id: state.extra!),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/buffer_brand',
       builder: (context, state) => BufferBrand(),
     ),
+    // GoRoute(
+    //   path: '/activity',
+    //   builder: (context, state) => Activity(),
+    // ),
     GoRoute(
-      path: '/activity',
-      builder: (context, state) => Activity(),
-    ),
-    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/activity_offers',
       builder: (context, state) => ActivityOffers(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/credit_detail',
       builder: (context, state) => CreditDetails(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/edit_profile',
       builder: (context, state) => EditProfile(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/legal',
       builder: (context, state) => LegalScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/settings_screen',
       builder: (context, state) => SettingsScreen(),
     ),
@@ -155,44 +234,54 @@ final router = GoRouter(
       builder: (context, state) => PendingTasksScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/guest_screen',
       builder: (context, state) => GuestScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/update_profile',
       builder: (context, state) => UpdateProfile(
         data: state.extra,
       ),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/notifications',
       builder: (context, state) => NotificationsScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/reviews_screen',
       builder: (context, state) => ReviewsScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/update_gender',
       builder: (context, state) => UpdateGender(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/update_dob',
       builder: (context, state) => UpdateDOB(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/terms',
       builder: (context, state) => TermsScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/privacy',
       builder: (context, state) => PrivacyPolicyScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/copyright_policy',
       builder: (context, state) => CopyRightPolicyScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/faq_screen',
       builder: (context, state) => FAQScreen(),
     ),
@@ -201,6 +290,7 @@ final router = GoRouter(
       builder: (context, state) => ForgetPasswordScreen(),
     ),
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: '/change_location',
       builder: (context, state) => ChangeLocationScreen(),
     ),

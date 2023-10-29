@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,9 +8,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:waspha/src/constants/constants.dart';
 import 'package:waspha/src/features/custom_need/domain/custom_need_domain.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
+import 'package:waspha/src/widgets/need_login.dart';
 
 import '../../login/domain/login_domain.dart';
-import '../../nearby_stores/presentation/nearby_stores.dart';
 import '../domain/activity_domain.dart';
 
 final activityProvider = StateProvider<String>((ref) => "current");
@@ -24,26 +23,9 @@ class Activity extends StatefulHookConsumerWidget {
 }
 
 class _ActivityState extends ConsumerState<Activity> {
-  isLogged() async {
-    return ref.read(isLoggedInProvider.future).then((value) {
-      if (value == false) {
-        return showAdaptiveDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                isLogged: true,
-                content: "Please login to see your activities",
-              );
-            });
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    isLogged();
   }
 
   @override
@@ -52,7 +34,43 @@ class _ActivityState extends ConsumerState<Activity> {
     final isPast = activity.value == "past";
     final _pageController = usePageController();
     final _pageTwoController = usePageController();
+    final isLogged = ref.watch(isLoggedInProvider);
+    return isLogged.when(
+      data: (data) {
+        if (data == false) {
+          return NeedLoginScreen();
+        }
+        return ActivityScreen(
+            activity: activity,
+            isPast: isPast,
+            pageController: _pageController,
+            pageTwoController: _pageTwoController);
+      },
+      error: (e, s) {
+        return Text("Error");
+      },
+      loading: () => Center(child: CircularProgressIndicator.adaptive()),
+    );
+  }
+}
 
+class ActivityScreen extends StatelessWidget {
+  const ActivityScreen({
+    super.key,
+    required this.activity,
+    required this.isPast,
+    required PageController pageController,
+    required PageController pageTwoController,
+  })  : _pageController = pageController,
+        _pageTwoController = pageTwoController;
+
+  final ValueNotifier<String> activity;
+  final bool isPast;
+  final PageController _pageController;
+  final PageController _pageTwoController;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -75,14 +93,14 @@ class _ActivityState extends ConsumerState<Activity> {
                 children: [
                   Text('Activities',
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 27,
                           fontWeight: FontWeight.bold,
                           color: Colors.black)),
                   Consumer(
                     builder: (context, ref, child) {
                       return Container(
                         width: 140,
-                        height: 50,
+                        height: 42,
                         decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(50)),
@@ -124,11 +142,8 @@ class _ActivityState extends ConsumerState<Activity> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
             Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.only(left: 12.0),
                 child: Text(isPast ? "Last Orders" : "Order Progress",
                     style: TextStyle(
                       fontSize: 20,
@@ -146,31 +161,22 @@ class _ActivityState extends ConsumerState<Activity> {
                       );
                     }
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 270,
-                              child: ListView.separated(
-                                  itemCount: data?.length ?? 0,
-                                  controller: _pageController,
-                                  scrollDirection: Axis.horizontal,
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      width: 180,
-                                      height: 260,
+                    return Column(
+                      children: [
+                        Container(
+                            height: 265,
+                            child: ListView.builder(
+                                itemCount: data?.length ?? 0,
+                                controller: _pageController,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 156,
                                       decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey[300]!,
-                                                blurRadius: 5,
-                                                offset: Offset(0, 1))
-                                          ],
+                                          border: Border.all(
+                                              color: Colors.grey[300]!),
                                           color: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(10)),
@@ -226,7 +232,6 @@ class _ActivityState extends ConsumerState<Activity> {
                                                   ],
                                                 ),
                                                 CircleAvatar(
-                                                  radius: 25,
                                                   backgroundImage:
                                                       CachedNetworkImageProvider(
                                                           data[index]
@@ -235,12 +240,20 @@ class _ActivityState extends ConsumerState<Activity> {
                                                 ),
                                               ],
                                             ),
-                                            ListTile(
-                                              leading: Icon(
-                                                Icons.schedule,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5),
+                                              child: ListTile(
+                                                leading: Icon(Icons.schedule,
+                                                    size: 17),
+                                                contentPadding:
+                                                    EdgeInsets.all(2),
+                                                title: Text(
+                                                  "56h:08m:23s",
+                                                  style:
+                                                      TextStyle(fontSize: 13),
+                                                ),
                                               ),
-                                              title: FittedBox(
-                                                  child: Text("56h:08m:23s")),
                                             ),
                                             // Text(
                                             //   "56h:08m:23s",
@@ -249,27 +262,29 @@ class _ActivityState extends ConsumerState<Activity> {
                                             Align(
                                                 alignment:
                                                     Alignment.bottomRight,
-                                                child:
-                                                    Icon(Icons.arrow_forward))
+                                                child: Icon(
+                                                  Icons.arrow_forward,
+                                                  size: 17,
+                                                ))
                                           ],
                                         ),
                                       ),
-                                    );
-                                  })),
-                          SizedBox(
-                            height: 10,
+                                    ),
+                                  );
+                                })),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SmoothPageIndicator(
+                          count: (data.length / 2).round(),
+                          controller: _pageController,
+                          effect: ExpandingDotsEffect(
+                            dotWidth: 7,
+                            dotHeight: 7,
+                            activeDotColor: Colors.purple,
                           ),
-                          SmoothPageIndicator(
-                            count: (data.length / 2).round(),
-                            controller: _pageController,
-                            effect: ExpandingDotsEffect(
-                              dotWidth: 7,
-                              dotHeight: 7,
-                              activeDotColor: Colors.purple,
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     );
                   },
                   error: (e, s) {
@@ -300,24 +315,25 @@ class _ActivityState extends ConsumerState<Activity> {
                               Text("You don't have either request/offer yet"),
                         );
                       } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                  height: 250,
-                                  child: ListView.separated(
-                                      itemCount: data?.length ?? 0,
-                                      controller: _pageTwoController,
-                                      scrollDirection: Axis.horizontal,
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                      itemBuilder: (context, index) {
-                                        String rfpStatus =
-                                            data[index]["rfp_status"];
-                                        return GestureDetector(
+                        return Column(
+                          children: [
+                            Container(
+                                height: 268,
+                                child: ListView.separated(
+                                    itemCount: data?.length ?? 0,
+                                    controller: _pageTwoController,
+                                    scrollDirection: Axis.horizontal,
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      String rfpStatus =
+                                          data[index]["rfp_status"];
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: GestureDetector(
                                           onTap: () {
                                             if (rfpStatus ==
                                                     QueueStatus
@@ -342,22 +358,22 @@ class _ActivityState extends ConsumerState<Activity> {
                                                 ["name"]["en"],
                                             type: data[index]["type"],
                                           ),
-                                        );
-                                      })),
-                              SizedBox(
-                                height: 10,
+                                        ),
+                                      );
+                                    })),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SmoothPageIndicator(
+                              count: (data?.length - 1.5).round(),
+                              controller: _pageTwoController,
+                              effect: ExpandingDotsEffect(
+                                dotWidth: 8,
+                                dotHeight: 8,
+                                activeDotColor: Colors.purple,
                               ),
-                              SmoothPageIndicator(
-                                count: (data?.length - 1.5).round(),
-                                controller: _pageTwoController,
-                                effect: ExpandingDotsEffect(
-                                  dotWidth: 8,
-                                  dotHeight: 8,
-                                  activeDotColor: Colors.purple,
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         );
                       }
                     },
@@ -404,13 +420,13 @@ class RequestBody extends StatelessWidget {
     DateTime now = DateTime.now();
     bool isExpired = now.isAfter(DateTime.parse(expiredTime));
     return Container(
-      width: 300,
-      height: 200,
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(color: Colors.grey[300]!, blurRadius: 5, offset: Offset(0, 1))
-      ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      width: 312,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]!),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -423,75 +439,76 @@ class RequestBody extends StatelessWidget {
                       radius: 40,
                       backgroundImage: CachedNetworkImageProvider(image),
                     ),
-                    Text(name),
+                    Container(
+                        width: 80,
+                        alignment: Alignment.center,
+                        child: Text(
+                          name,
+                          overflow: TextOverflow.ellipsis,
+                        )),
                   ],
                 ),
                 SizedBox(
                   width: 30,
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Visibility(
-                          visible: isPast,
-                          child: Center(
-                            child: ClosedText(
-                              text: queueStatus ==
-                                      QueueStatus.QUEUE_STOPPED.name
-                                          .toLowerCase()
-                                  ? "Stopped"
-                                  : queueStatus ==
-                                              QueueStatus.EXPIRED.name
-                                                  .toLowerCase() ||
-                                          isExpired
-                                      ? "Expired"
-                                      : queueStatus ==
-                                              QueueStatus.REJECTED.name
-                                                  .toLowerCase()
-                                          ? "Rejected"
-                                          : queueStatus ==
-                                                  QueueStatus.CANCELLED.name
-                                                      .toLowerCase()
-                                              ? "Cancelled"
-                                              : queueStatus ==
-                                                      QueueStatus
-                                                          .REQUIRE_QUEUE.name
-                                                          .toLowerCase()
-                                                  ? "Require Queue"
-                                                  : queueStatus ==
-                                                          QueueStatus
-                                                              .CURRENT.name
-                                                              .toLowerCase()
-                                                      ? "Current"
-                                                      : queueStatus ==
-                                                              QueueStatus
-                                                                  .UPCOMING.name
-                                                                  .toLowerCase()
-                                                          ? "Upcoming"
-                                                          : "",
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 80,
-                        ),
-                        Visibility(
-                          visible: isPast,
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Visibility(
+                              visible: isPast,
+                              child: ClosedText(
+                                text: queueStatus ==
+                                        QueueStatus.QUEUE_STOPPED.name
+                                            .toLowerCase()
+                                    ? "Stopped"
+                                    : queueStatus ==
+                                                QueueStatus.EXPIRED.name
+                                                    .toLowerCase() ||
+                                            isExpired
+                                        ? "Expired"
+                                        : queueStatus ==
+                                                QueueStatus.REJECTED.name
+                                                    .toLowerCase()
+                                            ? "Rejected"
+                                            : queueStatus ==
+                                                    QueueStatus.CANCELLED.name
+                                                        .toLowerCase()
+                                                ? "Cancelled"
+                                                : queueStatus ==
+                                                        QueueStatus
+                                                            .REQUIRE_QUEUE.name
+                                                            .toLowerCase()
+                                                    ? "Require Queue"
+                                                    : queueStatus ==
+                                                            QueueStatus
+                                                                .CURRENT.name
+                                                                .toLowerCase()
+                                                        ? "Current"
+                                                        : queueStatus ==
+                                                                QueueStatus
+                                                                    .UPCOMING
+                                                                    .name
+                                                                    .toLowerCase()
+                                                            ? "Upcoming"
+                                                            : "",
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80,
+                            ),
+                            Visibility(
+                                child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ))
+                          ],
+                        ),
                         Text("Request #120"),
                         Text(formatTime(currentTime)),
                         Text(capitalize(type),
@@ -510,12 +527,28 @@ class RequestBody extends StatelessWidget {
               leading: Icon(Icons.lock_clock),
               title: Text("56h:08m:23s"),
             ),
-            Text("Offer recieved (12)"),
-            Expanded(
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => CircleAvatar(),
-                    itemCount: 4))
+            Center(child: Text("Offer recieved (12)")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Container(
+                      height: 50,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) => SizedBox(
+                                width: 2,
+                              ),
+                          itemBuilder: (context, index) => CircleAvatar(),
+                          itemCount: 4)),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("+2")
+              ],
+            )
           ],
         ),
       ),

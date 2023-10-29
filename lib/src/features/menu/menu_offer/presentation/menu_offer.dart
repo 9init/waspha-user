@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 
+import '../../../../widgets/categories/categories_widget.dart';
+import '../../../../widgets/nearby_store/nearby_store_widget.dart';
 import '../domain/menu_offer_domain.dart';
 
 class MenuOffer extends HookWidget {
@@ -32,33 +34,38 @@ class MenuOffer extends HookWidget {
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmlrZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80'),
+                child: Consumer(builder: (context, ref, child) {
+                  final subCategory = ref.watch(subCategoryProvider);
+                  final category = ref.watch(categoryProvider);
+
+                  return Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              '${category["image"]}'),
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      top: 20,
-                      left: 20,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            'https://images.unsplash.com/photo-1525160354320-d8e92641c563?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW90b3JiaWtlfGVufDB8fDB8fHww&w=1000&q=80'),
-                      ),
-                    )
-                  ],
-                ),
+                      Positioned(
+                        top: 10,
+                        left: 20,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              '${subCategory["image"]}'),
+                        ),
+                      )
+                    ],
+                  );
+                }),
               ),
               RichText(
                   text: TextSpan(children: [
@@ -208,7 +215,7 @@ class MenuOffer extends HookWidget {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: GestureDetector(
                                 onTap: () => context.push('/product_details',
-                                    extra: data[index]["id"]),
+                                    extra: data?[index]["id"]),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),
@@ -235,7 +242,7 @@ class MenuOffer extends HookWidget {
                                           backgroundImage:
                                               CachedNetworkImageProvider(
                                             data[index]["image"]["en"],
-                                            errorListener: () =>
+                                            errorListener: (_) =>
                                                 Icon(Icons.broken_image),
                                           ),
                                         ),

@@ -6,8 +6,8 @@ part of 'menu_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_MapCategories _$$_MapCategoriesFromJson(Map<String, dynamic> json) =>
-    _$_MapCategories(
+_$MapCategoriesImpl _$$MapCategoriesImplFromJson(Map<String, dynamic> json) =>
+    _$MapCategoriesImpl(
       id: json['id'] as int,
       name: json['name'],
       is_enabled: json['is_enabled'] as bool,
@@ -17,7 +17,7 @@ _$_MapCategories _$$_MapCategoriesFromJson(Map<String, dynamic> json) =>
       parent_id: json['parent_id'],
     );
 
-Map<String, dynamic> _$$_MapCategoriesToJson(_$_MapCategories instance) =>
+Map<String, dynamic> _$$MapCategoriesImplToJson(_$MapCategoriesImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

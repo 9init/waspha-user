@@ -6,7 +6,7 @@ part of 'menu_offer_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getStoresProductsHash() => r'c43bb58613e7600a04505b80f4215927fe0ab6d5';
+String _$getStoresProductsHash() => r'f939eaddf82df66eb8703135b7d733633aefc2ca';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,8 +28,6 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
-
-typedef GetStoresProductsRef = AutoDisposeFutureProviderRef<dynamic>;
 
 /// See also [getStoresProducts].
 @ProviderFor(getStoresProducts)
@@ -80,11 +78,11 @@ class GetStoresProductsFamily extends Family<AsyncValue<dynamic>> {
 class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [getStoresProducts].
   GetStoresProductsProvider({
-    required this.storeID,
-    required this.categoryID,
-  }) : super.internal(
+    required int storeID,
+    required int categoryID,
+  }) : this._internal(
           (ref) => getStoresProducts(
-            ref,
+            ref as GetStoresProductsRef,
             storeID: storeID,
             categoryID: categoryID,
           ),
@@ -97,10 +95,47 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
           dependencies: GetStoresProductsFamily._dependencies,
           allTransitiveDependencies:
               GetStoresProductsFamily._allTransitiveDependencies,
+          storeID: storeID,
+          categoryID: categoryID,
         );
+
+  GetStoresProductsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.storeID,
+    required this.categoryID,
+  }) : super.internal();
 
   final int storeID;
   final int categoryID;
+
+  @override
+  Override overrideWith(
+    FutureOr<dynamic> Function(GetStoresProductsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetStoresProductsProvider._internal(
+        (ref) => create(ref as GetStoresProductsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        storeID: storeID,
+        categoryID: categoryID,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<dynamic> createElement() {
+    return _GetStoresProductsProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -118,5 +153,24 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin GetStoresProductsRef on AutoDisposeFutureProviderRef<dynamic> {
+  /// The parameter `storeID` of this provider.
+  int get storeID;
+
+  /// The parameter `categoryID` of this provider.
+  int get categoryID;
+}
+
+class _GetStoresProductsProviderElement
+    extends AutoDisposeFutureProviderElement<dynamic>
+    with GetStoresProductsRef {
+  _GetStoresProductsProviderElement(super.provider);
+
+  @override
+  int get storeID => (origin as GetStoresProductsProvider).storeID;
+  @override
+  int get categoryID => (origin as GetStoresProductsProvider).categoryID;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

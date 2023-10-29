@@ -13,7 +13,7 @@ part 'register_domain.g.dart';
 @riverpod
 Future sendRegister(
   Ref ref, {
-  required String name,
+  required String userName,
   required String email,
   required String countryCode,
   required String phoneNumber,
@@ -27,7 +27,7 @@ Future sendRegister(
     var request = await ref.watch(dioProvider).post(
         url,
         json.encode({
-          "name": name,
+          "name": userName,
           "email": email,
           "contact": {
             "country_code": countryCode,

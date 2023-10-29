@@ -10,9 +10,9 @@ import 'package:waspha/src/widgets/search/search_widget.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/categories/categories_widget.dart';
+import '../../../widgets/need_login.dart';
 import '../../login/domain/login_domain.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
-import '../../nearby_stores/presentation/nearby_stores.dart';
 import '../data/item_data.dart';
 import '../domain/custom_need_domain.dart';
 import 'item_widget.dart';
@@ -27,207 +27,195 @@ class CustomNeedScreen extends StatefulHookConsumerWidget {
 }
 
 class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
-  isLogged() async {
-    return ref.read(isLoggedInProvider.future).then((value) {
-      if (value == false) {
-        return showAdaptiveDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                isLogged: true,
-                content: "Please login to see or make requests",
-              );
-            });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    isLogged();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isScheduled = useState(false);
     final items = useState(<Item>[]);
+    final isLogged = ref.watch(isLoggedInProvider);
+    return isLogged.when(data: (data) {
+      if (data == false) {
+        return NeedLoginScreen();
+      }
 
-    return Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CustomBackButton(),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Consumer(
+      return Scaffold(
+          body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomBackButton(),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final subCategory = ref.watch(subCategoryProvider);
+                      final category = ref.watch(categoryProvider);
+
+                      return Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.network(
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                  '${category["image"]}'),
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 20,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.network(
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                  '${subCategory["image"]}'),
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                Consumer(
                   builder: (context, ref, child) {
+                    final method = ref.watch(methodProvider);
                     final subCategory = ref.watch(subCategoryProvider);
                     final category = ref.watch(categoryProvider);
 
-                    return Stack(
-                      children: [
-                        Positioned(
-                          left: 0,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image.network(
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                                '${category["image"]}'),
-                          ),
-                        ),
-                        Positioned(
-                          top: 10,
-                          left: 20,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image.network(
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                                '${subCategory["image"]}'),
-                          ),
-                        )
-                      ],
-                    );
+                    return RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: "${capitalize(method)} direct request \n",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                      TextSpan(
+                          text: "${category["name"]}",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                      WidgetSpan(child: Icon(Icons.arrow_forward)),
+                      TextSpan(
+                          text: "${subCategory["name"]} \n",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                    ]));
                   },
                 ),
-              ),
-              Consumer(
-                builder: (context, ref, child) {
-                  final method = ref.watch(methodProvider);
-                  final subCategory = ref.watch(subCategoryProvider);
-                  final category = ref.watch(categoryProvider);
-
-                  return RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "${capitalize(method)} direct request \n",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: "${category["name"]}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                    WidgetSpan(child: Icon(Icons.arrow_forward)),
-                    TextSpan(
-                        text: "${subCategory["name"]} \n",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
-                  ]));
-                },
-              ),
-            ],
-          ),
-          Container(
-            width: 370,
-            height: 90,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
-                  )
-                ],
-                borderRadius: BorderRadius.circular(25)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 1,
-                  ),
-                  Text(
-                    "Craft your request",
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  Spacer(),
-                  Visibility(
-                    visible: widget.isMenu,
-                    child: GestureDetector(
-                      onTap: () {},
+              ],
+            ),
+            Container(
+              width: 370,
+              height: 90,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(25)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 1,
+                    ),
+                    Text(
+                      "Craft your request",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    Spacer(),
+                    Visibility(
+                      visible: widget.isMenu,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/nearby/menu.png'),
+                            Text("Menu")
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        items.value.insert(0, new Item(deleteCallback: (item) {
+                          items.value.remove(item);
+                          setState(() {});
+                        }));
+                        setState(() {});
+                        print(items);
+                      },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/images/nearby/menu.png'),
-                          Text("Menu")
+                          Text("new")
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      items.value.insert(0, new Item(deleteCallback: (item) {
-                        items.value.remove(item);
-                        setState(() {});
-                      }));
-                      setState(() {});
-                      print(items);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/nearby/menu.png'),
-                        Text("new")
-                      ],
+                    SizedBox(
+                      width: 1,
                     ),
-                  ),
-                  SizedBox(
-                    width: 1,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: items.value.length,
-              separatorBuilder: (context, index) => SizedBox(
-                height: 5,
-              ),
-              itemBuilder: (context, index) => CreateItemWidget(
-                item: items.value[index],
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: items.value.length,
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 5,
+                ),
+                itemBuilder: (context, index) => CreateItemWidget(
+                  item: items.value[index],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ReadyRequestButton(items: items, isScheduled: isScheduled),
-          SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
-    ));
+            SizedBox(
+              height: 20,
+            ),
+            ReadyRequestButton(items: items, isScheduled: isScheduled),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ));
+    }, error: (e, s) {
+      return Text("Error");
+    }, loading: () {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    });
   }
 }
 

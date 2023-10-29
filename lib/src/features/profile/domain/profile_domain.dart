@@ -57,8 +57,8 @@ final deleteAccountProvider =
 });
 
 @riverpod
-Future editProfile(Ref ref,
-    {required String name,
+Future<bool> editProfile(Ref ref,
+    {required String userName,
     required String dob,
     String language = "en",
     String gender = "male",
@@ -66,22 +66,23 @@ Future editProfile(Ref ref,
   final String url = "user/edit-profile";
   try {
     final request = await ref.watch(dioProvider).post(url, {
-      "name": name,
+      "name": userName,
       "dob": dob,
       "gender": gender,
       "language": language,
     });
-    final data = request.data["data"];
+    // final data = request.data["data"];
 
     if (request.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Profile Updated"),
       ));
-      return data;
+      return true;
     }
   } catch (e) {
     log("EDIT PROFILE ERROR ${e}");
   }
+  return false;
 }
 
 final updateImageProvider =

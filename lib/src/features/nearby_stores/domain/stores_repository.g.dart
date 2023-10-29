@@ -7,7 +7,7 @@ part of 'stores_repository.dart';
 // **************************************************************************
 
 String _$getNearbyStoresStreamHash() =>
-    r'b487d72936aa667e58a4b8b1282cad4769cbb319';
+    r'5bde722fb125b07c12e36bc42ffda7db39d8e8c2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,8 +29,6 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
-
-typedef GetNearbyStoresStreamRef = StreamProviderRef<dynamic>;
 
 /// See also [getNearbyStoresStream].
 @ProviderFor(getNearbyStoresStream)
@@ -84,12 +82,12 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
 class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
   /// See also [getNearbyStoresStream].
   GetNearbyStoresStreamProvider({
-    required this.context,
-    required this.isBottomSheetOpen,
-    required this.userLocation,
-  }) : super.internal(
+    required BuildContext context,
+    required ValueNotifier<bool> isBottomSheetOpen,
+    required ValueNotifier<LatLng> userLocation,
+  }) : this._internal(
           (ref) => getNearbyStoresStream(
-            ref,
+            ref as GetNearbyStoresStreamRef,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
             userLocation: userLocation,
@@ -103,11 +101,51 @@ class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
           dependencies: GetNearbyStoresStreamFamily._dependencies,
           allTransitiveDependencies:
               GetNearbyStoresStreamFamily._allTransitiveDependencies,
+          context: context,
+          isBottomSheetOpen: isBottomSheetOpen,
+          userLocation: userLocation,
         );
+
+  GetNearbyStoresStreamProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.context,
+    required this.isBottomSheetOpen,
+    required this.userLocation,
+  }) : super.internal();
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
   final ValueNotifier<LatLng> userLocation;
+
+  @override
+  Override overrideWith(
+    Stream<dynamic> Function(GetNearbyStoresStreamRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetNearbyStoresStreamProvider._internal(
+        (ref) => create(ref as GetNearbyStoresStreamRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        context: context,
+        isBottomSheetOpen: isBottomSheetOpen,
+        userLocation: userLocation,
+      ),
+    );
+  }
+
+  @override
+  StreamProviderElement<dynamic> createElement() {
+    return _GetNearbyStoresStreamProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -128,8 +166,32 @@ class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
   }
 }
 
-String _$getNearbyStoresHash() => r'330c313ba6894c79502ff2e5e6a8bcf8eb2834b7';
-typedef GetNearbyStoresRef = FutureProviderRef<dynamic>;
+mixin GetNearbyStoresStreamRef on StreamProviderRef<dynamic> {
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+
+  /// The parameter `isBottomSheetOpen` of this provider.
+  ValueNotifier<bool> get isBottomSheetOpen;
+
+  /// The parameter `userLocation` of this provider.
+  ValueNotifier<LatLng> get userLocation;
+}
+
+class _GetNearbyStoresStreamProviderElement
+    extends StreamProviderElement<dynamic> with GetNearbyStoresStreamRef {
+  _GetNearbyStoresStreamProviderElement(super.provider);
+
+  @override
+  BuildContext get context => (origin as GetNearbyStoresStreamProvider).context;
+  @override
+  ValueNotifier<bool> get isBottomSheetOpen =>
+      (origin as GetNearbyStoresStreamProvider).isBottomSheetOpen;
+  @override
+  ValueNotifier<LatLng> get userLocation =>
+      (origin as GetNearbyStoresStreamProvider).userLocation;
+}
+
+String _$getNearbyStoresHash() => r'7c3e561590db1a83aea23a8802b9c5e51e3e95ac';
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)
@@ -183,12 +245,12 @@ class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
 class GetNearbyStoresProvider extends FutureProvider<dynamic> {
   /// See also [getNearbyStores].
   GetNearbyStoresProvider({
-    required this.context,
-    required this.isBottomSheetOpen,
-    required this.userLocation,
-  }) : super.internal(
+    required BuildContext context,
+    required ValueNotifier<bool> isBottomSheetOpen,
+    required ValueNotifier<LatLng> userLocation,
+  }) : this._internal(
           (ref) => getNearbyStores(
-            ref,
+            ref as GetNearbyStoresRef,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
             userLocation: userLocation,
@@ -202,11 +264,51 @@ class GetNearbyStoresProvider extends FutureProvider<dynamic> {
           dependencies: GetNearbyStoresFamily._dependencies,
           allTransitiveDependencies:
               GetNearbyStoresFamily._allTransitiveDependencies,
+          context: context,
+          isBottomSheetOpen: isBottomSheetOpen,
+          userLocation: userLocation,
         );
+
+  GetNearbyStoresProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.context,
+    required this.isBottomSheetOpen,
+    required this.userLocation,
+  }) : super.internal();
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
   final ValueNotifier<LatLng> userLocation;
+
+  @override
+  Override overrideWith(
+    FutureOr<dynamic> Function(GetNearbyStoresRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetNearbyStoresProvider._internal(
+        (ref) => create(ref as GetNearbyStoresRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        context: context,
+        isBottomSheetOpen: isBottomSheetOpen,
+        userLocation: userLocation,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<dynamic> createElement() {
+    return _GetNearbyStoresProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -226,5 +328,30 @@ class GetNearbyStoresProvider extends FutureProvider<dynamic> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin GetNearbyStoresRef on FutureProviderRef<dynamic> {
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+
+  /// The parameter `isBottomSheetOpen` of this provider.
+  ValueNotifier<bool> get isBottomSheetOpen;
+
+  /// The parameter `userLocation` of this provider.
+  ValueNotifier<LatLng> get userLocation;
+}
+
+class _GetNearbyStoresProviderElement extends FutureProviderElement<dynamic>
+    with GetNearbyStoresRef {
+  _GetNearbyStoresProviderElement(super.provider);
+
+  @override
+  BuildContext get context => (origin as GetNearbyStoresProvider).context;
+  @override
+  ValueNotifier<bool> get isBottomSheetOpen =>
+      (origin as GetNearbyStoresProvider).isBottomSheetOpen;
+  @override
+  ValueNotifier<LatLng> get userLocation =>
+      (origin as GetNearbyStoresProvider).userLocation;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

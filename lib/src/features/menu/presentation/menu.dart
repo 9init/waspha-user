@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../widgets/nearby_store/nearby_store_widget.dart';
+
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key, required this.data});
   final data;
@@ -10,23 +12,21 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         actions: [
-          IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(
-                'https://img.freepik.com/free-photo/summer-daisy-beauty-petal-close-up-purple-outdoors-generative-ai_188544-8633.jpg'),
-          ),
-          SizedBox(
-            width: 10,
-          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ProfileAppBar(),
+          )
         ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Stack(
-          alignment: Alignment.bottomCenter,
+        child: Column(
           children: [
+            SizedBox(
+              height: 20,
+            ),
             Column(
               children: [
                 MenuContainer(
@@ -48,23 +48,26 @@ class MenuScreen extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
                   child: ListView.separated(
                       itemCount: data.length,
                       physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
                       separatorBuilder: (context, index) => SizedBox(
                             height: 20,
                           ),
+                      shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return MenuCard(
                           onFavorited: () {},
                           imageURl: data[index].image,
+                          
                           companyName: data[index].business_name["en"],
                         );
                       }),
                 )
               ],
+            ),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               onPressed: () => context.pop(),
@@ -120,28 +123,30 @@ class MenuCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * width,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: !isOffer
-                          ? MainAxisAlignment.spaceAround
-                          : MainAxisAlignment.start,
-                      children: [
-                        !isOffer ? Icon(Icons.abc) : Container(),
-                        Text(
-                          companyName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        !isOffer ? Icon(Icons.shopping_cart) : Container(),
-                      ],
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: !isOffer
+                            ? MainAxisAlignment.spaceAround
+                            : MainAxisAlignment.start,
+                        children: [
+                          !isOffer ? Icon(Icons.abc) : Container(),
+                          Text(
+                            companyName,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          !isOffer ? Icon(Icons.shopping_cart) : Container(),
+                        ],
+                      ),
                     ),
                   ),
                 )

@@ -6,7 +6,8 @@ part of 'user_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserData _$$_UserDataFromJson(Map<String, dynamic> json) => _$_UserData(
+_$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
+    _$UserDataImpl(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -41,7 +42,7 @@ _$_UserData _$$_UserDataFromJson(Map<String, dynamic> json) => _$_UserData(
       latest_lng: (json['latest_lng'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$$_UserDataToJson(_$_UserData instance) =>
+Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
     <String, dynamic>{
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
@@ -71,17 +72,19 @@ Map<String, dynamic> _$$_UserDataToJson(_$_UserData instance) =>
       'latest_lng': instance.latest_lng,
     };
 
-_$_Rating _$$_RatingFromJson(Map<String, dynamic> json) => _$_Rating(
+_$RatingImpl _$$RatingImplFromJson(Map<String, dynamic> json) => _$RatingImpl(
       rating: (json['rating'] as num?)?.toDouble(),
       count: json['count'] as int?,
     );
 
-Map<String, dynamic> _$$_RatingToJson(_$_Rating instance) => <String, dynamic>{
+Map<String, dynamic> _$$RatingImplToJson(_$RatingImpl instance) =>
+    <String, dynamic>{
       'rating': instance.rating,
       'count': instance.count,
     };
 
-_$_Country _$$_CountryFromJson(Map<String, dynamic> json) => _$_Country(
+_$CountryImpl _$$CountryImplFromJson(Map<String, dynamic> json) =>
+    _$CountryImpl(
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       id: json['id'] as int,
@@ -93,7 +96,7 @@ _$_Country _$$_CountryFromJson(Map<String, dynamic> json) => _$_Country(
       phonecode: json['phonecode'] as int,
     );
 
-Map<String, dynamic> _$$_CountryToJson(_$_Country instance) =>
+Map<String, dynamic> _$$CountryImplToJson(_$CountryImpl instance) =>
     <String, dynamic>{
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),

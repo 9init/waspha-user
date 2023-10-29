@@ -335,10 +335,11 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
 }
 
 /// @nodoc
-abstract class _$$_LoginDataCopyWith<$Res> implements $LoginDataCopyWith<$Res> {
-  factory _$$_LoginDataCopyWith(
-          _$_LoginData value, $Res Function(_$_LoginData) then) =
-      __$$_LoginDataCopyWithImpl<$Res>;
+abstract class _$$LoginDataImplCopyWith<$Res>
+    implements $LoginDataCopyWith<$Res> {
+  factory _$$LoginDataImplCopyWith(
+          _$LoginDataImpl value, $Res Function(_$LoginDataImpl) then) =
+      __$$LoginDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -385,11 +386,11 @@ abstract class _$$_LoginDataCopyWith<$Res> implements $LoginDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LoginDataCopyWithImpl<$Res>
-    extends _$LoginDataCopyWithImpl<$Res, _$_LoginData>
-    implements _$$_LoginDataCopyWith<$Res> {
-  __$$_LoginDataCopyWithImpl(
-      _$_LoginData _value, $Res Function(_$_LoginData) _then)
+class __$$LoginDataImplCopyWithImpl<$Res>
+    extends _$LoginDataCopyWithImpl<$Res, _$LoginDataImpl>
+    implements _$$LoginDataImplCopyWith<$Res> {
+  __$$LoginDataImplCopyWithImpl(
+      _$LoginDataImpl _value, $Res Function(_$LoginDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -436,7 +437,7 @@ class __$$_LoginDataCopyWithImpl<$Res>
     Object? verified = freezed,
     Object? unverified = freezed,
   }) {
-    return _then(_$_LoginData(
+    return _then(_$LoginDataImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -603,8 +604,8 @@ class __$$_LoginDataCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_LoginData implements _LoginData {
-  const _$_LoginData(
+class _$LoginDataImpl implements _LoginData {
+  const _$LoginDataImpl(
       {required this.id,
       this.createdAt,
       this.updatedAt,
@@ -646,8 +647,8 @@ class _$_LoginData implements _LoginData {
       this.verified,
       this.unverified});
 
-  factory _$_LoginData.fromJson(Map<String, dynamic> json) =>
-      _$$_LoginDataFromJson(json);
+  factory _$LoginDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LoginDataImplFromJson(json);
 
   @override
   final int id;
@@ -744,7 +745,7 @@ class _$_LoginData implements _LoginData {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LoginData &&
+            other is _$LoginDataImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -866,12 +867,12 @@ class _$_LoginData implements _LoginData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LoginDataCopyWith<_$_LoginData> get copyWith =>
-      __$$_LoginDataCopyWithImpl<_$_LoginData>(this, _$identity);
+  _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>
+      __$$LoginDataImplCopyWithImpl<_$LoginDataImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_LoginDataToJson(
+    return _$$LoginDataImplToJson(
       this,
     );
   }
@@ -918,10 +919,10 @@ abstract class _LoginData implements LoginData {
       required final String rc_auth_token,
       final double? avg_rating,
       final dynamic verified,
-      final dynamic unverified}) = _$_LoginData;
+      final dynamic unverified}) = _$LoginDataImpl;
 
   factory _LoginData.fromJson(Map<String, dynamic> json) =
-      _$_LoginData.fromJson;
+      _$LoginDataImpl.fromJson;
 
   @override
   int get id;
@@ -1005,6 +1006,6 @@ abstract class _LoginData implements LoginData {
   dynamic get unverified;
   @override
   @JsonKey(ignore: true)
-  _$$_LoginDataCopyWith<_$_LoginData> get copyWith =>
+  _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

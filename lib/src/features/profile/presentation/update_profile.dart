@@ -72,10 +72,10 @@ class UpdateProfile extends StatelessWidget {
                         builder: (context, ref, child) => AuthButton(
                           onTap: () {
                             ref.read(editProfileProvider(
-                                name: _controller.text,
+                                userName: _controller.text,
                                 dob: "1990-09-20T00:00:00.000Z",
                                 context: context));
-                            ref.refresh(getProfileDataProvider(context));
+                            ref.refresh(getProfileDataProvider(context)).value;
                           },
                           text: "Continue",
                         ),
@@ -119,16 +119,16 @@ class UpdateGender extends StatelessWidget {
                 ListTile(
                   onTap: () {
                     ref.read(editProfileProvider(
-                        name: "", gender: "male", dob: "", context: context));
-                    ref.refresh(getProfileDataProvider(context));
+                        userName: "", gender: "male", dob: "", context: context));
+                    ref.refresh(getProfileDataProvider(context)).value;
                   },
                   title: Text("Male"),
                 ),
                 ListTile(
                   onTap: () {
                     ref.read(editProfileProvider(
-                        name: "", gender: "female", dob: "", context: context));
-                    ref.refresh(getProfileDataProvider(context));
+                        userName: "", gender: "female", dob: "", context: context));
+                    ref.refresh(getProfileDataProvider(context)).value;
                   },
                   title: Text("Female"),
                 )
@@ -187,10 +187,10 @@ class UpdateDOB extends HookWidget {
               builder: (context, ref, child) => AuthButton(
                 onTap: () {
                   ref.read(editProfileProvider(
-                      name: '',
+                      userName: '',
                       dob: "${_selectedDate.value.toUtc()}",
                       context: context));
-                  ref.refresh(getProfileDataProvider(context));
+                  ref.refresh(getProfileDataProvider(context)).value;
                 },
                 text: "Continue",
               ),

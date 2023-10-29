@@ -29,14 +29,12 @@ class _SystemHash {
   }
 }
 
-typedef SendLogRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [sendLog].
 @ProviderFor(sendLog)
 const sendLogProvider = SendLogFamily();
 
 /// See also [sendLog].
-class SendLogFamily extends Family<AsyncValue<dynamic>> {
+class SendLogFamily extends Family<AsyncValue> {
   /// See also [sendLog].
   const SendLogFamily();
 
@@ -83,16 +81,16 @@ class SendLogFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [sendLog].
-class SendLogProvider extends AutoDisposeFutureProvider<dynamic> {
+class SendLogProvider extends AutoDisposeFutureProvider<Object?> {
   /// See also [sendLog].
   SendLogProvider({
-    required this.mobile,
-    required this.password,
-    required this.context,
-    required this.keepLogin,
-  }) : super.internal(
+    required String mobile,
+    required String password,
+    required BuildContext context,
+    required bool keepLogin,
+  }) : this._internal(
           (ref) => sendLog(
-            ref,
+            ref as SendLogRef,
             mobile: mobile,
             password: password,
             context: context,
@@ -106,12 +104,55 @@ class SendLogProvider extends AutoDisposeFutureProvider<dynamic> {
                   : _$sendLogHash,
           dependencies: SendLogFamily._dependencies,
           allTransitiveDependencies: SendLogFamily._allTransitiveDependencies,
+          mobile: mobile,
+          password: password,
+          context: context,
+          keepLogin: keepLogin,
         );
+
+  SendLogProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.mobile,
+    required this.password,
+    required this.context,
+    required this.keepLogin,
+  }) : super.internal();
 
   final String mobile;
   final String password;
   final BuildContext context;
   final bool keepLogin;
+
+  @override
+  Override overrideWith(
+    FutureOr<Object?> Function(SendLogRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendLogProvider._internal(
+        (ref) => create(ref as SendLogRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        mobile: mobile,
+        password: password,
+        context: context,
+        keepLogin: keepLogin,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Object?> createElement() {
+    return _SendLogProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -132,6 +173,34 @@ class SendLogProvider extends AutoDisposeFutureProvider<dynamic> {
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin SendLogRef on AutoDisposeFutureProviderRef<Object?> {
+  /// The parameter `mobile` of this provider.
+  String get mobile;
+
+  /// The parameter `password` of this provider.
+  String get password;
+
+  /// The parameter `context` of this provider.
+  BuildContext get context;
+
+  /// The parameter `keepLogin` of this provider.
+  bool get keepLogin;
+}
+
+class _SendLogProviderElement extends AutoDisposeFutureProviderElement<Object?>
+    with SendLogRef {
+  _SendLogProviderElement(super.provider);
+
+  @override
+  String get mobile => (origin as SendLogProvider).mobile;
+  @override
+  String get password => (origin as SendLogProvider).password;
+  @override
+  BuildContext get context => (origin as SendLogProvider).context;
+  @override
+  bool get keepLogin => (origin as SendLogProvider).keepLogin;
 }
 
 String _$getUserAvatarHash() => r'7efb11f3bf7f83c9604364b6efc938e8726d3388';
@@ -164,4 +233,4 @@ final isLoggedInProvider = AutoDisposeFutureProvider<bool>.internal(
 
 typedef IsLoggedInRef = AutoDisposeFutureProviderRef<bool>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

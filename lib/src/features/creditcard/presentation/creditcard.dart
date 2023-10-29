@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
+import '../../../widgets/need_login.dart';
 import '../../login/domain/login_domain.dart';
-import '../../nearby_stores/presentation/nearby_stores.dart';
 import '../domain/credit_domain.dart';
 
 class CreditCardScreen extends ConsumerStatefulWidget {
@@ -16,27 +16,26 @@ class CreditCardScreen extends ConsumerStatefulWidget {
 }
 
 class _CreditCardScreenState extends ConsumerState<CreditCardScreen> {
-  isLogged() async {
-    return ref.read(isLoggedInProvider.future).then((value) {
-      if (value == false) {
-        return showAdaptiveDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                isLogged: true,
-                content: "Please login to see your credit cards",
-              );
-            });
+  @override
+  Widget build(BuildContext context) {
+    final isLogged = ref.watch(isLoggedInProvider);
+    return isLogged.when(data: (data) {
+      if (data == false) {
+        return const NeedLoginScreen();
       }
+      return const CreditCardLogged();
+    }, error: (e, s) {
+      return const Text("Error");
+    }, loading: () {
+      return const Center(child: CircularProgressIndicator());
     });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-    isLogged();
-  }
+class CreditCardLogged extends StatelessWidget {
+  const CreditCardLogged({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +44,9 @@ class _CreditCardScreenState extends ConsumerState<CreditCardScreen> {
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         elevation: 0,
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: ProfileAppBar(),
           )
         ],
@@ -57,118 +56,168 @@ class _CreditCardScreenState extends ConsumerState<CreditCardScreen> {
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
+            const Text(
               "Credit",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Container(
+            SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 121,
                 child: ListView.separated(
                     itemCount: 3,
                     scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) => SizedBox(
+                    separatorBuilder: (context, index) => const SizedBox(
                           width: 20,
                         ),
                     itemBuilder: (context, index) {
-                      return CredCardWidget();
+                      return const CredCardWidget();
                     })),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Container(
-              width: 348,
-              height: 248,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        spreadRadius: 1)
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, left: 20),
-                    child: Text("Payment Methods",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final userCredits = ref.watch(getCreditCardsProvider);
+            Center(
+              child: Container(
+                width: 348,
+                height: 248,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 1)
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10, left: 20),
+                      child: Text("Payment Methods",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final userCredits = ref.watch(getCreditCardsProvider);
 
-                      return userCredits.when(data: (data) {
-                        print(data);
-                        return Container(
-                          height: 120,
-                          child: ListView.separated(
-                              itemCount: data.length,
-                              separatorBuilder: (context, index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Divider(),
-                                  ),
-                              itemBuilder: (context, index) {
-                                return Dismissible(
-                                  key: UniqueKey(),
-                                  onDismissed: (direction) {
-                                    ref.read(deleteCreditCardProvider(
-                                        id: data?[index]["id"]));
-                                  },
-                                  child: ListTile(
-                                    leading: SvgPicture.asset(
-                                      "assets/images/credit/credit_icon.svg",
-                                      width: 30,
+                        return userCredits.when(data: (data) {
+                          print(data);
+                          return SizedBox(
+                            height: 120,
+                            child: ListView.separated(
+                                itemCount: data.length,
+                                separatorBuilder: (context, index) => Divider(),
+                                itemBuilder: (context, index) {
+                                  return Dismissible(
+                                    key: UniqueKey(),
+                                    onDismissed: (direction) {
+                                      ref.read(deleteCreditCardProvider(
+                                          id: data?[index]["id"]));
+                                    },
+                                    child: ListTile(
+                                      leading: SvgPicture.asset(
+                                        "assets/images/credit/credit_icon.svg",
+                                        width: 30,
+                                      ),
+                                      title: Text(data[index].card_number),
+                                      trailing: const Icon(Icons.arrow_forward),
                                     ),
-                                    title: Text(data?[index]["card_number"]),
-                                    trailing: Icon(Icons.arrow_forward),
-                                  ),
-                                );
-                              }),
-                        );
-                      }, error: (e, s) {
-                        print(e);
-                        return Text("Error");
-                      }, loading: () {
-                        return Center(child: CircularProgressIndicator());
-                      });
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.add,
-                      size: 30,
+                                  );
+                                }),
+                          );
+                        }, error: (e, s) {
+                          print(e);
+                          return const Text("Error");
+                        }, loading: () {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        });
+                      },
                     ),
-                    onTap: () => context.push('/add_credit_card'),
-                    title: Text(
-                      "Add Debit / Credit Card",
-                      style: TextStyle(fontSize: 20),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.add,
+                        size: 30,
+                      ),
+                      onTap: () => context.push('/add_credit_card'),
+                      title: const Text(
+                        "Add Debit / Credit Card",
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            CredBigCardWidget(
-              text: "Pharmacy Free Delivery",
-              header: "Promotions",
-              textButton: "Add Promo Code",
-              onTextButtonClick: () {},
+            Center(
+              child: Container(
+                width: 348,
+                height: 248,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 1)
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10, left: 20),
+                      child: Text("Promotions",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      height: 120,
+                      child: ListView.separated(
+                          itemCount: 2,
+                          separatorBuilder: (context, index) => Divider(),
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: SvgPicture.asset(
+                                "assets/images/credit/credit_icon.svg",
+                                width: 30,
+                              ),
+                              title: Text("Pharmacy Free Delivery"),
+                              trailing: const Icon(Icons.arrow_forward),
+                            );
+                          }),
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.add,
+                        size: 30,
+                      ),
+                      onTap: () => context.push('/add_credit_card'),
+                      title: const Text(
+                        "Add Promo Code",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
           ]),
@@ -208,27 +257,28 @@ class CredBigCardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20),
+            padding: const EdgeInsets.only(top: 0, left: 20),
             child: Text(header,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           ListTile(
-            leading: Icon(Icons.credit_card),
+            leading: const Icon(Icons.credit_card),
             title: Text(text),
-            trailing: Icon(Icons.arrow_forward),
+            trailing: const Icon(Icons.arrow_forward),
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.add,
               size: 30,
             ),
             onTap: onTextButtonClick,
             title: Text(
               textButton,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
           ),
         ],
@@ -251,7 +301,7 @@ class CredCardWidget extends StatelessWidget {
         height: 121,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
                 begin: Alignment.bottomLeft,
                 end: Alignment.topCenter,
                 colors: [
@@ -260,7 +310,7 @@ class CredCardWidget extends StatelessWidget {
                   Colors.white,
                   Colors.white,
                 ])),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -272,7 +322,7 @@ class CredCardWidget extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 30.0),
+              padding: EdgeInsets.only(right: 30.0),
               child: Align(
                   alignment: Alignment.bottomRight,
                   child: Icon(Icons.arrow_forward)),

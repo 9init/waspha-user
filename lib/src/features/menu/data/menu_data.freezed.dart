@@ -105,11 +105,11 @@ class _$MapCategoriesCopyWithImpl<$Res, $Val extends MapCategories>
 }
 
 /// @nodoc
-abstract class _$$_MapCategoriesCopyWith<$Res>
+abstract class _$$MapCategoriesImplCopyWith<$Res>
     implements $MapCategoriesCopyWith<$Res> {
-  factory _$$_MapCategoriesCopyWith(
-          _$_MapCategories value, $Res Function(_$_MapCategories) then) =
-      __$$_MapCategoriesCopyWithImpl<$Res>;
+  factory _$$MapCategoriesImplCopyWith(
+          _$MapCategoriesImpl value, $Res Function(_$MapCategoriesImpl) then) =
+      __$$MapCategoriesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -123,11 +123,11 @@ abstract class _$$_MapCategoriesCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_MapCategoriesCopyWithImpl<$Res>
-    extends _$MapCategoriesCopyWithImpl<$Res, _$_MapCategories>
-    implements _$$_MapCategoriesCopyWith<$Res> {
-  __$$_MapCategoriesCopyWithImpl(
-      _$_MapCategories _value, $Res Function(_$_MapCategories) _then)
+class __$$MapCategoriesImplCopyWithImpl<$Res>
+    extends _$MapCategoriesCopyWithImpl<$Res, _$MapCategoriesImpl>
+    implements _$$MapCategoriesImplCopyWith<$Res> {
+  __$$MapCategoriesImplCopyWithImpl(
+      _$MapCategoriesImpl _value, $Res Function(_$MapCategoriesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -141,7 +141,7 @@ class __$$_MapCategoriesCopyWithImpl<$Res>
     Object? description = freezed,
     Object? parent_id = freezed,
   }) {
-    return _then(_$_MapCategories(
+    return _then(_$MapCategoriesImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -176,8 +176,8 @@ class __$$_MapCategoriesCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_MapCategories implements _MapCategories {
-  const _$_MapCategories(
+class _$MapCategoriesImpl implements _MapCategories {
+  const _$MapCategoriesImpl(
       {required this.id,
       this.name,
       required this.is_enabled,
@@ -186,8 +186,8 @@ class _$_MapCategories implements _MapCategories {
       this.description,
       this.parent_id});
 
-  factory _$_MapCategories.fromJson(Map<String, dynamic> json) =>
-      _$$_MapCategoriesFromJson(json);
+  factory _$MapCategoriesImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MapCategoriesImplFromJson(json);
 
   @override
   final int id;
@@ -213,7 +213,7 @@ class _$_MapCategories implements _MapCategories {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_MapCategories &&
+            other is _$MapCategoriesImpl &&
             (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             (identical(other.is_enabled, is_enabled) ||
@@ -240,12 +240,12 @@ class _$_MapCategories implements _MapCategories {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_MapCategoriesCopyWith<_$_MapCategories> get copyWith =>
-      __$$_MapCategoriesCopyWithImpl<_$_MapCategories>(this, _$identity);
+  _$$MapCategoriesImplCopyWith<_$MapCategoriesImpl> get copyWith =>
+      __$$MapCategoriesImplCopyWithImpl<_$MapCategoriesImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_MapCategoriesToJson(
+    return _$$MapCategoriesImplToJson(
       this,
     );
   }
@@ -259,10 +259,10 @@ abstract class _MapCategories implements MapCategories {
       final dynamic slug,
       final dynamic image,
       final dynamic description,
-      final dynamic parent_id}) = _$_MapCategories;
+      final dynamic parent_id}) = _$MapCategoriesImpl;
 
   factory _MapCategories.fromJson(Map<String, dynamic> json) =
-      _$_MapCategories.fromJson;
+      _$MapCategoriesImpl.fromJson;
 
   @override
   int get id;
@@ -280,6 +280,6 @@ abstract class _MapCategories implements MapCategories {
   dynamic get parent_id;
   @override
   @JsonKey(ignore: true)
-  _$$_MapCategoriesCopyWith<_$_MapCategories> get copyWith =>
+  _$$MapCategoriesImplCopyWith<_$MapCategoriesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

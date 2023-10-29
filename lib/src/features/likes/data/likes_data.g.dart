@@ -6,7 +6,8 @@ part of 'likes_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Location _$$_LocationFromJson(Map<String, dynamic> json) => _$_Location(
+_$LocationImpl _$$LocationImplFromJson(Map<String, dynamic> json) =>
+    _$LocationImpl(
       id: json['id'] as int,
       title: json['title'] as String,
       phone: json['phone'] as String,
@@ -16,7 +17,7 @@ _$_Location _$$_LocationFromJson(Map<String, dynamic> json) => _$_Location(
       lng: (json['lng'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$$_LocationToJson(_$_Location instance) =>
+Map<String, dynamic> _$$LocationImplToJson(_$LocationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,

@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef AddLocationRef = AutoDisposeFutureProviderRef<String>;
-
 /// See also [addLocation].
 @ProviderFor(addLocation)
 const addLocationProvider = AddLocationFamily();
@@ -86,13 +84,13 @@ class AddLocationFamily extends Family<AsyncValue<String>> {
 class AddLocationProvider extends AutoDisposeFutureProvider<String> {
   /// See also [addLocation].
   AddLocationProvider({
-    required this.title,
-    required this.phone,
-    this.isMeChecked = false,
-    required this.landmark,
-  }) : super.internal(
+    required String title,
+    required String phone,
+    bool isMeChecked = false,
+    required String landmark,
+  }) : this._internal(
           (ref) => addLocation(
-            ref,
+            ref as AddLocationRef,
             title: title,
             phone: phone,
             isMeChecked: isMeChecked,
@@ -107,12 +105,55 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
           dependencies: AddLocationFamily._dependencies,
           allTransitiveDependencies:
               AddLocationFamily._allTransitiveDependencies,
+          title: title,
+          phone: phone,
+          isMeChecked: isMeChecked,
+          landmark: landmark,
         );
+
+  AddLocationProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.title,
+    required this.phone,
+    required this.isMeChecked,
+    required this.landmark,
+  }) : super.internal();
 
   final String title;
   final String phone;
   final bool isMeChecked;
   final String landmark;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(AddLocationRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddLocationProvider._internal(
+        (ref) => create(ref as AddLocationRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        title: title,
+        phone: phone,
+        isMeChecked: isMeChecked,
+        landmark: landmark,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _AddLocationProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -135,6 +176,34 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
   }
 }
 
+mixin AddLocationRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `title` of this provider.
+  String get title;
+
+  /// The parameter `phone` of this provider.
+  String get phone;
+
+  /// The parameter `isMeChecked` of this provider.
+  bool get isMeChecked;
+
+  /// The parameter `landmark` of this provider.
+  String get landmark;
+}
+
+class _AddLocationProviderElement
+    extends AutoDisposeFutureProviderElement<String> with AddLocationRef {
+  _AddLocationProviderElement(super.provider);
+
+  @override
+  String get title => (origin as AddLocationProvider).title;
+  @override
+  String get phone => (origin as AddLocationProvider).phone;
+  @override
+  bool get isMeChecked => (origin as AddLocationProvider).isMeChecked;
+  @override
+  String get landmark => (origin as AddLocationProvider).landmark;
+}
+
 String _$getLocationsHash() => r'2b94e1fdce594a7c5267b3de660f5758a99db427';
 
 /// See also [getLocations].
@@ -150,4 +219,4 @@ final getLocationsProvider = AutoDisposeFutureProvider<List<Location>>.internal(
 
 typedef GetLocationsRef = AutoDisposeFutureProviderRef<List<Location>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef AddStoreFavRef = AutoDisposeFutureProviderRef<bool>;
-
 /// See also [addStoreFav].
 @ProviderFor(addStoreFav)
 const addStoreFavProvider = AddStoreFavFamily();
@@ -77,10 +75,10 @@ class AddStoreFavFamily extends Family<AsyncValue<bool>> {
 class AddStoreFavProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [addStoreFav].
   AddStoreFavProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => addStoreFav(
-            ref,
+            ref as AddStoreFavRef,
             id: id,
           ),
           from: addStoreFavProvider,
@@ -92,9 +90,43 @@ class AddStoreFavProvider extends AutoDisposeFutureProvider<bool> {
           dependencies: AddStoreFavFamily._dependencies,
           allTransitiveDependencies:
               AddStoreFavFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  AddStoreFavProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(AddStoreFavRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddStoreFavProvider._internal(
+        (ref) => create(ref as AddStoreFavRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _AddStoreFavProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -110,8 +142,20 @@ class AddStoreFavProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+mixin AddStoreFavRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _AddStoreFavProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with AddStoreFavRef {
+  _AddStoreFavProviderElement(super.provider);
+
+  @override
+  int get id => (origin as AddStoreFavProvider).id;
+}
+
 String _$deleteStoreFavHash() => r'80519648901a4cb77221b564e8724f2576210477';
-typedef DeleteStoreFavRef = AutoDisposeFutureProviderRef<bool>;
 
 /// See also [deleteStoreFav].
 @ProviderFor(deleteStoreFav)
@@ -159,10 +203,10 @@ class DeleteStoreFavFamily extends Family<AsyncValue<bool>> {
 class DeleteStoreFavProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [deleteStoreFav].
   DeleteStoreFavProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => deleteStoreFav(
-            ref,
+            ref as DeleteStoreFavRef,
             id: id,
           ),
           from: deleteStoreFavProvider,
@@ -174,9 +218,43 @@ class DeleteStoreFavProvider extends AutoDisposeFutureProvider<bool> {
           dependencies: DeleteStoreFavFamily._dependencies,
           allTransitiveDependencies:
               DeleteStoreFavFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  DeleteStoreFavProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(DeleteStoreFavRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteStoreFavProvider._internal(
+        (ref) => create(ref as DeleteStoreFavRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _DeleteStoreFavProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -192,7 +270,20 @@ class DeleteStoreFavProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
-String _$getFavStoresHash() => r'c95c38a26ce4990919f4f6789a04cd17be5b7920';
+mixin DeleteStoreFavRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _DeleteStoreFavProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with DeleteStoreFavRef {
+  _DeleteStoreFavProviderElement(super.provider);
+
+  @override
+  int get id => (origin as DeleteStoreFavProvider).id;
+}
+
+String _$getFavStoresHash() => r'ea74f9ce62f9e70088f8318f2c640e070879a69d';
 
 /// See also [getFavStores].
 @ProviderFor(getFavStores)
@@ -207,7 +298,6 @@ final getFavStoresProvider = AutoDisposeFutureProvider<dynamic>.internal(
 
 typedef GetFavStoresRef = AutoDisposeFutureProviderRef<dynamic>;
 String _$isStoreFavoritedHash() => r'2fff11762e619fac4e3ac0145a0ef42c475ce51d';
-typedef IsStoreFavoritedRef = AutoDisposeFutureProviderRef<bool>;
 
 /// See also [isStoreFavorited].
 @ProviderFor(isStoreFavorited)
@@ -255,10 +345,10 @@ class IsStoreFavoritedFamily extends Family<AsyncValue<bool>> {
 class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [isStoreFavorited].
   IsStoreFavoritedProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => isStoreFavorited(
-            ref,
+            ref as IsStoreFavoritedRef,
             id: id,
           ),
           from: isStoreFavoritedProvider,
@@ -270,9 +360,43 @@ class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
           dependencies: IsStoreFavoritedFamily._dependencies,
           allTransitiveDependencies:
               IsStoreFavoritedFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  IsStoreFavoritedProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(IsStoreFavoritedRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: IsStoreFavoritedProvider._internal(
+        (ref) => create(ref as IsStoreFavoritedRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _IsStoreFavoritedProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -287,5 +411,18 @@ class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin IsStoreFavoritedRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _IsStoreFavoritedProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with IsStoreFavoritedRef {
+  _IsStoreFavoritedProviderElement(super.provider);
+
+  @override
+  int get id => (origin as IsStoreFavoritedProvider).id;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

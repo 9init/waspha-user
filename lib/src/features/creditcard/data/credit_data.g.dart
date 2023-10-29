@@ -6,7 +6,7 @@ part of 'credit_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Credit _$$_CreditFromJson(Map<String, dynamic> json) => _$_Credit(
+_$CreditImpl _$$CreditImplFromJson(Map<String, dynamic> json) => _$CreditImpl(
       id: json['id'] as int,
       card_number: json['card_number'] as String,
       cardholder_name: json['cardholder_name'] as String,
@@ -16,7 +16,8 @@ _$_Credit _$$_CreditFromJson(Map<String, dynamic> json) => _$_Credit(
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$$_CreditToJson(_$_Credit instance) => <String, dynamic>{
+Map<String, dynamic> _$$CreditImplToJson(_$CreditImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'card_number': instance.card_number,
       'cardholder_name': instance.cardholder_name,
