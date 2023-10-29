@@ -89,6 +89,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
             polygons: widget.polygons ?? {},
             circles: {
               Circle(
+                visible: method.value == 'pickup',
                   circleId: CircleId("circle"),
                   radius: 15000,
                   strokeColor: Colors.transparent,

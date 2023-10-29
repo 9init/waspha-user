@@ -1,4 +1,5 @@
-
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
+import 'package:credit_card_type_detector/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,6 +15,26 @@ class AddCreditCard extends HookWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>>? cvvCodeKey =
       GlobalKey<FormFieldState<String>>();
+
+  CardType? getCardType(String number) {
+    var types = detectCCType(number);
+    if (types.contains(CreditCardType.visa())) {
+      return CardType.visa;
+    }
+    if (types.contains(CreditCardType.mastercard())) {
+      return CardType.mastercard;
+    }
+    if (types.contains(CreditCardType.americanExpress())) {
+      return CardType.americanExpress;
+    }
+    if (types.contains(CreditCardType.discover())) {
+      return CardType.discover;
+    }
+    if (types.contains(CreditCardType.maestro())) {
+      return CardType.otherBrand;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +62,6 @@ class AddCreditCard extends HookWidget {
               cvvCode: cvv.value, // Required
               showBackView: isBack.value,
               onCreditCardWidgetChange: (CreditCardBrand brand) {},
-              glassmorphismConfig: Glassmorphism.defaultConfig(),
               enableFloatingCard: true,
               floatingConfig: FloatingConfig(
                 isGlareEnabled: true,
@@ -54,7 +74,7 @@ class AddCreditCard extends HookWidget {
               obscureCardCvv: true,
               labelCardHolder: 'CARD HOLDER',
               height: 175,
-              cardType: CardType.otherBrand,
+              cardType: getCardType(cardNumber.value),
 
               width: MediaQuery.of(context).size.width,
               padding: 16,
@@ -74,6 +94,7 @@ class AddCreditCard extends HookWidget {
               cvvCode: cvv.value, // Required
               onCreditCardModelChange: (CreditCardModel data) {
                 cardNumber.value = data.cardNumber;
+
                 expiredData.value = data.expiryDate;
                 cvv.value = data.cvvCode;
                 cardHolder.value = data.cardHolderName;

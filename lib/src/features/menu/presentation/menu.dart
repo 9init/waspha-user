@@ -59,7 +59,6 @@ class MenuScreen extends StatelessWidget {
                         return MenuCard(
                           onFavorited: () {},
                           imageURl: data[index].image,
-                          
                           companyName: data[index].business_name["en"],
                         );
                       }),
@@ -88,32 +87,26 @@ class MenuCard extends StatelessWidget {
     this.isOffer = false,
     this.width = 0.9,
     required this.onFavorited,
+    this.favWidgth = 250,
+    this.isProvider = false,
   });
 
   final String imageURl;
   final String companyName;
-  final bool isOffer;
-  final double width;
+  final bool isOffer, isProvider;
+  final double width, favWidgth;
   final void Function()? onFavorited;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Stack(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * width,
+            width: 311,
             height: 200,
             decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.8),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                ),
-              ],
               image: DecorationImage(
                 image: CachedNetworkImageProvider(imageURl),
                 fit: BoxFit.cover,
@@ -131,7 +124,11 @@ class MenuCard extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: isProvider
+                            ? BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20))
+                            : BorderRadius.circular(20),
                       ),
                       child: Row(
                         mainAxisAlignment: !isOffer
@@ -165,15 +162,15 @@ class MenuCard extends StatelessWidget {
                         child: Text('4.8'),
                       ),
                       SizedBox(
-                        width: 250,
+                        width: favWidgth,
                       ),
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: Icon(Icons.favorite_border),
-                          onPressed: onFavorited,
+                      IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                          size: 30,
                         ),
+                        onPressed: onFavorited,
                       )
                     ],
                   ),

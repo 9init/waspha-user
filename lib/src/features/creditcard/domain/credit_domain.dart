@@ -23,7 +23,6 @@ Future<String> addCreditCard(Ref ref,
       "expirationYear": expYear,
       "cvv": cvv
     });
-    print("ADD CREDIT: ${request.data}");
     return request.data["message"];
   } catch (e) {}
   return "";

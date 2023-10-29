@@ -52,7 +52,7 @@ class CreditCardLogged extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -109,12 +109,15 @@ class CreditCardLogged extends StatelessWidget {
                         final userCredits = ref.watch(getCreditCardsProvider);
 
                         return userCredits.when(data: (data) {
-                          print(data);
                           return SizedBox(
                             height: 120,
                             child: ListView.separated(
                                 itemCount: data.length,
-                                separatorBuilder: (context, index) => Divider(),
+                                separatorBuilder: (context, index) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30),
+                                      child: Divider(),
+                                    ),
                                 itemBuilder: (context, index) {
                                   return Dismissible(
                                     key: UniqueKey(),
@@ -127,7 +130,12 @@ class CreditCardLogged extends StatelessWidget {
                                         "assets/images/credit/credit_icon.svg",
                                         width: 30,
                                       ),
-                                      title: Text(data[index].card_number),
+                                      title: Text(
+                                        ".... " +
+                                            data[index]
+                                                .card_number
+                                                .replaceAll("*", ""),
+                                      ),
                                       trailing: const Icon(Icons.arrow_forward),
                                     ),
                                   );
@@ -190,7 +198,10 @@ class CreditCardLogged extends StatelessWidget {
                       height: 120,
                       child: ListView.separated(
                           itemCount: 2,
-                          separatorBuilder: (context, index) => Divider(),
+                          separatorBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Divider(),
+                          ),
                           itemBuilder: (context, index) {
                             return ListTile(
                               leading: SvgPicture.asset(
@@ -300,6 +311,7 @@ class CredCardWidget extends StatelessWidget {
         width: 164,
         height: 121,
         decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey[400]!),
             borderRadius: BorderRadius.circular(18),
             gradient: const LinearGradient(
                 begin: Alignment.bottomLeft,
@@ -307,7 +319,6 @@ class CredCardWidget extends StatelessWidget {
                 colors: [
                   Colors.grey,
                   Colors.grey,
-                  Colors.white,
                   Colors.white,
                 ])),
         child: const Column(

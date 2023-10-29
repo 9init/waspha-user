@@ -52,151 +52,152 @@ class LikesBody extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Likes",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: 348,
-                  height: 323,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 1)
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Address you like",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Consumer(
-                          builder: (context, ref, child) {
-                            final locations = ref.watch(getLocationsProvider);
-                            return locations.when(data: (data) {
-                              return Container(
-                                height: 200,
-                                child: ListView.builder(
-                                  itemCount: data.length,
-                                  itemBuilder: ((context, index) {
-                                    return ListTile(
-                                      onTap: () => context.pushNamed(
-                                          "EditLocation",
-                                          pathParameters: {
-                                            "title": data[index].title,
-                                            "address": data[index].address,
-                                            "landmark": data[index].landmark,
-                                            "phone": data[index].phone
-                                          }),
-                                      leading: Icon(Icons.location_on),
-                                      title: Text(data[index].title),
-                                      trailing: Icon(Icons.arrow_forward),
-                                    );
-                                  }),
-                                ),
-                              );
-                            }, error: (e, s) {
-                              print("Location Error $e");
-                              return Text("Error");
-                            }, loading: () {
-                              return Center(child: CircularProgressIndicator());
-                            });
-                          },
-                        ),
-                        Center(
-                          child: ListTile(
-                            onTap: () => context.push('/add_address'),
-                            leading: Icon(Icons.add),
-                            title: Text(
-                              "Add new address",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Likes",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: 348,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 1)
+                    ]),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Address you like",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final locations = ref.watch(getLocationsProvider);
+                          return locations.when(data: (data) {
+                            return Container(
+                              child: ListView.builder(
+                                itemCount: data.length,
+                                shrinkWrap: true,
+                                itemBuilder: ((context, index) {
+                                  return ListTile(
+                                    onTap: () => context.pushNamed(
+                                        "EditLocation",
+                                        pathParameters: {
+                                          "title": data[index].title,
+                                          "address": data[index].address,
+                                          "landmark": data[index].landmark,
+                                          "phone": data[index].phone
+                                        }),
+                                    leading: Icon(Icons.location_on),
+                                    title: Text(data[index].title),
+                                    trailing: Icon(Icons.arrow_forward),
+                                  );
+                                }),
+                              ),
+                            );
+                          }, error: (e, s) {
+                            print("Location Error $e");
+                            return Text("Error");
+                          }, loading: () {
+                            return Center(child: CircularProgressIndicator());
+                          });
+                        },
+                      ),
+                      Center(
+                        child: ListTile(
+                          onTap: () => context.push('/add_address'),
+                          leading: Icon(Icons.add),
+                          title: Text(
+                            "Add new address",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: 348,
-                  height: 291,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 1)
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: 348,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 1)
+                    ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:14.0),
+                            child: Text(
                               "Providers you like",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            Icon(Icons.info)
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
+                          ),
+                          Icon(Icons.info)
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Center(
+                        child: Container(
                           width: 400,
                           height: 200,
-                          child: ListView.separated(
+                          child: ListView.builder(
                               padding: EdgeInsets.zero,
                               itemCount: 3,
                               scrollDirection: Axis.horizontal,
-                              separatorBuilder: (context, index) => SizedBox(
-                                    width: 15,
-                                  ),
                               itemBuilder: (context, index) {
                                 return MenuCard(
-                                  imageURl: '',
-                                  companyName: "",
+                                  imageURl:
+                                      'https://upload.wikimedia.org/wikipedia/en/b/b4/Noon_%28company%29.png',
+                                  companyName: "Noon Express",
+                                  width: 0.8,
+                                  favWidgth: 200,
+                                  isProvider: true,
                                   onFavorited: () {},
                                 );
                               }),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
