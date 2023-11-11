@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/item_data.dart';
@@ -39,11 +40,14 @@ class ItemWidgetCollapsed extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
-                  radius: 35,
-                  child: Center(
-                    child: Icon(Icons.add),
-                  ),
-                ),
+                    radius: 35,
+                    backgroundImage:
+                        CachedNetworkImageProvider(item.image ?? ""),
+                    child: item.image == null
+                        ? Icon(
+                            Icons.add,
+                          )
+                        : null),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

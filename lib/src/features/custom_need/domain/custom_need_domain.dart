@@ -35,7 +35,7 @@ Future createRFP(
           "type": type,
           "items": items,
         }));
-    print(request);
+    print(request.data);
   } on DioError catch (e) {
     print("Custom Need ${e.response?.data}");
   }
@@ -50,4 +50,3 @@ enum QueueStatus {
   CURRENT,
   UPCOMING
 }
-

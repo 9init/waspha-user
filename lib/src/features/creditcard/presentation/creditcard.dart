@@ -52,7 +52,7 @@ class CreditCardLogged extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -63,24 +63,38 @@ class CreditCardLogged extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 121,
-                child: ListView.separated(
-                    itemCount: 3,
-                    scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) => const SizedBox(
-                          width: 20,
-                        ),
-                    itemBuilder: (context, index) {
-                      return const CredCardWidget();
-                    })),
+            Consumer(builder: (context, ref, child) {
+              final userCredits = ref.watch(getWalletsProvider);
+              return userCredits.when(
+                  data: (data) {
+                    return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 121,
+                        child: ListView.separated(
+                            itemCount: data.length,
+                            scrollDirection: Axis.horizontal,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                            itemBuilder: (context, index) {
+                              return CredCardWidget(
+                                currency: data[index]["currency"],
+                                amount: data[index]["amount"].toString(),
+                              );
+                            }));
+                  },
+                  error: (e, s) {
+                    return Text("Error");
+                  },
+                  loading: () => CircularProgressIndicator());
+            }),
             const SizedBox(
               height: 30,
             ),
             Center(
               child: Container(
-                width: 348,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: 248,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -170,7 +184,7 @@ class CreditCardLogged extends StatelessWidget {
             ),
             Center(
               child: Container(
-                width: 348,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: 248,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -199,9 +213,10 @@ class CreditCardLogged extends StatelessWidget {
                       child: ListView.separated(
                           itemCount: 2,
                           separatorBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: Divider(),
-                          ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                child: Divider(),
+                              ),
                           itemBuilder: (context, index) {
                             return ListTile(
                               leading: SvgPicture.asset(
@@ -301,7 +316,11 @@ class CredBigCardWidget extends StatelessWidget {
 class CredCardWidget extends StatelessWidget {
   const CredCardWidget({
     super.key,
+    required this.amount,
+    required this.currency,
   });
+
+  final String amount, currency;
 
   @override
   Widget build(BuildContext context) {
@@ -321,15 +340,15 @@ class CredCardWidget extends StatelessWidget {
                   Colors.grey,
                   Colors.white,
                 ])),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "EGP Credit",
+              "$currency Wallet",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              "EGP 0.00",
+              "$currency $amount",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Padding(

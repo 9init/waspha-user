@@ -6,7 +6,7 @@ part of 'credit_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addCreditCardHash() => r'6a23e5179176608a4e64852ba4c393061f23c4f1';
+String _$addCreditCardHash() => r'58b7367444e60dfdfc38410c476e3bc427cc9375';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -362,5 +362,20 @@ class _DeleteCreditCardProviderElement
   @override
   int get id => (origin as DeleteCreditCardProvider).id;
 }
+
+String _$getWalletsHash() => r'7b4052cdc27d011bf55cbf616f6f0fe894c66060';
+
+/// See also [getWallets].
+@ProviderFor(getWallets)
+final getWalletsProvider = AutoDisposeFutureProvider<dynamic>.internal(
+  getWallets,
+  name: r'getWalletsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getWalletsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetWalletsRef = AutoDisposeFutureProviderRef<dynamic>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

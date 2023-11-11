@@ -4,7 +4,6 @@ import 'package:waspha/src/utils/dio_helper.dart';
 
 import '../data/credit_data.dart';
 
-
 part 'credit_domain.g.dart';
 
 @riverpod
@@ -17,7 +16,7 @@ Future<String> addCreditCard(Ref ref,
   final url = "user/credit-card";
   try {
     final request = await ref.watch(dioProvider).post(url, {
-      "cardNumber": cardNumber, 
+      "cardNumber": cardNumber,
       "cardholderName": cardName,
       "expirationMonth": expMonth,
       "expirationYear": expYear,
@@ -46,4 +45,14 @@ Future<String> deleteCreditCard(Ref ref, {required int id}) async {
     return request.data["message"];
   } catch (e) {}
   return "";
+}
+
+@riverpod
+Future<dynamic> getWallets(Ref ref) async {
+  final url = "user/get-wallets";
+  try {
+    final request = await ref.watch(dioProvider).get(url);
+    return request.data["data"];
+  } catch (e) {}
+  return [];
 }

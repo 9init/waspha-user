@@ -19,6 +19,7 @@ _$StoresImpl _$$StoresImplFromJson(Map<String, dynamic> json) => _$StoresImpl(
       delivery: json['delivery'] as bool?,
       pickup: json['pickup'] as bool?,
       vendor_id: json['vendor_id'] as int?,
+      is_favorite: json['is_favorite'] as bool?,
       category_id: json['category_id'] as int?,
       category_ids: (json['category_ids'] as List<dynamic>?)
           ?.map((e) => e as int)
@@ -40,6 +41,7 @@ Map<String, dynamic> _$$StoresImplToJson(_$StoresImpl instance) =>
       'delivery': instance.delivery,
       'pickup': instance.pickup,
       'vendor_id': instance.vendor_id,
+      'is_favorite': instance.is_favorite,
       'category_id': instance.category_id,
       'category_ids': instance.category_ids,
       'distance': instance.distance,

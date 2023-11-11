@@ -21,20 +21,38 @@ Stores _$StoresFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Stores {
   int get id => throw _privateConstructorUsedError;
+  set id(int value) => throw _privateConstructorUsedError;
   Map<String, String>? get business_name => throw _privateConstructorUsedError;
+  set business_name(Map<String, String>? value) =>
+      throw _privateConstructorUsedError;
   String? get ar => throw _privateConstructorUsedError;
+  set ar(String? value) => throw _privateConstructorUsedError;
   double? get lat => throw _privateConstructorUsedError;
+  set lat(double? value) => throw _privateConstructorUsedError;
   double? get lng => throw _privateConstructorUsedError;
+  set lng(double? value) => throw _privateConstructorUsedError;
   dynamic get timings => throw _privateConstructorUsedError;
+  set timings(dynamic value) => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
+  set image(String? value) => throw _privateConstructorUsedError;
   bool? get delivery => throw _privateConstructorUsedError;
+  set delivery(bool? value) => throw _privateConstructorUsedError;
   bool? get pickup => throw _privateConstructorUsedError;
+  set pickup(bool? value) => throw _privateConstructorUsedError;
   int? get vendor_id => throw _privateConstructorUsedError;
+  set vendor_id(int? value) => throw _privateConstructorUsedError;
+  bool? get is_favorite => throw _privateConstructorUsedError;
+  set is_favorite(bool? value) => throw _privateConstructorUsedError;
   int? get category_id => throw _privateConstructorUsedError;
+  set category_id(int? value) => throw _privateConstructorUsedError;
   List<int>? get category_ids => throw _privateConstructorUsedError;
+  set category_ids(List<int>? value) => throw _privateConstructorUsedError;
   double? get distance => throw _privateConstructorUsedError;
+  set distance(double? value) => throw _privateConstructorUsedError;
   double? get average_rating => throw _privateConstructorUsedError;
+  set average_rating(double? value) => throw _privateConstructorUsedError;
   bool? get has_menu => throw _privateConstructorUsedError;
+  set has_menu(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,6 +75,7 @@ abstract class $StoresCopyWith<$Res> {
       bool? delivery,
       bool? pickup,
       int? vendor_id,
+      bool? is_favorite,
       int? category_id,
       List<int>? category_ids,
       double? distance,
@@ -87,6 +106,7 @@ class _$StoresCopyWithImpl<$Res, $Val extends Stores>
     Object? delivery = freezed,
     Object? pickup = freezed,
     Object? vendor_id = freezed,
+    Object? is_favorite = freezed,
     Object? category_id = freezed,
     Object? category_ids = freezed,
     Object? distance = freezed,
@@ -134,6 +154,10 @@ class _$StoresCopyWithImpl<$Res, $Val extends Stores>
           ? _value.vendor_id
           : vendor_id // ignore: cast_nullable_to_non_nullable
               as int?,
+      is_favorite: freezed == is_favorite
+          ? _value.is_favorite
+          : is_favorite // ignore: cast_nullable_to_non_nullable
+              as bool?,
       category_id: freezed == category_id
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
@@ -176,6 +200,7 @@ abstract class _$$StoresImplCopyWith<$Res> implements $StoresCopyWith<$Res> {
       bool? delivery,
       bool? pickup,
       int? vendor_id,
+      bool? is_favorite,
       int? category_id,
       List<int>? category_ids,
       double? distance,
@@ -204,6 +229,7 @@ class __$$StoresImplCopyWithImpl<$Res>
     Object? delivery = freezed,
     Object? pickup = freezed,
     Object? vendor_id = freezed,
+    Object? is_favorite = freezed,
     Object? category_id = freezed,
     Object? category_ids = freezed,
     Object? distance = freezed,
@@ -216,7 +242,7 @@ class __$$StoresImplCopyWithImpl<$Res>
           : id // ignore: cast_nullable_to_non_nullable
               as int,
       business_name: freezed == business_name
-          ? _value._business_name
+          ? _value.business_name
           : business_name // ignore: cast_nullable_to_non_nullable
               as Map<String, String>?,
       ar: freezed == ar
@@ -251,12 +277,16 @@ class __$$StoresImplCopyWithImpl<$Res>
           ? _value.vendor_id
           : vendor_id // ignore: cast_nullable_to_non_nullable
               as int?,
+      is_favorite: freezed == is_favorite
+          ? _value.is_favorite
+          : is_favorite // ignore: cast_nullable_to_non_nullable
+              as bool?,
       category_id: freezed == category_id
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
               as int?,
       category_ids: freezed == category_ids
-          ? _value._category_ids
+          ? _value.category_ids
           : category_ids // ignore: cast_nullable_to_non_nullable
               as List<int>?,
       distance: freezed == distance
@@ -278,9 +308,9 @@ class __$$StoresImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$StoresImpl implements _Stores {
-  const _$StoresImpl(
+  _$StoresImpl(
       {required this.id,
-      final Map<String, String>? business_name,
+      this.business_name,
       this.ar,
       this.lat,
       this.lng,
@@ -289,118 +319,53 @@ class _$StoresImpl implements _Stores {
       this.delivery,
       this.pickup,
       this.vendor_id,
+      this.is_favorite,
       this.category_id,
-      final List<int>? category_ids,
+      this.category_ids,
       this.distance,
       this.average_rating,
-      this.has_menu})
-      : _business_name = business_name,
-        _category_ids = category_ids;
+      this.has_menu});
 
   factory _$StoresImpl.fromJson(Map<String, dynamic> json) =>
       _$$StoresImplFromJson(json);
 
   @override
-  final int id;
-  final Map<String, String>? _business_name;
+  int id;
   @override
-  Map<String, String>? get business_name {
-    final value = _business_name;
-    if (value == null) return null;
-    if (_business_name is EqualUnmodifiableMapView) return _business_name;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
-
+  Map<String, String>? business_name;
   @override
-  final String? ar;
+  String? ar;
   @override
-  final double? lat;
+  double? lat;
   @override
-  final double? lng;
+  double? lng;
   @override
-  final dynamic timings;
+  dynamic timings;
   @override
-  final String? image;
+  String? image;
   @override
-  final bool? delivery;
+  bool? delivery;
   @override
-  final bool? pickup;
+  bool? pickup;
   @override
-  final int? vendor_id;
+  int? vendor_id;
   @override
-  final int? category_id;
-  final List<int>? _category_ids;
+  bool? is_favorite;
   @override
-  List<int>? get category_ids {
-    final value = _category_ids;
-    if (value == null) return null;
-    if (_category_ids is EqualUnmodifiableListView) return _category_ids;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  int? category_id;
   @override
-  final double? distance;
+  List<int>? category_ids;
   @override
-  final double? average_rating;
+  double? distance;
   @override
-  final bool? has_menu;
+  double? average_rating;
+  @override
+  bool? has_menu;
 
   @override
   String toString() {
-    return 'Stores(id: $id, business_name: $business_name, ar: $ar, lat: $lat, lng: $lng, timings: $timings, image: $image, delivery: $delivery, pickup: $pickup, vendor_id: $vendor_id, category_id: $category_id, category_ids: $category_ids, distance: $distance, average_rating: $average_rating, has_menu: $has_menu)';
+    return 'Stores(id: $id, business_name: $business_name, ar: $ar, lat: $lat, lng: $lng, timings: $timings, image: $image, delivery: $delivery, pickup: $pickup, vendor_id: $vendor_id, is_favorite: $is_favorite, category_id: $category_id, category_ids: $category_ids, distance: $distance, average_rating: $average_rating, has_menu: $has_menu)';
   }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$StoresImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality()
-                .equals(other._business_name, _business_name) &&
-            (identical(other.ar, ar) || other.ar == ar) &&
-            (identical(other.lat, lat) || other.lat == lat) &&
-            (identical(other.lng, lng) || other.lng == lng) &&
-            const DeepCollectionEquality().equals(other.timings, timings) &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.delivery, delivery) ||
-                other.delivery == delivery) &&
-            (identical(other.pickup, pickup) || other.pickup == pickup) &&
-            (identical(other.vendor_id, vendor_id) ||
-                other.vendor_id == vendor_id) &&
-            (identical(other.category_id, category_id) ||
-                other.category_id == category_id) &&
-            const DeepCollectionEquality()
-                .equals(other._category_ids, _category_ids) &&
-            (identical(other.distance, distance) ||
-                other.distance == distance) &&
-            (identical(other.average_rating, average_rating) ||
-                other.average_rating == average_rating) &&
-            (identical(other.has_menu, has_menu) ||
-                other.has_menu == has_menu));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      const DeepCollectionEquality().hash(_business_name),
-      ar,
-      lat,
-      lng,
-      const DeepCollectionEquality().hash(timings),
-      image,
-      delivery,
-      pickup,
-      vendor_id,
-      category_id,
-      const DeepCollectionEquality().hash(_category_ids),
-      distance,
-      average_rating,
-      has_menu);
 
   @JsonKey(ignore: true)
   @override
@@ -417,55 +382,74 @@ class _$StoresImpl implements _Stores {
 }
 
 abstract class _Stores implements Stores {
-  const factory _Stores(
-      {required final int id,
-      final Map<String, String>? business_name,
-      final String? ar,
-      final double? lat,
-      final double? lng,
-      final dynamic timings,
-      final String? image,
-      final bool? delivery,
-      final bool? pickup,
-      final int? vendor_id,
-      final int? category_id,
-      final List<int>? category_ids,
-      final double? distance,
-      final double? average_rating,
-      final bool? has_menu}) = _$StoresImpl;
+  factory _Stores(
+      {required int id,
+      Map<String, String>? business_name,
+      String? ar,
+      double? lat,
+      double? lng,
+      dynamic timings,
+      String? image,
+      bool? delivery,
+      bool? pickup,
+      int? vendor_id,
+      bool? is_favorite,
+      int? category_id,
+      List<int>? category_ids,
+      double? distance,
+      double? average_rating,
+      bool? has_menu}) = _$StoresImpl;
 
   factory _Stores.fromJson(Map<String, dynamic> json) = _$StoresImpl.fromJson;
 
   @override
   int get id;
+  set id(int value);
   @override
   Map<String, String>? get business_name;
+  set business_name(Map<String, String>? value);
   @override
   String? get ar;
+  set ar(String? value);
   @override
   double? get lat;
+  set lat(double? value);
   @override
   double? get lng;
+  set lng(double? value);
   @override
   dynamic get timings;
+  set timings(dynamic value);
   @override
   String? get image;
+  set image(String? value);
   @override
   bool? get delivery;
+  set delivery(bool? value);
   @override
   bool? get pickup;
+  set pickup(bool? value);
   @override
   int? get vendor_id;
+  set vendor_id(int? value);
+  @override
+  bool? get is_favorite;
+  set is_favorite(bool? value);
   @override
   int? get category_id;
+  set category_id(int? value);
   @override
   List<int>? get category_ids;
+  set category_ids(List<int>? value);
   @override
   double? get distance;
+  set distance(double? value);
   @override
   double? get average_rating;
+  set average_rating(double? value);
   @override
   bool? get has_menu;
+  set has_menu(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$StoresImplCopyWith<_$StoresImpl> get copyWith =>

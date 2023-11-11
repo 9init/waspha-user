@@ -7,7 +7,7 @@ part of 'stores_repository.dart';
 // **************************************************************************
 
 String _$getNearbyStoresStreamHash() =>
-    r'5bde722fb125b07c12e36bc42ffda7db39d8e8c2';
+    r'1932ca5b87b3f3ec1285f54fc5d1d1c2162c4516';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -79,7 +79,7 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [getNearbyStoresStream].
-class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
+class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
   /// See also [getNearbyStoresStream].
   GetNearbyStoresStreamProvider({
     required BuildContext context,
@@ -143,7 +143,7 @@ class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
   }
 
   @override
-  StreamProviderElement<dynamic> createElement() {
+  AutoDisposeStreamProviderElement<dynamic> createElement() {
     return _GetNearbyStoresStreamProviderElement(this);
   }
 
@@ -166,7 +166,7 @@ class GetNearbyStoresStreamProvider extends StreamProvider<dynamic> {
   }
 }
 
-mixin GetNearbyStoresStreamRef on StreamProviderRef<dynamic> {
+mixin GetNearbyStoresStreamRef on AutoDisposeStreamProviderRef<dynamic> {
   /// The parameter `context` of this provider.
   BuildContext get context;
 
@@ -178,7 +178,8 @@ mixin GetNearbyStoresStreamRef on StreamProviderRef<dynamic> {
 }
 
 class _GetNearbyStoresStreamProviderElement
-    extends StreamProviderElement<dynamic> with GetNearbyStoresStreamRef {
+    extends AutoDisposeStreamProviderElement<dynamic>
+    with GetNearbyStoresStreamRef {
   _GetNearbyStoresStreamProviderElement(super.provider);
 
   @override
@@ -191,7 +192,7 @@ class _GetNearbyStoresStreamProviderElement
       (origin as GetNearbyStoresStreamProvider).userLocation;
 }
 
-String _$getNearbyStoresHash() => r'7c3e561590db1a83aea23a8802b9c5e51e3e95ac';
+String _$getNearbyStoresHash() => r'd18339fff7b982bec163da138b06511445f2fed7';
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)
@@ -242,7 +243,7 @@ class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [getNearbyStores].
-class GetNearbyStoresProvider extends FutureProvider<dynamic> {
+class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [getNearbyStores].
   GetNearbyStoresProvider({
     required BuildContext context,
@@ -306,7 +307,7 @@ class GetNearbyStoresProvider extends FutureProvider<dynamic> {
   }
 
   @override
-  FutureProviderElement<dynamic> createElement() {
+  AutoDisposeFutureProviderElement<dynamic> createElement() {
     return _GetNearbyStoresProviderElement(this);
   }
 
@@ -329,7 +330,7 @@ class GetNearbyStoresProvider extends FutureProvider<dynamic> {
   }
 }
 
-mixin GetNearbyStoresRef on FutureProviderRef<dynamic> {
+mixin GetNearbyStoresRef on AutoDisposeFutureProviderRef<dynamic> {
   /// The parameter `context` of this provider.
   BuildContext get context;
 
@@ -340,8 +341,8 @@ mixin GetNearbyStoresRef on FutureProviderRef<dynamic> {
   ValueNotifier<LatLng> get userLocation;
 }
 
-class _GetNearbyStoresProviderElement extends FutureProviderElement<dynamic>
-    with GetNearbyStoresRef {
+class _GetNearbyStoresProviderElement
+    extends AutoDisposeFutureProviderElement<dynamic> with GetNearbyStoresRef {
   _GetNearbyStoresProviderElement(super.provider);
 
   @override

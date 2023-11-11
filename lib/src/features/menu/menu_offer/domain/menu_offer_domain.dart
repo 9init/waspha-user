@@ -14,22 +14,21 @@ final getStoresCategoriesProvider = FutureProvider.family((ref, id) async {
     final request = await ref.watch(dioProvider).post(url, {'store_id': id});
     final response = request.data["data"];
     return response;
-  } on DioError catch(e) {
+  } on DioError catch (e) {
     print("CAT: ${e.response?.data}");
-    
   }
 });
 
 @riverpod
-Future<dynamic> getStoresProducts(Ref ref, {required int storeID,required int categoryID}) async {
+Future<dynamic> getStoresProducts(Ref ref, {required int categoryID}) async {
   const url = 'user/store-products';
-
   try {
-    final request = await ref.watch(dioProvider).post(url, {'store_id': storeID,'category_id':categoryID});
+    final request =
+        await ref.watch(dioProvider).post(url, {'category_id': categoryID});
     final response = request.data["data"];
+
     return response;
-  } on DioError catch(e) {
+  } on DioError catch (e) {
     print("CAT: ${e.response?.data}");
   }
 }
-

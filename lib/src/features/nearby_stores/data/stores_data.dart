@@ -3,9 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'stores_data.freezed.dart';
 part 'stores_data.g.dart';
 
-@freezed
+@unfreezed
 class Stores with _$Stores {
-  const factory Stores(
+  factory Stores(
       {required int id,
       Map<String, String>? business_name,
       String? ar,
@@ -16,6 +16,7 @@ class Stores with _$Stores {
       bool? delivery,
       bool? pickup,
       int? vendor_id,
+      bool? is_favorite,
       int? category_id,
       List<int>? category_ids,
       double? distance,

@@ -155,7 +155,7 @@ class _AddStoreFavProviderElement extends AutoDisposeFutureProviderElement<bool>
   int get id => (origin as AddStoreFavProvider).id;
 }
 
-String _$deleteStoreFavHash() => r'80519648901a4cb77221b564e8724f2576210477';
+String _$deleteStoreFavHash() => r'607005b5ce1a636afaa560f1848c864dfd501da2';
 
 /// See also [deleteStoreFav].
 @ProviderFor(deleteStoreFav)

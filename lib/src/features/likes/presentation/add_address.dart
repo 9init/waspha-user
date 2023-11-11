@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -10,22 +11,37 @@ import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import '../domain/likes_domain.dart';
 import 'choose_location.dart';
 
-class AddAddressScreen extends HookWidget {
+class AddAddressScreen extends StatefulHookWidget {
   AddAddressScreen({super.key});
+
+  @override
+  State<AddAddressScreen> createState() => _AddAddressScreenState();
+}
+
+class _AddAddressScreenState extends State<AddAddressScreen> {
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController _titleController = TextEditingController();
+
   TextEditingController _landmarkController = TextEditingController();
 
   PhoneController _phoneController =
       PhoneController(PhoneNumber(isoCode: IsoCode.KW, nsn: ""));
 
+  final List<String> iconsImages = [
+    "assets/images/address/home.svg",
+    "assets/images/address/work.svg",
+    "assets/images/address/beach.svg"
+  ];
+  Map<int, bool> homeChecked = {0: true, 1: false, 2: false};
   @override
   Widget build(BuildContext context) {
-    final isMeChecked = useState(false);
+    final isMeChecked = useState(true);
     final isOtherChecked = useState(false);
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
         elevation: 0,
         actions: [
           Padding(
@@ -35,253 +51,368 @@ class AddAddressScreen extends HookWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Add new address",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 348,
-                height: 750,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          spreadRadius: 1)
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Pick an icon", style: TextStyle(fontSize: 20)),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 80,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Icon(Icons.home),
-                                    Checkbox(value: false, onChanged: (v) {})
-                                  ],
-                                );
-                              }),
-                        ),
-                        Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFormField(
-                                  controller: _titleController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Title is required";
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: "Address Title",
-                                      hintText: "Enter your address Title",
-                                      border: UnderlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text("Used phone no.",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                ListTile(
-                                  leading: Checkbox(
-                                      value: isMeChecked.value,
-                                      onChanged: (v) {
-                                        isMeChecked.value = v!;
-                                        isOtherChecked.value = !v;
-                                      }),
-                                  title: Text("me"),
-                                ),
-                                ListTile(
-                                  leading: Checkbox(
-                                      value: isOtherChecked.value,
-                                      onChanged: (v) {
-                                        isOtherChecked.value = v!;
-                                        isMeChecked.value = !v;
-                                      }),
-                                  title: Text("other"),
-                                  trailing: SizedBox(
-                                    width: 150,
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          hintText: "Name",
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10))),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Add new address",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: 348,
+                  height: 750,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 1)
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Pick an icon",
+                                style: TextStyle(fontSize: 16)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 80,
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 3,
+                                separatorBuilder: (context, index) => SizedBox(
+                                      width: 10,
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 30),
-                                  child: PhoneFormField(
-                                    controller: _phoneController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Phone Number',
-                                      border: UnderlineInputBorder(),
-                                    ),
-                                    showFlagInInput: true,
-                                    defaultCountry: IsoCode.KW,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                      width: 244,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF663399),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Pick from contact list",
-                                          style: TextStyle(color: Colors.white),
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      homeChecked[index] = true;
+
+                                      setState(() {
+                                        for (int i = 0;
+                                            i < homeChecked.length;
+                                            i++) {
+                                          if (i != index) {
+                                            homeChecked[i] = false;
+                                          }
+                                        }
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                          iconsImages[index],
+                                          width: 30,
+                                          height: 30,
                                         ),
-                                      )),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                        Transform.scale(
+                                          scale: 0.8,
+                                          child: Checkbox(
+                                              shape: CircleBorder(),
+                                              value: homeChecked[index],
+                                              onChanged: (v) {
+                                                setState(() {
+                                                  homeChecked[index] = v!;
+                                                });
+
+                                                for (int i = 0;
+                                                    i < homeChecked.length;
+                                                    i++) {
+                                                  if (i != index) {
+                                                    homeChecked[i] = false;
+                                                  }
+                                                }
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 200,
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 20),
                                       child: TextFormField(
-                                        controller: _landmarkController,
+                                        controller: _titleController,
                                         validator: (value) {
                                           if (value!.isEmpty) {
-                                            return "Landmark is required";
+                                            return "Title is required";
                                           }
                                           return null;
                                         },
                                         decoration: InputDecoration(
-                                            labelText: "Landmark",
-                                            hintText: "Landmark",
+                                            labelText: "Address Title",
+                                            hintText: "Enter title",
                                             border: UnderlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10))),
                                       ),
                                     ),
-                                    Icon(Icons.info)
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text("Location",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                Consumer(
-                                  builder: (context, ref, child) {
-                                    final details =
-                                        ref.watch(getChoosenLocationProvider);
-                                    return GestureDetector(
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("Used phone no.",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          )),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListTile(
+                                      onTap: () {
+                                        isMeChecked.value = true;
+                                        isOtherChecked.value = false;
+                                      },
+                                      leading: Transform.scale(
+                                        scale: 0.8,
+                                        child: SizedBox(
+                                          width: 10,
+                                          child: Checkbox(
+                                              shape: CircleBorder(),
+                                              value: isMeChecked.value,
+                                              onChanged: (v) {
+                                                isMeChecked.value = v!;
+                                                isOtherChecked.value = !v;
+                                              }),
+                                        ),
+                                      ),
+                                      title: Text("me"),
+                                    ),
+                                    ListTile(
+                                      onTap: () {
+                                        isOtherChecked.value = true;
+                                        isMeChecked.value = false;
+                                      },
+                                      leading: Transform.scale(
+                                        scale: 0.8,
+                                        child: SizedBox(
+                                          width: 10,
+                                          child: Checkbox(
+                                              value: isOtherChecked.value,
+                                              shape: CircleBorder(),
+                                              onChanged: (v) {
+                                                isOtherChecked.value = v!;
+                                                isMeChecked.value = !v;
+                                              }),
+                                        ),
+                                      ),
+                                      title: Text("other",
+                                          style: TextStyle(fontSize: 16)),
+                                      trailing: SizedBox(
+                                        width: 150,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    blurRadius: 10,
+                                                    spreadRadius: 1)
+                                              ]),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: TextFormField(
+                                              decoration: InputDecoration(
+                                                  hintText: "Name",
+                                                  border: InputBorder.none),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 1)
+                                            ]),
+                                        child: PhoneFormField(
+                                          controller: _phoneController,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none),
+                                          showFlagInInput: true,
+                                          defaultCountry: IsoCode.KW,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                          width: 244,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF663399),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Pick from contact list",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 250,
+                                          child: TextFormField(
+                                            controller: _landmarkController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return "Landmark is required";
+                                              }
+                                              return null;
+                                            },
+                                            decoration: InputDecoration(
+                                                labelText: "Landmark",
+                                                hintText: "Landmark",
+                                                border: UnderlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10))),
+                                          ),
+                                        ),
+                                        Icon(Icons.info)
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("Location",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          )),
+                                    ),
+                                    GestureDetector(
                                       onTap: () {
                                         context.push('/choose_location');
                                       },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          details["address"] != ""
-                                              ? Expanded(
-                                                  child:
-                                                      Text(details["address"]))
-                                              : Text("Choose location on map"),
-                                          Icon(Icons.location_on)
-                                        ],
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          final details = ref.watch(
+                                              getChoosenLocationProvider);
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              details["address"] != ""
+                                                  ? Expanded(
+                                                      child: Text(
+                                                          details["address"]))
+                                                  : Text(
+                                                      "Choose location on map"),
+                                              Icon(Icons.location_on)
+                                            ],
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Consumer(
-                                  builder: (context, ref, child) {
-                                    return SizedBox(
-                                        height: 50,
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: MaterialStatePropertyAll(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color(0xFF663399)),
-                                            ),
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                ref
-                                                    .read(addLocationProvider(
-                                                      landmark:
-                                                          _landmarkController
-                                                              .text,
-                                                      title:
-                                                          _titleController.text,
-                                                      phone: _phoneController
-                                                          .value!.international
-                                                          .toString(),
-                                                    ).future)
-                                                    .then((value) =>
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(
-                                                                    value))));
-                                              }
-                                            },
-                                            child: Text("Save",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 17))));
-                                  },
-                                )
-                              ],
-                            ))
-                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Consumer(
+                                      builder: (context, ref, child) {
+                                        return SizedBox(
+                                            height: 50,
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStatePropertyAll(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15))),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color(0xFF663399)),
+                                                ),
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    ref
+                                                        .read(
+                                                            addLocationProvider(
+                                                          landmark:
+                                                              _landmarkController
+                                                                  .text,
+                                                          title:
+                                                              _titleController
+                                                                  .text,
+                                                          phone:
+                                                              _phoneController
+                                                                  .value!
+                                                                  .international
+                                                                  .toString(),
+                                                        ).future)
+                                                        .then((value) =>
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    SnackBar(
+                                                                        content:
+                                                                            Text(value))));
+                                                  }
+                                                },
+                                                child: Text("Save",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 17))));
+                                      },
+                                    )
+                                  ],
+                                )),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

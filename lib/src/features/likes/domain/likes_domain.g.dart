@@ -204,11 +204,12 @@ class _AddLocationProviderElement
   String get landmark => (origin as AddLocationProvider).landmark;
 }
 
-String _$getLocationsHash() => r'2b94e1fdce594a7c5267b3de660f5758a99db427';
+String _$getLocationsHash() => r'7f92a9e1c21c1ed317510e2cb37290b42bd9aa1c';
 
 /// See also [getLocations].
 @ProviderFor(getLocations)
-final getLocationsProvider = AutoDisposeFutureProvider<List<Location>>.internal(
+final getLocationsProvider =
+    AutoDisposeFutureProvider<List<DataLocation>>.internal(
   getLocations,
   name: r'getLocationsProvider',
   debugGetCreateSourceHash:
@@ -217,6 +218,278 @@ final getLocationsProvider = AutoDisposeFutureProvider<List<Location>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef GetLocationsRef = AutoDisposeFutureProviderRef<List<Location>>;
+typedef GetLocationsRef = AutoDisposeFutureProviderRef<List<DataLocation>>;
+String _$addLocationFavHash() => r'3625283b614fec1c039245645ba96547171aa050';
+
+/// See also [addLocationFav].
+@ProviderFor(addLocationFav)
+const addLocationFavProvider = AddLocationFavFamily();
+
+/// See also [addLocationFav].
+class AddLocationFavFamily extends Family<AsyncValue<String>> {
+  /// See also [addLocationFav].
+  const AddLocationFavFamily();
+
+  /// See also [addLocationFav].
+  AddLocationFavProvider call({
+    required LatLng location,
+    required String address,
+  }) {
+    return AddLocationFavProvider(
+      location: location,
+      address: address,
+    );
+  }
+
+  @override
+  AddLocationFavProvider getProviderOverride(
+    covariant AddLocationFavProvider provider,
+  ) {
+    return call(
+      location: provider.location,
+      address: provider.address,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'addLocationFavProvider';
+}
+
+/// See also [addLocationFav].
+class AddLocationFavProvider extends AutoDisposeFutureProvider<String> {
+  /// See also [addLocationFav].
+  AddLocationFavProvider({
+    required LatLng location,
+    required String address,
+  }) : this._internal(
+          (ref) => addLocationFav(
+            ref as AddLocationFavRef,
+            location: location,
+            address: address,
+          ),
+          from: addLocationFavProvider,
+          name: r'addLocationFavProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$addLocationFavHash,
+          dependencies: AddLocationFavFamily._dependencies,
+          allTransitiveDependencies:
+              AddLocationFavFamily._allTransitiveDependencies,
+          location: location,
+          address: address,
+        );
+
+  AddLocationFavProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.location,
+    required this.address,
+  }) : super.internal();
+
+  final LatLng location;
+  final String address;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(AddLocationFavRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddLocationFavProvider._internal(
+        (ref) => create(ref as AddLocationFavRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        location: location,
+        address: address,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _AddLocationFavProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddLocationFavProvider &&
+        other.location == location &&
+        other.address == address;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, location.hashCode);
+    hash = _SystemHash.combine(hash, address.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin AddLocationFavRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `location` of this provider.
+  LatLng get location;
+
+  /// The parameter `address` of this provider.
+  String get address;
+}
+
+class _AddLocationFavProviderElement
+    extends AutoDisposeFutureProviderElement<String> with AddLocationFavRef {
+  _AddLocationFavProviderElement(super.provider);
+
+  @override
+  LatLng get location => (origin as AddLocationFavProvider).location;
+  @override
+  String get address => (origin as AddLocationFavProvider).address;
+}
+
+String _$deleteLocationHash() => r'ec53de126b0f5c73d077b78a8a686fc3a61ced97';
+
+/// See also [deleteLocation].
+@ProviderFor(deleteLocation)
+const deleteLocationProvider = DeleteLocationFamily();
+
+/// See also [deleteLocation].
+class DeleteLocationFamily extends Family<AsyncValue<String>> {
+  /// See also [deleteLocation].
+  const DeleteLocationFamily();
+
+  /// See also [deleteLocation].
+  DeleteLocationProvider call({
+    required int id,
+  }) {
+    return DeleteLocationProvider(
+      id: id,
+    );
+  }
+
+  @override
+  DeleteLocationProvider getProviderOverride(
+    covariant DeleteLocationProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deleteLocationProvider';
+}
+
+/// See also [deleteLocation].
+class DeleteLocationProvider extends AutoDisposeFutureProvider<String> {
+  /// See also [deleteLocation].
+  DeleteLocationProvider({
+    required int id,
+  }) : this._internal(
+          (ref) => deleteLocation(
+            ref as DeleteLocationRef,
+            id: id,
+          ),
+          from: deleteLocationProvider,
+          name: r'deleteLocationProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deleteLocationHash,
+          dependencies: DeleteLocationFamily._dependencies,
+          allTransitiveDependencies:
+              DeleteLocationFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  DeleteLocationProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(DeleteLocationRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteLocationProvider._internal(
+        (ref) => create(ref as DeleteLocationRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _DeleteLocationProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteLocationProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeleteLocationRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _DeleteLocationProviderElement
+    extends AutoDisposeFutureProviderElement<String> with DeleteLocationRef {
+  _DeleteLocationProviderElement(super.provider);
+
+  @override
+  int get id => (origin as DeleteLocationProvider).id;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

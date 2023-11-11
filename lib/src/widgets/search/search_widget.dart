@@ -7,6 +7,8 @@ import 'package:waspha/src/features/get_location/domain/get_location_domain.dart
 import 'package:waspha/src/widgets/get_location_text/get_location_text.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 
+import '../../features/likes/domain/likes_domain.dart';
+
 final currentPlaceDescription = StateProvider<String>((ref) {
   return "";
 });
@@ -27,6 +29,8 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final tempLocation = ref.watch(getUserLocationTempProvider.notifier);
+    final locations = ref.watch(getLocationsProvider);
+
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -40,10 +44,10 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                   isLatLngRequired: true,
                   boxDecoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent)),
-                  getPlaceDetailWithLatLng: (Prediction prediction)  {
+                  getPlaceDetailWithLatLng: (Prediction prediction) {
                     double lat = double.parse(prediction.lat ?? '0.0');
                     double lng = double.parse(prediction.lng ?? '0.0');
-                     tempLocation.update((state) => LatLng(lat, lng));
+                    tempLocation.update((state) => LatLng(lat, lng));
                     // ref
                     //     .read(getUserLocationTempProvider.notifier)
                     //     .update((state) => LatLng(lat, lng));
@@ -93,6 +97,58 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                       hintText: "Search for a location"),
                   debounceTime: 800,
                   googleAPIKey: APIKEY),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: locations.when(
+                  data: (data) {
+                    if (data.isEmpty) return Container();
+                    return Container(
+                      height: 70,
+                      color: Colors.black.withOpacity(0.05),
+                      child: ListView.separated(
+                        itemCount: data.length,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: VerticalDivider(),
+                        ),
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              Icon(Icons.home),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("${data[index].location_type}"),
+                                  Container(
+                                      width: 100,
+                                      child: Text(
+                                        "${data[index].location_string ?? ""}",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                      )),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  loading: () => Container(),
+                  error: (e, s) {
+                    debugPrint(e.toString());
+                    return Container();
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: GetLocationText(),

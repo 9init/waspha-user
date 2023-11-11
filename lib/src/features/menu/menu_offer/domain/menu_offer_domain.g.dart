@@ -6,7 +6,7 @@ part of 'menu_offer_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getStoresProductsHash() => r'f939eaddf82df66eb8703135b7d733633aefc2ca';
+String _$getStoresProductsHash() => r'c00d2a6df078be4443f5eed89ab4b847440c51f0';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,11 +40,9 @@ class GetStoresProductsFamily extends Family<AsyncValue<dynamic>> {
 
   /// See also [getStoresProducts].
   GetStoresProductsProvider call({
-    required int storeID,
     required int categoryID,
   }) {
     return GetStoresProductsProvider(
-      storeID: storeID,
       categoryID: categoryID,
     );
   }
@@ -54,7 +52,6 @@ class GetStoresProductsFamily extends Family<AsyncValue<dynamic>> {
     covariant GetStoresProductsProvider provider,
   ) {
     return call(
-      storeID: provider.storeID,
       categoryID: provider.categoryID,
     );
   }
@@ -78,12 +75,10 @@ class GetStoresProductsFamily extends Family<AsyncValue<dynamic>> {
 class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [getStoresProducts].
   GetStoresProductsProvider({
-    required int storeID,
     required int categoryID,
   }) : this._internal(
           (ref) => getStoresProducts(
             ref as GetStoresProductsRef,
-            storeID: storeID,
             categoryID: categoryID,
           ),
           from: getStoresProductsProvider,
@@ -95,7 +90,6 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
           dependencies: GetStoresProductsFamily._dependencies,
           allTransitiveDependencies:
               GetStoresProductsFamily._allTransitiveDependencies,
-          storeID: storeID,
           categoryID: categoryID,
         );
 
@@ -106,11 +100,9 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.storeID,
     required this.categoryID,
   }) : super.internal();
 
-  final int storeID;
   final int categoryID;
 
   @override
@@ -126,7 +118,6 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        storeID: storeID,
         categoryID: categoryID,
       ),
     );
@@ -139,15 +130,12 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
 
   @override
   bool operator ==(Object other) {
-    return other is GetStoresProductsProvider &&
-        other.storeID == storeID &&
-        other.categoryID == categoryID;
+    return other is GetStoresProductsProvider && other.categoryID == categoryID;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, storeID.hashCode);
     hash = _SystemHash.combine(hash, categoryID.hashCode);
 
     return _SystemHash.finish(hash);
@@ -155,9 +143,6 @@ class GetStoresProductsProvider extends AutoDisposeFutureProvider<dynamic> {
 }
 
 mixin GetStoresProductsRef on AutoDisposeFutureProviderRef<dynamic> {
-  /// The parameter `storeID` of this provider.
-  int get storeID;
-
   /// The parameter `categoryID` of this provider.
   int get categoryID;
 }
@@ -167,8 +152,6 @@ class _GetStoresProductsProviderElement
     with GetStoresProductsRef {
   _GetStoresProductsProviderElement(super.provider);
 
-  @override
-  int get storeID => (origin as GetStoresProductsProvider).storeID;
   @override
   int get categoryID => (origin as GetStoresProductsProvider).categoryID;
 }

@@ -25,23 +25,6 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   List menuCategories = [];
   final List<Marker> locationMarkers = [];
 
-  showLocationDialog() async {
-    return showAdaptiveDialog(
-        context: context,
-        builder: (context) {
-          return CustomDialog(
-            content:
-                "We will use your location to find nearby stores, categories and products",
-          );
-        });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    showLocationDialog();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isBottomSheetOpen = useState(false);
@@ -71,31 +54,27 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
 
         final String message = data["message"];
         final stores = data["stores"] ?? [];
-        final categories = data["categories"];
+        List categories = data["categories"];
 
-        for (var i = 0; i < stores.length; i++) {
-          if (stores[i].has_menu == true) {
-            menuCategories.add(stores[i]);
-          }
-          final image = ref.watch(imageBytesProvider(stores[i].image)).value;
+        for (var store in stores.toSet()) {
+          final image = ref.watch(imageBytesProvider(store.image)).value;
 
           markers.add(Marker(
               icon: image != null
                   ? image
                   : BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueViolet),
-              markerId: MarkerId(stores[i].id.toString()),
-              position: LatLng(stores[i].lat, stores[i].lng),
+              markerId: MarkerId(store.id.toString()),
+              position: LatLng(store.lat, store.lng),
               infoWindow: InfoWindow(
-                  title: stores[i].business_name["en"],
-                  snippet: stores[i].average_rating.toString())));
+                  title: store.business_name["en"],
+                  snippet: store.average_rating.toString())));
         }
-
         return NearbyStoreMap(
             isBottomSheetOpen: isBottomSheetOpen,
             initialLocation: LatLng(data["lat"], data["lng"]),
             dataLength: categories.length,
-            stores: menuCategories.toSet().toList(),
+            stores: stores.where((cat) => cat.has_menu == true).toList(),
             onMapCreated: (controller) {},
             message: message,
             categoryName: categories,

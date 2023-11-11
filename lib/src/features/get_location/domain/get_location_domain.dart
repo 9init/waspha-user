@@ -5,7 +5,6 @@ final getUserLocation = StateProvider<LatLng>((ref) {
   return LatLng(0.0, 0.0);
 });
 final getUserLocationTempProvider = StateProvider<LatLng>((ref) {
-  ref.onDispose(() => print('DISPOSED'));
 
   return LatLng(0.0, 0.0);
 });

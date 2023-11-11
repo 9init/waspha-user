@@ -4,6 +4,7 @@ import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
+import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
 import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dart';
@@ -32,6 +33,7 @@ import '../features/likes/presentation/likes_screen.dart';
 import '../features/login/presentation/login.dart';
 import '../features/menu/menu_detail/presentation/menu_detail.dart';
 import '../features/menu/menu_offer/presentation/menu_offer.dart';
+import '../features/menu/menu_offer/presentation/subCategoryOffer.dart';
 import '../features/menu/products/presentation/products_detail.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/profile/presentation/change_location.dart';
@@ -67,6 +69,11 @@ final router = GoRouter(
                 path: '/',
                 builder: (context, state) => const NearbyStoreScreen(),
                 routes: [
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: 'guest_screen',
+                    builder: (context, state) => GuestScreen(),
+                  ),
                   // child route
                 ],
               ),
@@ -188,17 +195,18 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: '/product_details',
-      builder: (context, state) => ProductDetails(id: state.extra!),
+      builder: (context, state) => ProductDetails(data: state.extra!),
+    ),
+     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: '/subcategory_offer',
+      builder: (context, state) => SubCategoryOffer(data: state.extra!),
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: '/buffer_brand',
       builder: (context, state) => BufferBrand(),
     ),
-    // GoRoute(
-    //   path: '/activity',
-    //   builder: (context, state) => Activity(),
-    // ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: '/activity_offers',
@@ -235,11 +243,6 @@ final router = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
-      path: '/guest_screen',
-      builder: (context, state) => GuestScreen(),
-    ),
-    GoRoute(
-      parentNavigatorKey: rootNavigatorKey,
       path: '/update_profile',
       builder: (context, state) => UpdateProfile(
         data: state.extra,
@@ -254,6 +257,11 @@ final router = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       path: '/reviews_screen',
       builder: (context, state) => ReviewsScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: '/menu_reviews',
+      builder: (context, state) => MenuReviews(id: state.extra),
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,

@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../widgets/nearby_store/domain/nearby_domain.dart';
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -56,10 +58,36 @@ class MenuScreen extends StatelessWidget {
                           ),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return MenuCard(
-                          onFavorited: () {},
-                          imageURl: data[index].image,
-                          companyName: data[index].business_name["en"],
+                        return GestureDetector(
+                          onTap: () => context.push('/menu-detail',
+                              extra: data[index].id),
+                          child: Consumer(builder: (context, ref, child) {
+                            return MenuCard(
+                              rating: data[index].average_rating,
+                              onFavorited: () async {
+                                if (data[index].is_favorite) {
+                                  await ref.read(deleteStoreFavProvider(
+                                      id: data[index].id));
+                                  ref.invalidate(getFavStoresProvider);
+                                  print("Removed from favs");
+                                } else {
+                                  await ref
+                                      .read(addStoreFavProvider(
+                                              id: data[index].id)
+                                          .future)
+                                      .then((value) {
+                                    if (value) {
+                                      print("Added to favs");
+                                      ref.invalidate(getFavStoresProvider);
+                                    }
+                                  });
+                                }
+                              },
+                              isFavorited: data[index].is_favorite ?? false,
+                              imageURl: data[index].image,
+                              companyName: data[index].business_name["en"],
+                            );
+                          }),
                         );
                       }),
                 )
@@ -89,6 +117,8 @@ class MenuCard extends StatelessWidget {
     required this.onFavorited,
     this.favWidgth = 250,
     this.isProvider = false,
+    this.isFavorited = false,
+    this.rating = 0,
   });
 
   final String imageURl;
@@ -96,6 +126,17 @@ class MenuCard extends StatelessWidget {
   final bool isOffer, isProvider;
   final double width, favWidgth;
   final void Function()? onFavorited;
+  final bool isFavorited;
+  final double rating;
+
+  double dynamicWidth() {
+    if (isOffer) {
+      return 150;
+    } else if (isProvider) {
+      return 311;
+    }
+    return 370;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +145,8 @@ class MenuCard extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: 311,
-            height: 200,
+            width: dynamicWidth(),
+            height: isOffer ? 150 : 200,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: CachedNetworkImageProvider(imageURl),
@@ -120,7 +161,7 @@ class MenuCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * width,
+                      width: dynamicWidth(),
                       height: 50,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.5),
@@ -130,19 +171,26 @@ class MenuCard extends StatelessWidget {
                                 bottomRight: Radius.circular(20))
                             : BorderRadius.circular(20),
                       ),
-                      child: Row(
-                        mainAxisAlignment: !isOffer
-                            ? MainAxisAlignment.spaceAround
-                            : MainAxisAlignment.start,
-                        children: [
-                          !isOffer ? Icon(Icons.abc) : Container(),
-                          Text(
-                            companyName,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          !isOffer ? Icon(Icons.shopping_cart) : Container(),
-                        ],
+                      child: Padding(
+                        padding: isOffer
+                            ? const EdgeInsets.only(left: 20)
+                            : const EdgeInsets.all(0),
+                        child: Row(
+                          mainAxisAlignment: !isOffer
+                              ? MainAxisAlignment.spaceAround
+                              : MainAxisAlignment.start,
+                          children: [
+                            !isOffer ? Icon(Icons.abc) : Container(),
+                            FittedBox(
+                              child: Text(
+                                companyName,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 17),
+                              ),
+                            ),
+                            !isOffer ? Icon(Icons.shopping_cart) : Container(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -159,7 +207,7 @@ class MenuCard extends StatelessWidget {
                       CircleAvatar(
                         radius: 20,
                         backgroundColor: Colors.white,
-                        child: Text('4.8'),
+                        child: Text("$rating"),
                       ),
                       SizedBox(
                         width: favWidgth,
@@ -167,7 +215,7 @@ class MenuCard extends StatelessWidget {
                       IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: Colors.red,
+                          color: isFavorited ? Colors.red : Colors.white,
                           size: 30,
                         ),
                         onPressed: onFavorited,

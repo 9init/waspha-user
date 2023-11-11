@@ -18,7 +18,7 @@ Future<bool> addStoreFav(Ref ref, {required int id}) async {
 
 @riverpod
 Future<bool> deleteStoreFav(Ref ref, {required int id}) async {
-  final url = "user/fav-location/$id";
+  final url = "user/fav-stores/$id";
   try {
     final request = await ref.watch(dioProvider).delete(url);
     if (request.statusCode == 200) {

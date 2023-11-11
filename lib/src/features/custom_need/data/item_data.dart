@@ -1,3 +1,4 @@
+
 class Item {
   int? id;
   String? name;
@@ -6,7 +7,7 @@ class Item {
   Function(Item item)? deleteCallback;
   String? image;
   String? requirements;
-
+  int? product_id;
   Item(
       {this.id,
       this.name,
@@ -14,7 +15,8 @@ class Item {
       this.quantity = 1,
       this.image,
       this.requirements,
-      this.deleteCallback});
+      this.deleteCallback,
+      this.product_id});
 
   @override
   String toString() {
@@ -25,12 +27,12 @@ class Item {
     deleteCallback?.call(this);
   }
 
-  Map<String,dynamic> toJson() => {
-    "product_id": id,
-    "name": name,
-    "additional_notes": additional_notes,
-    "quantity": quantity,
-    "image": image,
-    "requirements": requirements,
-  };
+  Map<String, dynamic> toJson() => {
+        "product_id": product_id,
+        "name": name,
+        "additional_notes": additional_notes,
+        "quantity": quantity,
+        "image": image,
+        "requirements": requirements,
+      };
 }

@@ -35,7 +35,7 @@ class NearbyData {
   });
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Stream<dynamic> getNearbyStoresStream(
   Ref ref, {
   required BuildContext context,
@@ -85,7 +85,7 @@ Future<LocationData> getLocation() async {
   return _locationData;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<dynamic> getNearbyStores(
   Ref ref, {
   required BuildContext context,

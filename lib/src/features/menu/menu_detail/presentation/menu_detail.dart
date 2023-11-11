@@ -1,30 +1,97 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
+import 'package:waspha/src/features/menu/menu_detail/domain/menu_detail.dart';
+import 'package:flutter/services.dart';
+
+import '../../../../widgets/nearby_store/domain/nearby_domain.dart';
+import '../../../login/domain/login_domain.dart';
 
 final storeIDProvider = StateProvider<int>((ref) => 0);
 
-class MenuDetailScreen extends StatelessWidget {
+class MenuDetailScreen extends ConsumerWidget {
   final id;
   const MenuDetailScreen({super.key, required this.id});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     print("BEE $id");
     return Scaffold(
-      body: Column(
+      body: Consumer(builder: (context, ref, child) {
+        final storeDetails = ref.watch(getStoresDetailsProvider(id: id));
+        return storeDetails.when(
+            data: (data) {
+              return MenuDetailsBody(
+                id: id,
+                isFavorite: data["is_favorite"],
+                imageURL: data["image"],
+                address: data["more_information"]["address"],
+                name: data["business_name"]["en"],
+                timings: data["timings"],
+                ratings: data["average_rating"].toDouble(),
+                categories:
+                    data["categories"].map((e) => e["name"]["en"]).join(" - "),
+              );
+            },
+            error: (e, s) {
+              return Center(child: Text("Error"));
+            },
+            loading: () => Center(child: CircularProgressIndicator()));
+      }),
+    );
+  }
+}
+
+class MenuDetailsBody extends HookWidget {
+  const MenuDetailsBody({
+    super.key,
+    required this.id,
+    required this.imageURL,
+    required this.address,
+    required this.name,
+    required this.ratings,
+    required this.timings,
+    required this.categories,
+    required this.isFavorite,
+  });
+
+  final id;
+  final bool isFavorite;
+  final String imageURL, address, name;
+
+  final double ratings;
+  final timings, categories;
+  String convertTimeToAMPM(String timeString) {
+    // Parse the time string into a DateTime object
+    final DateTime time = DateTime.parse('1970-01-01 ' + timeString);
+
+    // Format the DateTime object with AM/PM
+    final DateFormat ampmFormat = DateFormat('h:mm a');
+    return ampmFormat.format(time);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isExpanded = useState(false);
+    final maxLines = isExpanded.value ? 100 : 2;
+    final isStoreFavorited = useState<bool>(false);
+
+    return SingleChildScrollView(
+      child: Column(
         children: [
           Stack(
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 200,
+                height: 170,
                 decoration: BoxDecoration(
                   color: Colors.red,
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80'),
+                    image: CachedNetworkImageProvider(imageURL),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.only(
@@ -37,32 +104,74 @@ class MenuDetailScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 35,
+                        height: 35,
+                        child: CustomBackButton(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                        ),
                       ),
-                      onPressed: () => Navigator.pop(context),
                     ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
+                    Consumer(builder: (context, ref, child) {
+                      return IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: isFavorite || isStoreFavorited.value
+                              ? Colors.red
+                              : Colors.white,
+                        ),
+                        onPressed: () async {
+                          final isLogged =
+                              await ref.watch(isLoggedInProvider.future);
+                          if (!isLogged) {
+                            showAdaptiveDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text('Login'),
+                                      content: Text(
+                                          'You need to login to add this store to your favorites'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              context.push('/login');
+                                            },
+                                            child: Text('Login')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Cancel')),
+                                      ],
+                                    ));
+                            return;
+                          }
+
+                          if (isFavorite || isStoreFavorited.value) {
+                            isStoreFavorited.value = false;
+                            ref.read(deleteStoreFavProvider(id: id));
+                            ref.invalidate(getStoresDetailsProvider(id: id));
+                          } else {
+                            isStoreFavorited.value = true;
+                            await ref.read(addStoreFavProvider(id: id));
+                            ref.invalidate(getStoresDetailsProvider(id: id));
+                          }
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 150),
+                padding: const EdgeInsets.only(top: 130),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.red,
-                    backgroundImage: CachedNetworkImageProvider(
-                        'https://seeklogo.com/images/N/noon-com-logo-3D35F15324-seeklogo.com.png'),
+                    backgroundImage: CachedNetworkImageProvider(imageURL),
                   ),
                 ),
               ),
@@ -73,7 +182,7 @@ class MenuDetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'noon express down \n town Alexandria',
+                name,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -100,43 +209,103 @@ class MenuDetailScreen extends StatelessWidget {
           ),
           SizedBox(height: 20),
           ListTile(
+            onTap: () {
+              isExpanded.value = !isExpanded.value;
+            },
             title: Text(
-                'Grocery - Vegetables - Cosmetics - Butcher -Electrics - Sandwi  …. '),
-            trailing: Icon(Icons.add),
+              categories,
+              maxLines: maxLines,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: isExpanded.value ? Icon(Icons.minimize) : Icon(Icons.add),
           ),
           SizedBox(height: 15),
           ListTile(
+            onTap: () => context.push('/menu_reviews', extra: id),
             leading: Icon(Icons.star),
-            title: Text('4.6 (90 ratings)'),
+            title: Text("$ratings"),
             trailing: Icon(Icons.arrow_forward),
           ),
           SizedBox(height: 15),
           ListTile(
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: address));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("Copied to clipboard")));
+            },
             leading: Icon(Icons.location_on),
-            title: Text('51 Smoha Midan ama nwellsquear alexndria egypt'),
-            trailing: Icon(Icons.arrow_forward),
+            title: Text(address),
+            trailing: Icon(Icons.copy),
           ),
           SizedBox(height: 15),
           ListTile(
             leading: Icon(Icons.lock_clock),
-            title: Text('Open until 11:56 PM'),
+            title: Text(
+                "${timings != "fulltime" ? "Opens until " + convertTimeToAMPM(timings?[0]["to"]) : "Fulltime"}"),
             trailing: Icon(Icons.minimize),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 80.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Visibility(
+                visible: timings == "fulltime",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Every day",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Full time"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: timings != "fulltime",
+            child: Container(
+              alignment: Alignment.center,
+              child: Center(
+                child: ListView.builder(
+                    itemCount: timings?.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: 80),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(timings?[index]["day"],
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(convertTimeToAMPM(timings?[index]["from"]) +
+                              " - " +
+                              convertTimeToAMPM(timings?[index]["to"]))
+                        ],
+                      );
+                    }),
+              ),
+            ),
           ),
           SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              DetailsCard(
-                widget: Image.asset(
-                  'assets/images/nearby/custom_need.png',
-                  width: 50,
-                ),
-                text: "Custom Need",
-                onPressed: () => context.push(
-                  '/custom_need_screen',
-                  extra: true,
-                ),
-              ),
+              Consumer(builder: (context, ref, child) {
+                return DetailsCard(
+                  widget: Image.asset(
+                    'assets/images/nearby/custom_need.png',
+                    width: 50,
+                  ),
+                  text: "Custom Need",
+                  onPressed: () {
+                    ref.read(storeIDProvider.notifier).update((state) => id);
+
+                    return context.push(
+                      '/custom_need_screen',
+                      extra: true,
+                    );
+                  },
+                );
+              }),
               SizedBox(width: 20),
               DetailsCard(
                 widget: Icon(Icons.rotate_90_degrees_ccw),

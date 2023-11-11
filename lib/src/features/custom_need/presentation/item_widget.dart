@@ -45,7 +45,8 @@ class CreateItemWidget extends HookWidget {
                   visible: !isCollapsed.value,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 3, vertical: 10),
+                      horizontal: 3,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

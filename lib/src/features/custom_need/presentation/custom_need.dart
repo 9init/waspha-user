@@ -12,11 +12,14 @@ import '../../../constants/constants.dart';
 import '../../../widgets/categories/categories_widget.dart';
 import '../../../widgets/need_login.dart';
 import '../../login/domain/login_domain.dart';
+import '../../menu/menu_detail/presentation/menu_detail.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 import '../data/item_data.dart';
 import '../domain/custom_need_domain.dart';
 import 'item_widget.dart';
 import 'select_date.dart';
+
+final itemsProvider = StateProvider<List<Item>>((ref) => []);
 
 class CustomNeedScreen extends StatefulHookConsumerWidget {
   final isMenu;
@@ -30,7 +33,6 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
   @override
   Widget build(BuildContext context) {
     final isScheduled = useState(false);
-    final items = useState(<Item>[]);
     final isLogged = ref.watch(isLoggedInProvider);
     return isLogged.when(data: (data) {
       if (data == false) {
@@ -149,37 +151,48 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                     Spacer(),
                     Visibility(
                       visible: widget.isMenu,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/nearby/menu.png'),
-                            Text("Menu")
-                          ],
-                        ),
-                      ),
+                      child: Consumer(builder: (context, ref, child) {
+                        final storeID = ref.watch(storeIDProvider);
+                        print("ID: $storeID");
+                        return GestureDetector(
+                          onTap: () {
+                            context.push('/menu-offer', extra: storeID);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/images/nearby/menu.png'),
+                              Text("Menu")
+                            ],
+                          ),
+                        );
+                      }),
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        items.value.insert(0, new Item(deleteCallback: (item) {
-                          items.value.remove(item);
-                          setState(() {});
-                        }));
-                        setState(() {});
-                        print(items);
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/nearby/menu.png'),
-                          Text("new")
-                        ],
-                      ),
-                    ),
+                    Consumer(builder: (context, ref, child) {
+                      final items = ref.watch(itemsProvider);
+                      return GestureDetector(
+                        onTap: () {
+                          items.insert(0, new Item(deleteCallback: (item) {
+                            items.remove(item);
+                            ref.invalidate(itemsProvider);
+                          }));
+                          setState(() {
+                            
+                          });
+                          print(items);
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/nearby/menu.png'),
+                            Text("new")
+                          ],
+                        ),
+                      );
+                    }),
                     SizedBox(
                       width: 1,
                     ),
@@ -190,21 +203,29 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
             SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: ListView.separated(
-                itemCount: items.value.length,
-                separatorBuilder: (context, index) => SizedBox(
-                  height: 5,
+            Consumer(builder: (context, ref, child) {
+              final items = ref.watch(itemsProvider);
+
+              return Expanded(
+                child: ListView.separated(
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 5,
+                  ),
+                  itemBuilder: (context, index) => CreateItemWidget(
+                    item: items[index],
+                  ),
                 ),
-                itemBuilder: (context, index) => CreateItemWidget(
-                  item: items.value[index],
-                ),
-              ),
-            ),
+              );
+            }),
             SizedBox(
               height: 20,
             ),
-            ReadyRequestButton(items: items, isScheduled: isScheduled),
+            Consumer(builder: (context, ref, child) {
+              final items = ref.watch(itemsProvider);
+
+              return ReadyRequestButton(items: items, isScheduled: isScheduled);
+            }),
             SizedBox(
               height: 20,
             ),
@@ -222,7 +243,10 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
 class CustomBackButton extends StatelessWidget {
   const CustomBackButton({
     super.key,
+    this.backgroundColor = Colors.black,
+    this.foregroundColor = Colors.white,
   });
+  final Color backgroundColor, foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -230,17 +254,18 @@ class CustomBackButton extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: backgroundColor,
             shape: BoxShape.circle,
           ),
           width: 42,
           height: 42,
           child: IconButton(
               iconSize: 18,
+              padding: EdgeInsets.zero,
               onPressed: () => context.pop(),
               icon: Icon(
                 Icons.arrow_back_ios_new,
-                color: Colors.white,
+                color: foregroundColor,
               )),
         ));
   }
@@ -253,7 +278,7 @@ class ReadyRequestButton extends StatelessWidget {
     required this.isScheduled,
   });
 
-  final ValueNotifier<List<Item>> items;
+  final List<Item> items;
   final ValueNotifier<bool> isScheduled;
 
   @override
@@ -261,7 +286,7 @@ class ReadyRequestButton extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) => GestureDetector(
         onTap: () {
-          if (items.value.length == 0) {
+          if (items.length == 0) {
             return;
           }
           showDialog(
@@ -270,7 +295,7 @@ class ReadyRequestButton extends StatelessWidget {
                 final method = ref.watch(methodProvider);
 
                 final itemsJsonList =
-                    items.value.map((item) => item.toJson()).toList();
+                    items.map((item) => item.toJson()).toList();
                 final currentPlace = ref.watch(currentPlaceDescription);
 
                 return Dialog(
@@ -295,7 +320,7 @@ class ReadyRequestButton extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            "Items (${items.value.length})",
+                            "Items (${items.length})",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
@@ -305,8 +330,8 @@ class ReadyRequestButton extends StatelessWidget {
                               child: ListView.builder(
                             shrinkWrap: true,
                             itemBuilder: (context, index) => Text(
-                                "${items.value[index].quantity} x ${items.value[index].name ?? "Item Summary"}"),
-                            itemCount: items.value.length,
+                                "${items[index].quantity} x ${items[index].name ?? "Item Summary"}"),
+                            itemCount: items.length,
                           )),
                           SizedBox(
                             height: 10,

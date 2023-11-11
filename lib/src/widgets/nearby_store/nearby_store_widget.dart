@@ -9,7 +9,9 @@ import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 
+import '../../features/custom_need/presentation/custom_need.dart';
 import '../../features/get_location/domain/get_location_domain.dart';
+import '../../features/likes/domain/likes_domain.dart';
 import '../../features/nearby_stores/domain/stores_repository.dart';
 import '../categories/categories_widget.dart';
 
@@ -72,6 +74,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final currentLocation = ref.watch(userLocationProvider).asData?.value;
     final isPicking = ref.watch(isPickingLocationProvider);
     final isNearbyClicked = useState(false);
+    final mapType = useState<MapType>(MapType.normal);
     ref.listen(
         getUserLocationTempProvider,
         (_, newValue) => mapController?.animateCamera(
@@ -89,14 +92,14 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
             polygons: widget.polygons ?? {},
             circles: {
               Circle(
-                visible: method.value == 'pickup',
+                  visible: method.value == 'pickup',
                   circleId: CircleId("circle"),
                   radius: 15000,
                   strokeColor: Colors.transparent,
                   fillColor: Colors.purple.withOpacity(0.2),
                   center: currentLocation ?? LatLng(0.0, 0.0)),
             },
-            mapType: MapType.normal,
+            mapType: mapType.value,
             markers: widget.markers,
             onCameraMove: (position) {
               userLocation.value = position.target;
@@ -216,7 +219,20 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                               SizedBox(width: 3),
                               Text(widget.message),
                               SizedBox(width: 10),
-                              Icon(Icons.favorite_border)
+                              GestureDetector(
+                                  onTap: () async {
+                                    final details = await getPlaceDetails(ref,
+                                        location: userLocation.value);
+
+                                    final result = await ref.read(
+                                        addLocationFavProvider(
+                                                location: userLocation.value,
+                                                address: details)
+                                            .future);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("$result")));
+                                  },
+                                  child: Icon(Icons.favorite_border))
                             ],
                           ),
                         ),
@@ -237,14 +253,14 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     child: IconButton(
-                        onPressed: () async {
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              useSafeArea: true,
-                              builder: (context) => SearchWidget());
+                        onPressed: () {
+                          mapType.value = mapType.value == MapType.normal
+                              ? MapType.satellite
+                              : MapType.normal;
                         },
-                        icon: Icon(Icons.search)),
+                        icon: Icon(mapType.value == MapType.normal
+                            ? Icons.satellite_alt
+                            : Icons.public)),
                   ),
                   SizedBox(
                     height: 15,
@@ -529,7 +545,8 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                   isNearbyClicked.value = true;
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 20, right: 10),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
@@ -565,8 +582,9 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                   child: Column(
                     children: [
                       ElevatedButton(
-                          onPressed: () => context.push('/menu-screen',
-                              extra: widget.stores),
+                          onPressed: () {
+                            context.push('/menu-screen', extra: widget.stores);
+                          },
                           child: Text("List View")),
                       SizedBox(
                         height: 5,
@@ -583,43 +601,35 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                 ),
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () => context.push('/menu-detail',
-                                    extra: widget.stores[index].id),
+                                onTap: () {
+                                  ref.read(itemsProvider).clear();
+
+                                  context.push('/menu-detail',
+                                      extra: widget.stores[index].id);
+                                },
                                 child: MenuCard(
                                     onFavorited: () async {
-                                      bool isStoreFavorited = await ref.read(
-                                          isStoreFavoritedProvider(
-                                                  id: widget.stores[index].id)
-                                              .future);
-
-                                      if (isStoreFavorited) {
-                                        await ref
-                                            .read(deleteStoreFavProvider(
-                                                    id: widget.stores[index].id)
-                                                .future)
-                                            .then((value) {
-                                          if (value) {
-                                            print("Deleted from favs");
-
-                                            ref.invalidate(
-                                                getFavStoresProvider);
-                                          }
-                                        });
+                                      if (widget.stores[index]?.is_favorite) {
+                                        widget.stores[index].is_favorite =
+                                            false;
+                                        ref.read(deleteStoreFavProvider(
+                                            id: widget.stores[index].id));
+                                        print("Deleted" +
+                                            widget.stores[index].id.toString());
+                                        ref.invalidate(getFavStoresProvider);
                                       } else {
-                                        await ref
-                                            .read(addStoreFavProvider(
-                                                    id: widget.stores[index].id)
-                                                .future)
-                                            .then((value) {
-                                          if (value) {
-                                            print("Added to favs");
-                                            ref.invalidate(
-                                                getFavStoresProvider);
-                                          }
-                                        });
+                                        widget.stores[index].is_favorite = true;
+                                        await ref.read(addStoreFavProvider(
+                                            id: widget.stores[index].id));
+                                        ref.invalidate(getFavStoresProvider);
                                       }
                                     },
+                                    isFavorited:
+                                        widget.stores[index].is_favorite ??
+                                            false,
                                     imageURl: widget.stores[index].image,
+                                    rating: widget.stores[index].average_rating,
+                                    favWidgth: 270,
                                     companyName: widget
                                         .stores[index].business_name["en"]),
                               );
@@ -661,12 +671,11 @@ class ProfileAppBar extends StatelessWidget {
             final userData = ref.watch(getUserAvatarProvider);
             return userData.when(
                 data: (data) {
-                  print(context.canPop());
                   return GestureDetector(
                     onTap: () => context.push('/profile'),
                     child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                          data ?? "https://i.pravatar.cc/150?img=1"),
+                      backgroundImage: CachedNetworkImageProvider(data ??
+                          "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"),
                     ),
                   );
                 },

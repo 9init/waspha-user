@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
 import '../../../widgets/need_login.dart';
@@ -65,7 +66,7 @@ class LikesBody extends StatelessWidget {
                 height: 30,
               ),
               Container(
-                width: 348,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
@@ -94,28 +95,38 @@ class LikesBody extends StatelessWidget {
                           final locations = ref.watch(getLocationsProvider);
                           return locations.when(data: (data) {
                             return Container(
+                              height: 150,
                               child: ListView.builder(
                                 itemCount: data.length,
                                 shrinkWrap: true,
                                 itemBuilder: ((context, index) {
-                                  return ListTile(
-                                    onTap: () => context.pushNamed(
-                                        "EditLocation",
-                                        pathParameters: {
-                                          "title": data[index].title,
-                                          "address": data[index].address,
-                                          "landmark": data[index].landmark,
-                                          "phone": data[index].phone
-                                        }),
-                                    leading: Icon(Icons.location_on),
-                                    title: Text(data[index].title),
-                                    trailing: Icon(Icons.arrow_forward),
+                                  return Dismissible(
+                                    key: UniqueKey(),
+                                    onDismissed: (direction) {
+                                      print(data[index]);
+                                      ref.read(deleteLocationProvider(
+                                          id: data[index].id));
+                                      data.removeAt(index);
+                                    },
+                                    child: ListTile(
+                                      onTap: () => context.pushNamed(
+                                          "EditLocation",
+                                          pathParameters: {
+                                            "title":
+                                                data[index].location_string ??
+                                                    "",
+                                          }),
+                                      leading: Icon(Icons.location_on),
+                                      title: Text(
+                                          data[index].location_string ?? ""),
+                                      trailing: Icon(Icons.arrow_forward),
+                                    ),
                                   );
                                 }),
                               ),
                             );
                           }, error: (e, s) {
-                            print("Location Error $e");
+                            print("Location Error $e $s");
                             return Text("Error");
                           }, loading: () {
                             return Center(child: CircularProgressIndicator());
@@ -141,7 +152,7 @@ class LikesBody extends StatelessWidget {
                 height: 30,
               ),
               Container(
-                width: 348,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
@@ -159,7 +170,7 @@ class LikesBody extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left:14.0),
+                            padding: const EdgeInsets.only(left: 14.0),
                             child: Text(
                               "Providers you like",
                               style: TextStyle(
@@ -172,27 +183,50 @@ class LikesBody extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Center(
-                        child: Container(
-                          width: 400,
-                          height: 200,
-                          child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: 3,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return MenuCard(
-                                  imageURl:
-                                      'https://upload.wikimedia.org/wikipedia/en/b/b4/Noon_%28company%29.png',
-                                  companyName: "Noon Express",
-                                  width: 0.8,
-                                  favWidgth: 200,
-                                  isProvider: true,
-                                  onFavorited: () {},
-                                );
-                              }),
-                        ),
-                      ),
+                      Consumer(builder: (context, ref, child) {
+                        final favStores = ref.watch(getFavStoresProvider);
+                        return favStores.when(
+                            data: (data) {
+                              return Center(
+                                child: Container(
+                                  width: 400,
+                                  height: 200,
+                                  child: data.isEmpty
+                                      ? Center(
+                                          child: Text("No providers found"),
+                                        )
+                                      : ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          itemCount: data.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return MenuCard(
+                                              imageURl: data[index]["store"]
+                                                      ["image"] ??
+                                                  "",
+                                              companyName: data[index]["store"]
+                                                  ["business_name"]["en"],
+                                              width: 0.8,
+                                              favWidgth: 200,
+                                              isProvider: true,
+                                              onFavorited: () async {
+                                                ref.read(deleteStoreFavProvider(
+                                                    id: data[index]["store"]
+                                                        ["id"]));
+                                                ref.invalidate(
+                                                    getFavStoresProvider);
+                                              },
+                                              isFavorited: true,
+                                            );
+                                          }),
+                                ),
+                              );
+                            },
+                            error: (e, s) {
+                              return Text("Error");
+                            },
+                            loading: () => CircularProgressIndicator());
+                      }),
                     ],
                   ),
                 ),

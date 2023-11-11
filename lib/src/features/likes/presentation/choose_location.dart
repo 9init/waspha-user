@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../widgets/search/search_widget.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 
 final getChoosenLocationProvider = StateProvider<Map<String, dynamic>>(
@@ -29,6 +28,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
   @override
   Widget build(BuildContext context) {
     final userLocation = useState(LatLng(0.0, 0.0));
+    final mapType = useState<MapType>(MapType.normal);
 
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
@@ -46,6 +46,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
                       zoom: 14.4746,
                     ),
                     myLocationEnabled: false,
+                    mapType: mapType.value,
                     onMapCreated: (controller) {
                       _onMapCreated(controller);
                     },
@@ -75,14 +76,15 @@ class _ChooseLocationState extends State<ChooseLocation> {
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: IconButton(
-                                onPressed: () async {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      useSafeArea: true,
-                                      builder: (context) => SearchWidget());
+                                onPressed: () {
+                                  mapType.value =
+                                      mapType.value == MapType.normal
+                                          ? MapType.satellite
+                                          : MapType.normal;
                                 },
-                                icon: Icon(Icons.search)),
+                                icon: Icon(mapType.value == MapType.normal
+                                    ? Icons.satellite_alt
+                                    : Icons.public)),
                           ),
                           SizedBox(
                             height: 15,
