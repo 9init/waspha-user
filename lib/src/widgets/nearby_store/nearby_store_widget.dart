@@ -62,7 +62,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
   @override
   Widget build(BuildContext context) {
     final isClicked = useState(false);
-    final method = useState('delivery');
+    final method = ref.watch(methodProvider);
     final category = useState(0);
     final isCategoryClicked = useState(false);
     final isSubCategoryClicked = useState(false);
@@ -92,7 +92,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
             polygons: widget.polygons ?? {},
             circles: {
               Circle(
-                  visible: method.value == 'pickup',
+                  visible: method == 'pickup',
                   circleId: CircleId("circle"),
                   radius: 15000,
                   strokeColor: Colors.transparent,
@@ -157,7 +157,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                       height: 42,
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton(
-                                          value: method.value,
+                                          value: method,
                                           items: [
                                             DropdownMenuItem(
                                               child: Text("Pickup"),
@@ -168,21 +168,20 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                               value: "delivery",
                                             ),
                                           ],
-                                          onChanged: (v) {
+                                          onChanged: (v) async {
                                             ref
                                                 .read(methodProvider.notifier)
                                                 .update(
                                                     (state) => v.toString());
-                                            method.value = v.toString();
-                                            ref
+
+                                            await ref
                                                 .refresh(
-                                                    getNearbyStoresProvider(
+                                                    getNearbyStoresStreamProvider(
                                                   context: context,
                                                   isBottomSheetOpen:
                                                       widget.isBottomSheetOpen,
                                                 ))
                                                 .value;
-                                            ;
                                           },
                                         ),
                                       ),

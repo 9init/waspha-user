@@ -43,11 +43,11 @@ Stream<dynamic> getNearbyStoresStream(
 }) async* {
   while (true) {
     await Future.delayed(Duration(seconds: 5));
-
-    yield await getNearbyStores(ref,
-        context: context,
-        isBottomSheetOpen: isBottomSheetOpen,
-        );
+    yield await getNearbyStores(
+      ref,
+      context: context,
+      isBottomSheetOpen: isBottomSheetOpen,
+    );
   }
 }
 
@@ -91,13 +91,7 @@ Future<dynamic> getNearbyStores(
   required ValueNotifier<bool> isBottomSheetOpen,
 }) async {
   final url = "user/get-nearby-stores";
-  // final location = await getLocation();
-  // double latitude = location.latitude ?? 0.0;
-  // print("LAT: GPS: $latitude");
 
-  // double longitude = location.longitude ?? 0.0;
-
-  // final userL = ref.watch(getUserLocation);
 
   LatLng location = await ref.watch(userLocationProvider.future);
 
@@ -158,9 +152,9 @@ Future<dynamic> getNearbyStores(
                             onPressed: () async {
                               await ref
                                   .refresh(getNearbyStoresProvider(
-                                      context: context,
-                                      isBottomSheetOpen: isBottomSheetOpen,
-                                      ))
+                                    context: context,
+                                    isBottomSheetOpen: isBottomSheetOpen,
+                                  ))
                                   .value;
                             },
                             child: Text("Refresh")),
