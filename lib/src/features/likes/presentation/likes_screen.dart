@@ -207,16 +207,16 @@ class LikesBody extends StatelessWidget {
                                               companyName: data[index]["store"]
                                                   ["business_name"]["en"],
                                               width: 0.8,
-                                              favWidgth: 200,
+                                              favWidth: 200,
                                               isProvider: true,
-                                              onFavorited: () async {
+                                              onFavored: () async {
                                                 ref.read(deleteStoreFavProvider(
                                                     id: data[index]["store"]
                                                         ["id"]));
                                                 ref.invalidate(
                                                     getFavStoresProvider);
                                               },
-                                              isFavorited: true,
+                                              isFavored: true,
                                             );
                                           }),
                                 ),

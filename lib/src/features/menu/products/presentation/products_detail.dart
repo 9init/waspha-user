@@ -95,7 +95,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 }
                               },
                               icon: Icon(
-                                Icons.exposure_minus_1,
+                                Icons.remove,
                                 size: 20,
                                 color: Colors.black,
                               ),
