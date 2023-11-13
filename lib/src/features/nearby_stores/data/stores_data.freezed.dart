@@ -45,6 +45,8 @@ mixin _$Stores {
   set is_favorite(bool? value) => throw _privateConstructorUsedError;
   int? get category_id => throw _privateConstructorUsedError;
   set category_id(int? value) => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  set address(String? value) => throw _privateConstructorUsedError;
   List<int>? get category_ids => throw _privateConstructorUsedError;
   set category_ids(List<int>? value) => throw _privateConstructorUsedError;
   double? get distance => throw _privateConstructorUsedError;
@@ -77,6 +79,7 @@ abstract class $StoresCopyWith<$Res> {
       int? vendor_id,
       bool? is_favorite,
       int? category_id,
+      String? address,
       List<int>? category_ids,
       double? distance,
       double? average_rating,
@@ -108,6 +111,7 @@ class _$StoresCopyWithImpl<$Res, $Val extends Stores>
     Object? vendor_id = freezed,
     Object? is_favorite = freezed,
     Object? category_id = freezed,
+    Object? address = freezed,
     Object? category_ids = freezed,
     Object? distance = freezed,
     Object? average_rating = freezed,
@@ -162,6 +166,10 @@ class _$StoresCopyWithImpl<$Res, $Val extends Stores>
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
               as int?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
       category_ids: freezed == category_ids
           ? _value.category_ids
           : category_ids // ignore: cast_nullable_to_non_nullable
@@ -202,6 +210,7 @@ abstract class _$$StoresImplCopyWith<$Res> implements $StoresCopyWith<$Res> {
       int? vendor_id,
       bool? is_favorite,
       int? category_id,
+      String? address,
       List<int>? category_ids,
       double? distance,
       double? average_rating,
@@ -231,6 +240,7 @@ class __$$StoresImplCopyWithImpl<$Res>
     Object? vendor_id = freezed,
     Object? is_favorite = freezed,
     Object? category_id = freezed,
+    Object? address = freezed,
     Object? category_ids = freezed,
     Object? distance = freezed,
     Object? average_rating = freezed,
@@ -285,6 +295,10 @@ class __$$StoresImplCopyWithImpl<$Res>
           ? _value.category_id
           : category_id // ignore: cast_nullable_to_non_nullable
               as int?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
       category_ids: freezed == category_ids
           ? _value.category_ids
           : category_ids // ignore: cast_nullable_to_non_nullable
@@ -321,6 +335,7 @@ class _$StoresImpl implements _Stores {
       this.vendor_id,
       this.is_favorite,
       this.category_id,
+      this.address,
       this.category_ids,
       this.distance,
       this.average_rating,
@@ -354,6 +369,8 @@ class _$StoresImpl implements _Stores {
   @override
   int? category_id;
   @override
+  String? address;
+  @override
   List<int>? category_ids;
   @override
   double? distance;
@@ -364,7 +381,7 @@ class _$StoresImpl implements _Stores {
 
   @override
   String toString() {
-    return 'Stores(id: $id, business_name: $business_name, ar: $ar, lat: $lat, lng: $lng, timings: $timings, image: $image, delivery: $delivery, pickup: $pickup, vendor_id: $vendor_id, is_favorite: $is_favorite, category_id: $category_id, category_ids: $category_ids, distance: $distance, average_rating: $average_rating, has_menu: $has_menu)';
+    return 'Stores(id: $id, business_name: $business_name, ar: $ar, lat: $lat, lng: $lng, timings: $timings, image: $image, delivery: $delivery, pickup: $pickup, vendor_id: $vendor_id, is_favorite: $is_favorite, category_id: $category_id, address: $address, category_ids: $category_ids, distance: $distance, average_rating: $average_rating, has_menu: $has_menu)';
   }
 
   @JsonKey(ignore: true)
@@ -395,6 +412,7 @@ abstract class _Stores implements Stores {
       int? vendor_id,
       bool? is_favorite,
       int? category_id,
+      String? address,
       List<int>? category_ids,
       double? distance,
       double? average_rating,
@@ -438,6 +456,9 @@ abstract class _Stores implements Stores {
   @override
   int? get category_id;
   set category_id(int? value);
+  @override
+  String? get address;
+  set address(String? value);
   @override
   List<int>? get category_ids;
   set category_ids(List<int>? value);

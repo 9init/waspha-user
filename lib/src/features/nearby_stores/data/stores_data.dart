@@ -18,6 +18,7 @@ class Stores with _$Stores {
       int? vendor_id,
       bool? is_favorite,
       int? category_id,
+      String? address,
       List<int>? category_ids,
       double? distance,
       double? average_rating,

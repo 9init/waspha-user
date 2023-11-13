@@ -297,7 +297,7 @@ final getFavStoresProvider = AutoDisposeFutureProvider<dynamic>.internal(
 );
 
 typedef GetFavStoresRef = AutoDisposeFutureProviderRef<dynamic>;
-String _$isStoreFavoredHash() => r'2fff11762e619fac4e3ac0145a0ef42c475ce51d';
+String _$isStoreFavoredHash() => r'ce6047cbb0d8cc648cd904ebc87d407f7228e66c';
 
 /// See also [isStoreFavored].
 @ProviderFor(isStoreFavored)

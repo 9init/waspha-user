@@ -107,12 +107,25 @@ class PickupConfirmationDialog extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 7.5),
                 child: Icon(Icons.arrow_downward),
               ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  child: Icon(Icons.location_on),
-                ),
-                title: Text("SDF"),
+              Container(
+                height: 100,
+                child: ListView.separated(
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(height: 3);
+                    },
+                    itemCount: stores.length,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      print(stores[index]);
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              CachedNetworkImageProvider(stores[index].image),
+                        ),
+                      );
+                    }),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,

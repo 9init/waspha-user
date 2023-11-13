@@ -21,6 +21,7 @@ _$StoresImpl _$$StoresImplFromJson(Map<String, dynamic> json) => _$StoresImpl(
       vendor_id: json['vendor_id'] as int?,
       is_favorite: json['is_favorite'] as bool?,
       category_id: json['category_id'] as int?,
+      address: json['address'] as String?,
       category_ids: (json['category_ids'] as List<dynamic>?)
           ?.map((e) => e as int)
           .toList(),
@@ -43,6 +44,7 @@ Map<String, dynamic> _$$StoresImplToJson(_$StoresImpl instance) =>
       'vendor_id': instance.vendor_id,
       'is_favorite': instance.is_favorite,
       'category_id': instance.category_id,
+      'address': instance.address,
       'category_ids': instance.category_ids,
       'distance': instance.distance,
       'average_rating': instance.average_rating,

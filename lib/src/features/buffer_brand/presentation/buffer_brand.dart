@@ -22,6 +22,8 @@ class BufferBrand extends StatelessWidget {
         child: Consumer(
           builder: (context, ref, child) {
             final location = ref.watch(userLocationProvider);
+            final List<dynamic> stores = ref.watch(getStoresProvider);
+
             return location.when(
                 data: (data) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

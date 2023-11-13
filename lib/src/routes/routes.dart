@@ -197,7 +197,7 @@ final router = GoRouter(
       path: '/product_details',
       builder: (context, state) => ProductDetails(data: state.extra!),
     ),
-     GoRoute(
+    GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: '/subcategory_offer',
       builder: (context, state) => SubCategoryOffer(data: state.extra!),
