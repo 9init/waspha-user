@@ -23,6 +23,7 @@ final itemsProvider = StateProvider<List<Item>>((ref) => []);
 
 class CustomNeedScreen extends StatefulHookConsumerWidget {
   final isMenu;
+
   CustomNeedScreen({super.key, required this.isMenu});
 
   @override
@@ -123,7 +124,6 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
             ),
             Container(
               width: 370,
-              height: 90,
               decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -136,7 +136,8 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                   ],
                   borderRadius: BorderRadius.circular(25)),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,9 +180,7 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                             items.remove(item);
                             ref.invalidate(itemsProvider);
                           }));
-                          setState(() {
-                            
-                          });
+                          setState(() {});
                           print(items);
                         },
                         child: Column(
@@ -246,6 +245,7 @@ class CustomBackButton extends StatelessWidget {
     this.backgroundColor = Colors.black,
     this.foregroundColor = Colors.white,
   });
+
   final Color backgroundColor, foregroundColor;
 
   @override
@@ -402,85 +402,93 @@ class ReadyRequestButton extends StatelessWidget {
           //     items.value.map((item) => item.toJson()).toList();
           // print(itemsJsonList);
         },
-        child: Container(
-            width: 350,
-            height: 70,
-            decoration: BoxDecoration(
-              color: Color(0xff663399),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    width: isScheduled.value ? 80 : 150,
-                    child: Center(
-                      child: Text(
-                        isScheduled.value ? 'Schedule' : 'Ready for request',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Expanded(
-                    child: Consumer(
-                      builder: (context, ref, child) => Container(
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                        ),
-                        child: Center(
-                          child: DropdownButton(
-                              isExpanded: true,
-                              underline: Container(),
-                              dropdownColor: Colors.grey[200],
-                              icon: Icon(Icons.keyboard_arrow_down),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20)),
-                              value: isScheduled.value
-                                  ? ref.watch(selectedTimeProvider)
-                                  : "Now",
-                              hint: Text("df"),
-                              items: [
-                                DropdownMenuItem(
-                                  value: "Now",
-                                  child: Center(child: Text("Now")),
-                                ),
-                                DropdownMenuItem(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+              height: 65,
+              decoration: BoxDecoration(
+                color: Color(0xff663399),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                        fit: FlexFit.tight,
+                        flex: isScheduled.value ? 3 : 6,
+                        child: SizedBox(
+                          width: isScheduled.value ? 80 : 150,
+                          child: Center(
+                            child: Text(
+                              isScheduled.value
+                                  ? 'Schedule'
+                                  : 'Ready for request',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: isScheduled.value ? 6 : 3,
+                      child: Consumer(
+                        builder: (context, ref, child) => Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  underline: Container(),
+                                  dropdownColor: Colors.grey[200],
+                                  icon: Icon(Icons.keyboard_arrow_down),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)),
                                   value: isScheduled.value
                                       ? ref.watch(selectedTimeProvider)
-                                      : "Scheduled",
-                                  child: Center(
-                                    child: Text(
-                                      isScheduled.value
-                                          ? ref.watch(selectedTimeProvider)
-                                          : 'Scheduled',
+                                      : "Now",
+                                  hint: Text("df"),
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: "Now",
+                                      child: Center(child: Text("Now")),
                                     ),
-                                  ),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                if (value == "Scheduled") {
-                                  isScheduled.value = true;
-                                  context.push('/select_date');
-                                } else {
-                                  isScheduled.value = false;
-                                }
-                              }),
+                                    DropdownMenuItem(
+                                      value: isScheduled.value
+                                          ? ref.watch(selectedTimeProvider)
+                                          : "Scheduled",
+                                      child: Center(
+                                        child: Text(
+                                          isScheduled.value
+                                              ? ref.watch(selectedTimeProvider)
+                                              : 'Scheduled',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    if (value == "Scheduled") {
+                                      isScheduled.value = true;
+                                      context.push('/select_date');
+                                    } else {
+                                      isScheduled.value = false;
+                                    }
+                                  }),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            )),
+                    )
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }
