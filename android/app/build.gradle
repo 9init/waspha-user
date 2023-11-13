@@ -54,30 +54,30 @@ android {
         versionName flutterVersionName
     }
 
-    signingConfigs{
-        release{
-            storeFile file('key.jks')
-            storePassword 'android'
-            keyAlias 'upload'
-            keyPassword 'android'
+    signingConfigs {
+        release {
+            storeFile file('waspha-user-release.keystore')
+            storePassword '123456'
+            keyAlias 'waspha-user'
+            keyPassword '123456'
         }
         debug {
-            storeFile file('key.jks')
+            storeFile file('debug.keystore')
             storePassword 'android'
-            keyAlias 'upload'
+            keyAlias 'androiddebugkey'
             keyPassword 'android'
-    }
+        }
 
     }
 
     buildTypes {
-    debug {
-        signingConfig signingConfigs.release
+        debug {
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
     }
-    release {
-        signingConfig signingConfigs.release
-    }
-}
 }
 
 flutter {

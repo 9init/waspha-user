@@ -41,6 +41,10 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       double? longitude =
           ref.watch(locationStreamProvider).asData?.value.longitude;
 
+      if(latitude == null && longitude == null){
+        return CircularProgressIndicator();
+      }
+
       if (!isPicking) {
         locationMarkers.removeWhere((item) => item.markerId.value == 'user');
         locationMarkers.add(Marker(
@@ -49,6 +53,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueBlue)));
       }
+
       return nearbyStores.when(data: (data) {
         markers.clear();
 
