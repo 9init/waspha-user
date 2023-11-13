@@ -43,10 +43,6 @@ Stream<dynamic> getNearbyStoresStream(
 }) async* {
   while (true) {
     await Future.delayed(Duration(seconds: 5));
-<<<<<<< HEAD
-
-=======
->>>>>>> c96130be91a05fa8791c3e47b61bae9f6eb9df79
     yield await getNearbyStores(
       ref,
       context: context,
