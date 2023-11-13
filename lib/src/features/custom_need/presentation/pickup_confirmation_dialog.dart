@@ -157,17 +157,25 @@ class PickupConfirmationDialog extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 30),
                     child: RichText(
                       text: TextSpan(
-                        text: isScheduled.value ? "Pick up on " : "Pickup Now",
+                        text: isScheduled.value
+                            ? "Pick up on "
+                            : "Pickup ", // Common text
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          TextSpan(
-                            text: isScheduled.value
-                                ? consumer.watch(selectedTimeProvider)
-                                : "", // The text you want to make bold
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                          if (isScheduled.value)
+                            TextSpan(
+                              text: consumer.watch(selectedTimeProvider),
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
-                          ),
+                          if (!isScheduled.value)
+                            TextSpan(
+                              text: "Now", // Text for immediate
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                         ],
                       ),
                     )),
