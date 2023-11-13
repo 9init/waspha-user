@@ -4,11 +4,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/buffer_brand/domain/buffer_brand_domain.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 
+final selectedReasons = StateProvider<List<String>>((ref) => []);
+
 class CancellationReasonsBottomSheet extends StatefulWidget {
   const CancellationReasonsBottomSheet({
     super.key,
+    required this.rfpID,
   });
-
+  final int rfpID;
   @override
   State<CancellationReasonsBottomSheet> createState() =>
       _CancellationReasonsBottomSheetState();
@@ -47,6 +50,17 @@ class _CancellationReasonsBottomSheetState
                               value: data[index].checked,
                               onChanged: (value) {
                                 data[index].checked = !data[index].checked;
+                                if (value!) {
+                                  ref
+                                      .read(selectedReasons.notifier)
+                                      .state
+                                      .add(data[index].value.en.toString());
+                                } else {
+                                  ref
+                                      .read(selectedReasons.notifier)
+                                      .state
+                                      .remove(data[index].value.en.toString());
+                                }
                                 setState(() {});
                               },
                               title: Text(data[index].value.en)),
@@ -96,21 +110,34 @@ class _CancellationReasonsBottomSheetState
               child: SizedBox(
                 height: 63,
                 width: 214,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xFF663399)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(13)))),
-                    onPressed: () {
-                      context.push('/');
-                    },
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(color: Colors.white),
-                    )),
+                child: Consumer(builder: (context, ref, child) {
+                  final reasons = ref.watch(selectedReasons);
+                  return ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0xFF663399)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(13)))),
+                      onPressed: () {
+                        ref.read(cancelRFPProvider(
+                          rfpID: widget.rfpID,
+                          reasons: reasons,
+                          description: "description",
+                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Your request has been canceled")));
+                        context.go(
+                          '/',
+                        );
+                      },
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white),
+                      ));
+                }),
               ),
             ),
           ],

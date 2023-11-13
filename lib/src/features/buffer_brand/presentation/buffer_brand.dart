@@ -9,7 +9,8 @@ import 'package:waspha/src/features/buffer_brand/presentation/cancellation_reaso
 import '../../nearby_stores/domain/stores_repository.dart';
 
 class BufferBrand extends ConsumerWidget {
-  const BufferBrand({super.key});
+  final int rfpID;
+  const BufferBrand({super.key, required this.rfpID});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -197,7 +198,28 @@ class BufferBrand extends ConsumerWidget {
                                   )
                                 ],
                               ),
+<<<<<<< HEAD
                             ),
+=======
+                            ],
+                            onPressed: (index) {
+                              if (index == 0) {
+                                context.go('/activity');
+                              } else {
+                                showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.white,
+                                    isScrollControlled: true,
+                                    useSafeArea: false,
+                                    builder: (context) {
+                                      return CancellationReasonsBottomSheet(
+                                        rfpID: rfpID,
+                                      );
+                                    });
+                              }
+                            },
+                            isSelected: [false, true],
+>>>>>>> 9786bc84ffdcb0b939f4cd3fd5eac85a6f84aa96
                           ),
                         ),
                         // Center(

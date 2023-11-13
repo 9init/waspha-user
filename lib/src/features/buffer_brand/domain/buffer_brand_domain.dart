@@ -21,3 +21,19 @@ Future<List<CancelReason>> getCancelReasons(Ref ref) async {
   } catch (e) {}
   return [];
 }
+
+@riverpod
+Future<bool> cancelRFP(Ref ref,
+    {required int rfpID,
+    required List<String> reasons,
+    required String description}) async {
+  final url = "user/cancel-rfp";
+
+  try {
+    await ref.watch(dioProvider).post(
+        url, {"rfp_id": rfpID, "reasons": reasons, "description": description});
+    print("RFP Canceled");
+    return true;
+  } catch (e) {}
+  return false;
+}

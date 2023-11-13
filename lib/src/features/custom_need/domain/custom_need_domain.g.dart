@@ -6,7 +6,7 @@ part of 'custom_need_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createRFPHash() => r'763b6d6c44bef8f9fcce7f9571e7f9b059576606';
+String _$createRFPHash() => r'bfb18a4c99424cabb73391e563317d52fe75d9e5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const createRFPProvider = CreateRFPFamily();
 
 /// See also [createRFP].
-class CreateRFPFamily extends Family<AsyncValue> {
+class CreateRFPFamily extends Family<AsyncValue<int>> {
   /// See also [createRFP].
   const CreateRFPFamily();
 
@@ -78,7 +78,7 @@ class CreateRFPFamily extends Family<AsyncValue> {
 }
 
 /// See also [createRFP].
-class CreateRFPProvider extends AutoDisposeFutureProvider<Object?> {
+class CreateRFPProvider extends AutoDisposeFutureProvider<int> {
   /// See also [createRFP].
   CreateRFPProvider({
     required List<Map<String, dynamic>> items,
@@ -122,7 +122,7 @@ class CreateRFPProvider extends AutoDisposeFutureProvider<Object?> {
 
   @override
   Override overrideWith(
-    FutureOr<Object?> Function(CreateRFPRef provider) create,
+    FutureOr<int> Function(CreateRFPRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -141,7 +141,7 @@ class CreateRFPProvider extends AutoDisposeFutureProvider<Object?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Object?> createElement() {
+  AutoDisposeFutureProviderElement<int> createElement() {
     return _CreateRFPProviderElement(this);
   }
 
@@ -164,7 +164,7 @@ class CreateRFPProvider extends AutoDisposeFutureProvider<Object?> {
   }
 }
 
-mixin CreateRFPRef on AutoDisposeFutureProviderRef<Object?> {
+mixin CreateRFPRef on AutoDisposeFutureProviderRef<int> {
   /// The parameter `items` of this provider.
   List<Map<String, dynamic>> get items;
 
@@ -175,8 +175,8 @@ mixin CreateRFPRef on AutoDisposeFutureProviderRef<Object?> {
   String get type;
 }
 
-class _CreateRFPProviderElement
-    extends AutoDisposeFutureProviderElement<Object?> with CreateRFPRef {
+class _CreateRFPProviderElement extends AutoDisposeFutureProviderElement<int>
+    with CreateRFPRef {
   _CreateRFPProviderElement(super.provider);
 
   @override

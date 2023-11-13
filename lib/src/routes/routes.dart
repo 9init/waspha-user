@@ -205,7 +205,10 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: '/buffer_brand',
-      builder: (context, state) => BufferBrand(),
+      builder: (context, state) {
+        int s = state.extra as int;
+        return BufferBrand(rfpID: s);
+      },
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
