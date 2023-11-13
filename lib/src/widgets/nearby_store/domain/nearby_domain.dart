@@ -41,7 +41,7 @@ Future<dynamic> getFavStores(Ref ref) async {
 }
 
 @riverpod
-Future<bool> isStoreFavorited(Ref ref, {required int id}) async {
+Future<bool> isStoreFavored(Ref ref, {required int id}) async {
   final favList = await ref.read(getFavStoresProvider.future);
   if (favList.any((element) => element["id"] == id)) {
     return true;

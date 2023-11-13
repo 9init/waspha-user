@@ -608,7 +608,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                       extra: widget.stores[index].id);
                                 },
                                 child: MenuCard(
-                                    onFavorited: () async {
+                                    onFavored: () async {
                                       if (widget.stores[index]?.is_favorite) {
                                         widget.stores[index].is_favorite =
                                             false;
@@ -624,12 +624,12 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                         ref.invalidate(getFavStoresProvider);
                                       }
                                     },
-                                    isFavorited:
+                                    isFavored:
                                         widget.stores[index].is_favorite ??
                                             false,
                                     imageURl: widget.stores[index].image,
                                     rating: widget.stores[index].average_rating,
-                                    favWidgth: 270,
+                                    favWidth: 270,
                                     companyName: widget
                                         .stores[index].business_name["en"]),
                               );

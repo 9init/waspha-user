@@ -64,7 +64,7 @@ class MenuScreen extends StatelessWidget {
                           child: Consumer(builder: (context, ref, child) {
                             return MenuCard(
                               rating: data[index].average_rating,
-                              onFavorited: () async {
+                              onFavored: () async {
                                 if (data[index].is_favorite) {
                                   await ref.read(deleteStoreFavProvider(
                                       id: data[index].id));
@@ -83,7 +83,7 @@ class MenuScreen extends StatelessWidget {
                                   });
                                 }
                               },
-                              isFavorited: data[index].is_favorite ?? false,
+                              isFavored: data[index].is_favorite ?? false,
                               imageURl: data[index].image,
                               companyName: data[index].business_name["en"],
                             );
@@ -114,19 +114,19 @@ class MenuCard extends StatelessWidget {
     required this.companyName,
     this.isOffer = false,
     this.width = 0.9,
-    required this.onFavorited,
-    this.favWidgth = 250,
+    required this.onFavored,
+    this.favWidth = 250,
     this.isProvider = false,
-    this.isFavorited = false,
+    this.isFavored = false,
     this.rating = 0,
   });
 
   final String imageURl;
   final String companyName;
   final bool isOffer, isProvider;
-  final double width, favWidgth;
-  final void Function()? onFavorited;
-  final bool isFavorited;
+  final double width, favWidth;
+  final void Function()? onFavored;
+  final bool isFavored;
   final double rating;
 
   double dynamicWidth() {
@@ -210,15 +210,15 @@ class MenuCard extends StatelessWidget {
                         child: Text("$rating"),
                       ),
                       SizedBox(
-                        width: favWidgth,
+                        width: favWidth,
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: isFavorited ? Colors.red : Colors.white,
+                          color: isFavored ? Colors.red : Colors.white,
                           size: 30,
                         ),
-                        onPressed: onFavorited,
+                        onPressed: onFavored,
                       )
                     ],
                   ),

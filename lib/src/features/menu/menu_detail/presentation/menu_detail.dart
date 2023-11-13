@@ -78,7 +78,7 @@ class MenuDetailsBody extends HookWidget {
   Widget build(BuildContext context) {
     final isExpanded = useState(false);
     final maxLines = isExpanded.value ? 100 : 2;
-    final isStoreFavorited = useState<bool>(false);
+    final isStoreFavored = useState<bool>(false);
 
     return SingleChildScrollView(
       child: Column(
@@ -119,7 +119,7 @@ class MenuDetailsBody extends HookWidget {
                       return IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: isFavorite || isStoreFavorited.value
+                          color: isFavorite || isStoreFavored.value
                               ? Colors.red
                               : Colors.white,
                         ),
@@ -149,12 +149,12 @@ class MenuDetailsBody extends HookWidget {
                             return;
                           }
 
-                          if (isFavorite || isStoreFavorited.value) {
-                            isStoreFavorited.value = false;
+                          if (isFavorite || isStoreFavored.value) {
+                            isStoreFavored.value = false;
                             ref.read(deleteStoreFavProvider(id: id));
                             ref.invalidate(getStoresDetailsProvider(id: id));
                           } else {
-                            isStoreFavorited.value = true;
+                            isStoreFavored.value = true;
                             await ref.read(addStoreFavProvider(id: id));
                             ref.invalidate(getStoresDetailsProvider(id: id));
                           }

@@ -156,7 +156,7 @@ class MenuOffer extends HookWidget {
           //         return MenuCard(
           //             isOffer: true,
           //             width: 0.8,
-          //             onFavorited: () {},
+          //             onFavored: () {},
           //             imageURl:
           //                 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80',
           //             companyName: "Buy and Get Free");
@@ -185,7 +185,7 @@ class MenuOffer extends HookWidget {
           //         return MenuCard(
           //             isOffer: true,
           //             width: 0.8,
-          //             onFavorited: () {},
+          //             onFavored: () {},
           //             imageURl:
           //                 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80',
           //             companyName: "Shampoo +");
@@ -241,7 +241,7 @@ class MenuOffer extends HookWidget {
                             child: MenuCard(
                                 isOffer: true,
                                 width: 0.7,
-                                onFavorited: () {},
+                                onFavored: () {},
                                 imageURl: data[index]["image"]["en"],
                                 companyName: data[index]["name"]["en"]),
                           );

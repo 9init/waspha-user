@@ -297,29 +297,29 @@ final getFavStoresProvider = AutoDisposeFutureProvider<dynamic>.internal(
 );
 
 typedef GetFavStoresRef = AutoDisposeFutureProviderRef<dynamic>;
-String _$isStoreFavoritedHash() => r'2fff11762e619fac4e3ac0145a0ef42c475ce51d';
+String _$isStoreFavoredHash() => r'2fff11762e619fac4e3ac0145a0ef42c475ce51d';
 
-/// See also [isStoreFavorited].
-@ProviderFor(isStoreFavorited)
-const isStoreFavoritedProvider = IsStoreFavoritedFamily();
+/// See also [isStoreFavored].
+@ProviderFor(isStoreFavored)
+const isStoreFavoredProvider = IsStoreFavoredFamily();
 
-/// See also [isStoreFavorited].
-class IsStoreFavoritedFamily extends Family<AsyncValue<bool>> {
-  /// See also [isStoreFavorited].
-  const IsStoreFavoritedFamily();
+/// See also [isStoreFavored].
+class IsStoreFavoredFamily extends Family<AsyncValue<bool>> {
+  /// See also [isStoreFavored].
+  const IsStoreFavoredFamily();
 
-  /// See also [isStoreFavorited].
-  IsStoreFavoritedProvider call({
+  /// See also [isStoreFavored].
+  IsStoreFavoredProvider call({
     required int id,
   }) {
-    return IsStoreFavoritedProvider(
+    return IsStoreFavoredProvider(
       id: id,
     );
   }
 
   @override
-  IsStoreFavoritedProvider getProviderOverride(
-    covariant IsStoreFavoritedProvider provider,
+  IsStoreFavoredProvider getProviderOverride(
+    covariant IsStoreFavoredProvider provider,
   ) {
     return call(
       id: provider.id,
@@ -338,32 +338,32 @@ class IsStoreFavoritedFamily extends Family<AsyncValue<bool>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'isStoreFavoritedProvider';
+  String? get name => r'isStoreFavoredProvider';
 }
 
-/// See also [isStoreFavorited].
-class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
-  /// See also [isStoreFavorited].
-  IsStoreFavoritedProvider({
+/// See also [isStoreFavored].
+class IsStoreFavoredProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [isStoreFavored].
+  IsStoreFavoredProvider({
     required int id,
   }) : this._internal(
-          (ref) => isStoreFavorited(
-            ref as IsStoreFavoritedRef,
+          (ref) => isStoreFavored(
+            ref as IsStoreFavoredRef,
             id: id,
           ),
-          from: isStoreFavoritedProvider,
-          name: r'isStoreFavoritedProvider',
+          from: isStoreFavoredProvider,
+          name: r'isStoreFavoredProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$isStoreFavoritedHash,
-          dependencies: IsStoreFavoritedFamily._dependencies,
+                  : _$isStoreFavoredHash,
+          dependencies: IsStoreFavoredFamily._dependencies,
           allTransitiveDependencies:
-              IsStoreFavoritedFamily._allTransitiveDependencies,
+              IsStoreFavoredFamily._allTransitiveDependencies,
           id: id,
         );
 
-  IsStoreFavoritedProvider._internal(
+  IsStoreFavoredProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -377,12 +377,12 @@ class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
 
   @override
   Override overrideWith(
-    FutureOr<bool> Function(IsStoreFavoritedRef provider) create,
+    FutureOr<bool> Function(IsStoreFavoredRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: IsStoreFavoritedProvider._internal(
-        (ref) => create(ref as IsStoreFavoritedRef),
+      override: IsStoreFavoredProvider._internal(
+        (ref) => create(ref as IsStoreFavoredRef),
         from: from,
         name: null,
         dependencies: null,
@@ -395,12 +395,12 @@ class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
 
   @override
   AutoDisposeFutureProviderElement<bool> createElement() {
-    return _IsStoreFavoritedProviderElement(this);
+    return _IsStoreFavoredProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is IsStoreFavoritedProvider && other.id == id;
+    return other is IsStoreFavoredProvider && other.id == id;
   }
 
   @override
@@ -412,17 +412,17 @@ class IsStoreFavoritedProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
-mixin IsStoreFavoritedRef on AutoDisposeFutureProviderRef<bool> {
+mixin IsStoreFavoredRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `id` of this provider.
   int get id;
 }
 
-class _IsStoreFavoritedProviderElement
-    extends AutoDisposeFutureProviderElement<bool> with IsStoreFavoritedRef {
-  _IsStoreFavoritedProviderElement(super.provider);
+class _IsStoreFavoredProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with IsStoreFavoredRef {
+  _IsStoreFavoredProviderElement(super.provider);
 
   @override
-  int get id => (origin as IsStoreFavoritedProvider).id;
+  int get id => (origin as IsStoreFavoredProvider).id;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
