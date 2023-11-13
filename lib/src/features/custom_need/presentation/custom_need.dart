@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ import '../../menu/menu_detail/presentation/menu_detail.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 import '../data/item_data.dart';
 import '../domain/custom_need_domain.dart';
+import 'delivery_confimration_dialog.dart';
 import 'item_widget.dart';
 import 'select_date.dart';
 
@@ -32,16 +34,9 @@ class CustomNeedScreen extends StatefulHookConsumerWidget {
 
 class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
   @override
-  void initState() {
-    ref.read(itemsProvider).clear();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final isScheduled = useState(false);
     final isLogged = ref.watch(isLoggedInProvider);
-
     return isLogged.when(data: (data) {
       if (data == false) {
         return NeedLoginScreen();
@@ -188,7 +183,6 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                             ref.invalidate(itemsProvider);
                           }));
                           setState(() {});
-                          print(items);
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -305,8 +299,8 @@ class ReadyRequestButton extends StatelessWidget {
                     items.map((item) => item.toJson()).toList();
                 final currentPlace = ref.watch(currentPlaceDescription);
 
-                return DeliveryConfirmation(
-                    conusmer: ref,
+                return DeliveryConfirmationDialog(
+                    consumer: ref,
                     items: items,
                     method: method,
                     currentPlace: currentPlace,
@@ -333,7 +327,6 @@ class ReadyRequestButton extends StatelessWidget {
                         fit: FlexFit.tight,
                         flex: isScheduled.value ? 3 : 6,
                         child: SizedBox(
-                          width: isScheduled.value ? 80 : 150,
                           child: Center(
                             child: Text(
                               isScheduled.value
@@ -405,126 +398,6 @@ class ReadyRequestButton extends StatelessWidget {
                 ),
               )),
         ),
-      ),
-    );
-  }
-}
-
-class DeliveryConfirmation extends StatelessWidget {
-  const DeliveryConfirmation({
-    super.key,
-    required this.conusmer,
-    required this.items,
-    required this.method,
-    required this.currentPlace,
-    required this.isScheduled,
-    required this.itemsJsonList,
-  });
-
-  final WidgetRef conusmer;
-  final List<Item> items;
-  final String method;
-  final String currentPlace;
-  final ValueNotifier<bool> isScheduled;
-  final List<Map<String, dynamic>> itemsJsonList;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Confirmation",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  CustomCloseButton()
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Items (${items.length})",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) => Text(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    "${items[index].quantity} x ${items[index].name ?? "item"}"),
-                itemCount: items.length,
-              )),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "${capitalize(method)} instruction",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.red,
-                ),
-                title: Text("${capitalize(method)}"),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 7.5),
-                child: Icon(Icons.arrow_downward),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: Colors.red,
-                ),
-                title: Text("${currentPlace}"),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  child: Icon(Icons.lock_clock_rounded),
-                ),
-                title: Text(isScheduled.value ? "Scheduled" : "Delivery Now"),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(13)))),
-                      onPressed: () {
-                        conusmer.watch(createRFPProvider(
-                            items: itemsJsonList, context: context));
-                        context.push('/buffer_brand');
-                      },
-                      child: Text(
-                        "Confirm my request",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              )
-            ]),
       ),
     );
   }
