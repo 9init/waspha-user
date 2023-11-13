@@ -70,7 +70,7 @@ class _ItemWidgetExpandedState extends ConsumerState<ItemWidgetExpanded> {
                         controller: _nameController,
                         onChanged: (value) {
                           _nameController.text = value;
-                          saveItem();
+                          widget.item.name = value;
                         },
                         decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -80,8 +80,8 @@ class _ItemWidgetExpandedState extends ConsumerState<ItemWidgetExpanded> {
                       TextFormField(
                         controller: _noteController,
                         onChanged: (value) {
+                          _noteController.text = value;
                           widget.item.additional_notes = value;
-                          saveItem();
                         },
                         maxLines: 6,
                         minLines: 1,

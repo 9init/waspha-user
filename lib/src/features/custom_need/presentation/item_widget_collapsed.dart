@@ -5,8 +5,10 @@ import '../data/item_data.dart';
 
 class ItemWidgetCollapsed extends StatelessWidget {
   final ValueNotifier<bool> isCollapsed;
+
   const ItemWidgetCollapsed(
       {super.key, required this.isCollapsed, required this.item});
+
   final Item item;
 
   @override
@@ -49,19 +51,24 @@ class ItemWidgetCollapsed extends StatelessWidget {
                           )
                         : null),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(item.name ?? "Item Summary"),
-                  Text(
-                    item.additional_notes ?? "Notes",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(item.name ?? "Item Summary",
+                          overflow: TextOverflow.ellipsis, maxLines: 1),
+                      Text(
+                        item.additional_notes ?? "Notes",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-              Spacer(),
               GestureDetector(
                   onTap: () => isCollapsed.value = false,
                   child: Container(

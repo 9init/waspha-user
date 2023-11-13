@@ -330,7 +330,9 @@ class ReadyRequestButton extends StatelessWidget {
                               child: ListView.builder(
                             shrinkWrap: true,
                             itemBuilder: (context, index) => Text(
-                                "${items[index].quantity} x ${items[index].name ?? "Item Summary"}"),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                "${items[index].quantity} x ${items[index].name }"),
                             itemCount: items.length,
                           )),
                           SizedBox(
@@ -441,7 +443,8 @@ class ReadyRequestButton extends StatelessWidget {
                           ),
                           child: Center(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: DropdownButton(
                                   isExpanded: true,
                                   underline: Container(),
