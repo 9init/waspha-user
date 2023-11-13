@@ -168,10 +168,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     product_id: widget.data["id"]));
 
                             // ignore: unused_result
-                            ref.refresh(itemsProvider);
+                            // ref.refresh(itemsProvider);
 
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Item added')));
+
+                            print(ref.read(itemsProvider));
                           },
                           child: Center(
                             child: Container(

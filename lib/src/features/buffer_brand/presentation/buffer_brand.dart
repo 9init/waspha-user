@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/buffer_brand/presentation/cancellation_reasons_bottom_sheet.dart';
 import '../../custom_need/presentation/custom_need.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 import '../domain/buffer_brand_domain.dart';
@@ -12,11 +14,11 @@ final isCheckedListProvider = Provider<List<bool>>((ref) {
   return List.generate(5, (index) => false);
 });
 
-class BufferBrand extends StatelessWidget {
+class BufferBrand extends ConsumerWidget {
   const BufferBrand({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Consumer(
@@ -88,12 +90,48 @@ class BufferBrand extends StatelessWidget {
                           child: Text("Offers may be recieved from"),
                         ),
                         SizedBox(height: 10),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 38,
+                                child: ListView.builder(
+                                    itemCount:
+                                        stores.length > 5 ? 5 : stores.length,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return AnimatedAlign(
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.easeIn,
+                                        alignment: Alignment.centerLeft,
+                                        widthFactor: 0.6,
+                                        child: CircleAvatar(
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                                  stores[index].image),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: stores.length == 5 ? 0 : 30),
+                                  child: Text(
+                                    stores.length > 5
+                                        ? "+${stores.length - 5}"
+                                        : stores.length == 1
+                                            ? stores[0].address
+                                            : "",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          title: Text("Amazon Egypt Brand"),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -131,143 +169,9 @@ class BufferBrand extends StatelessWidget {
                                     context: context,
                                     backgroundColor: Colors.white,
                                     isScrollControlled: true,
-                                    useSafeArea: true,
+                                    useSafeArea: false,
                                     builder: (context) {
-                                      return Container(
-                                        padding: EdgeInsets.all(20),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text("Cancelation reason",
-                                                      style: TextStyle(
-                                                          fontSize: 16)),
-                                                  CustomCloseButton()
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Consumer(builder:
-                                                  (context, ref, child) {
-                                                final reasons = ref.watch(
-                                                    getCancelReasonsProvider);
-                                                final isChecked = ref.watch(
-                                                    isCheckedListProvider);
-                                                return reasons.when(
-                                                    data: (data) {
-                                                      return Container(
-                                                          child:
-                                                              ListView.builder(
-                                                        shrinkWrap: true,
-                                                        itemBuilder: (context, index) => CheckboxListTile
-                                                            .adaptive(
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .leading,
-                                                                value:
-                                                                    isChecked[
-                                                                        index],
-                                                                onChanged:
-                                                                    (value) {
-                                                                  isChecked[
-                                                                          index] =
-                                                                      value!;
-                                                                },
-                                                                title: Text(
-                                                                    data[index]
-                                                                        .value
-                                                                        .en)),
-                                                        itemCount: data.length,
-                                                      ));
-                                                    },
-                                                    error: (e, s) {
-                                                      log("Error: $e");
-                                                      return Container();
-                                                    },
-                                                    loading: () => Center(
-                                                          child:
-                                                              CircularProgressIndicator
-                                                                  .adaptive(),
-                                                        ));
-                                              }),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text("Add Description",
-                                                  style:
-                                                      TextStyle(fontSize: 16)),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                height: 150,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.2),
-                                                          blurRadius: 10,
-                                                          offset: Offset(0, 3))
-                                                    ]),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintMaxLines: 3,
-                                                        hintText:
-                                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 50,
-                                              ),
-                                              Center(
-                                                child: SizedBox(
-                                                  height: 63,
-                                                  width: 214,
-                                                  child: ElevatedButton(
-                                                      style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(Color(
-                                                                      0xFF663399)),
-                                                          shape: MaterialStateProperty.all<
-                                                                  RoundedRectangleBorder>(
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              13)))),
-                                                      onPressed: () {
-                                                        context.push('/');
-                                                      },
-                                                      child: Text(
-                                                        "Submit",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return CancellationReasonsBottomSheet();
                                     });
                               }
                             },
