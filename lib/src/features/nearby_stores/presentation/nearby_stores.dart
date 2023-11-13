@@ -59,7 +59,10 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         final String message = data["message"];
         final List<dynamic> stores = data["stores"] ?? [];
         List categories = data["categories"];
-        ref.watch(getStoresProvider.notifier).update((state) => stores);
+
+        Future(() {
+          ref.watch(getStoresProvider.notifier).update((state) => stores);
+        });
 
         for (var store in stores.toSet()) {
           final image = ref.watch(imageBytesProvider(store.image)).value;

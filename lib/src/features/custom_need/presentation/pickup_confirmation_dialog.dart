@@ -31,6 +31,8 @@ class PickupConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<dynamic> stores = consumer.watch(getStoresProvider);
+
     return Dialog(
       backgroundColor: Colors.white,
       child: Padding(
