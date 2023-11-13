@@ -176,7 +176,18 @@ class BufferBrand extends ConsumerWidget {
                                     flex: 12,
                                     child: Consumer(
                                       builder: (context, ref, child) => InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              backgroundColor: Colors.white,
+                                              isScrollControlled: true,
+                                              useSafeArea: false,
+                                              builder: (context) {
+                                                return CancellationReasonsBottomSheet(
+                                                  rfpID: rfpID,
+                                                );
+                                              });
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Colors.red,
@@ -198,28 +209,7 @@ class BufferBrand extends ConsumerWidget {
                                   )
                                 ],
                               ),
-<<<<<<< HEAD
                             ),
-=======
-                            ],
-                            onPressed: (index) {
-                              if (index == 0) {
-                                context.go('/activity');
-                              } else {
-                                showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.white,
-                                    isScrollControlled: true,
-                                    useSafeArea: false,
-                                    builder: (context) {
-                                      return CancellationReasonsBottomSheet(
-                                        rfpID: rfpID,
-                                      );
-                                    });
-                              }
-                            },
-                            isSelected: [false, true],
->>>>>>> 9786bc84ffdcb0b939f4cd3fd5eac85a6f84aa96
                           ),
                         ),
                         // Center(
