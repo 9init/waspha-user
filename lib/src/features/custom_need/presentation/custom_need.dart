@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -332,7 +333,7 @@ class ReadyRequestButton extends StatelessWidget {
                             itemBuilder: (context, index) => Text(
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                "${items[index].quantity} x ${items[index].name }"),
+                                "${items[index].quantity} x ${items[index].name}"),
                             itemCount: items.length,
                           )),
                           SizedBox(
@@ -345,7 +346,8 @@ class ReadyRequestButton extends StatelessWidget {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: CircleAvatar(
-                              backgroundColor: Colors.red,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
                             ),
                             title: Text("${capitalize(method)}"),
                           ),
@@ -353,13 +355,27 @@ class ReadyRequestButton extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 7.5),
                             child: Icon(Icons.arrow_downward),
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.red,
-                            ),
-                            title: Text("${currentPlace}"),
-                          ),
+                          Consumer(builder: (context, ref, child) {
+                            final userProfile =
+                                ref.watch(getUserAvatarProvider);
+                            return userProfile.when(
+                                data: (image) {
+                                  return ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(image ??
+                                              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"),
+                                    ),
+                                    title: Text("${currentPlace}"),
+                                  );
+                                },
+                                error: (e, s) {
+                                  print("LOG CUSTOM : $e");
+                                  return Text("Error");
+                                },
+                                loading: () => Container());
+                          }),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: CircleAvatar(
