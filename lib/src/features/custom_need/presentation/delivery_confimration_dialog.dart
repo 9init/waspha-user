@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/custom_need/presentation/select_date.dart';
+import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 import '../../../constants/constants.dart';
 import '../../login/domain/login_domain.dart';
@@ -29,6 +31,8 @@ class DeliveryConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<dynamic> stores = consumer.watch(getStoresProvider);
+
     return Dialog(
       backgroundColor: Colors.white,
       child: Padding(
@@ -81,6 +85,47 @@ class DeliveryConfirmationDialog extends StatelessWidget {
                 title: Text("${capitalize(method)}"),
               ),
               Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 38,
+                      child: ListView.builder(
+                          itemCount: stores.length > 5 ? 5 : stores.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return AnimatedAlign(
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.easeIn,
+                              alignment: Alignment.centerLeft,
+                              widthFactor: 0.6,
+                              child: CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                    stores[index].image),
+                              ),
+                            );
+                          }),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: stores.length == 5 ? 0 : 30),
+                        child: Text(
+                          stores.length > 5
+                              ? "+${stores.length - 5}"
+                              : stores.length == 1
+                                  ? stores[0].address
+                                  : "",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(left: 7.5),
                 child: Icon(Icons.arrow_downward),
               ),
@@ -108,7 +153,26 @@ class DeliveryConfirmationDialog extends StatelessWidget {
                 leading: CircleAvatar(
                   child: Icon(Icons.lock_clock_rounded),
                 ),
-                title: Text(isScheduled.value ? "Scheduled" : "Delivery Now"),
+                title: Padding(
+                    padding: const EdgeInsets.only(right: 30),
+                    child: RichText(
+                      text: TextSpan(
+                        text: isScheduled.value
+                            ? "Delivery on "
+                            : "Delivery ", // Common text
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: isScheduled.value
+                                ? consumer.watch(selectedTimeProvider)
+                                : "Now",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
               ),
               SizedBox(
                 height: 20,
@@ -118,7 +182,8 @@ class DeliveryConfirmationDialog extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

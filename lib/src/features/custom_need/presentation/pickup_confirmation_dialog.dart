@@ -162,20 +162,14 @@ class PickupConfirmationDialog extends StatelessWidget {
                             : "Pickup ", // Common text
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
-                          if (isScheduled.value)
-                            TextSpan(
-                              text: consumer.watch(selectedTimeProvider),
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                              ),
+                          TextSpan(
+                            text: isScheduled.value
+                                ? consumer.watch(selectedTimeProvider)
+                                : "Now",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                          if (!isScheduled.value)
-                            TextSpan(
-                              text: "Now", // Text for immediate
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                          ),
                         ],
                       ),
                     )),
