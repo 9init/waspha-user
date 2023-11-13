@@ -23,15 +23,15 @@ final methodProvider = StateProvider<String>((ref) {
   return "delivery";
 });
 
+final getStoresProvider = StateProvider<List<dynamic>>((ref) => []);
+
 class NearbyData {
   BuildContext context;
   ValueNotifier<bool> isBottomSheetOpen;
-  ValueNotifier<LatLng> userLocation;
 
   NearbyData({
     required this.context,
     required this.isBottomSheetOpen,
-    required this.userLocation,
   });
 }
 
@@ -40,7 +40,6 @@ Stream<dynamic> getNearbyStoresStream(
   Ref ref, {
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
-  required ValueNotifier<LatLng> userLocation,
 }) async* {
   while (true) {
     await Future.delayed(Duration(seconds: 5));
@@ -48,7 +47,7 @@ Stream<dynamic> getNearbyStoresStream(
     yield await getNearbyStores(ref,
         context: context,
         isBottomSheetOpen: isBottomSheetOpen,
-        userLocation: userLocation);
+        );
   }
 }
 
@@ -90,7 +89,6 @@ Future<dynamic> getNearbyStores(
   Ref ref, {
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
-  required ValueNotifier<LatLng> userLocation,
 }) async {
   final url = "user/get-nearby-stores";
   // final location = await getLocation();
@@ -162,7 +160,7 @@ Future<dynamic> getNearbyStores(
                                   .refresh(getNearbyStoresProvider(
                                       context: context,
                                       isBottomSheetOpen: isBottomSheetOpen,
-                                      userLocation: userLocation))
+                                      ))
                                   .value;
                             },
                             child: Text("Refresh")),

@@ -7,7 +7,7 @@ part of 'stores_repository.dart';
 // **************************************************************************
 
 String _$getNearbyStoresStreamHash() =>
-    r'1932ca5b87b3f3ec1285f54fc5d1d1c2162c4516';
+    r'd700822f0763446044291ef79fa2175d7eb4e8fd';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -43,12 +43,10 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
   GetNearbyStoresStreamProvider call({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
-    required ValueNotifier<LatLng> userLocation,
   }) {
     return GetNearbyStoresStreamProvider(
       context: context,
       isBottomSheetOpen: isBottomSheetOpen,
-      userLocation: userLocation,
     );
   }
 
@@ -59,7 +57,6 @@ class GetNearbyStoresStreamFamily extends Family<AsyncValue<dynamic>> {
     return call(
       context: provider.context,
       isBottomSheetOpen: provider.isBottomSheetOpen,
-      userLocation: provider.userLocation,
     );
   }
 
@@ -84,13 +81,11 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
   GetNearbyStoresStreamProvider({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
-    required ValueNotifier<LatLng> userLocation,
   }) : this._internal(
           (ref) => getNearbyStoresStream(
             ref as GetNearbyStoresStreamRef,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
-            userLocation: userLocation,
           ),
           from: getNearbyStoresStreamProvider,
           name: r'getNearbyStoresStreamProvider',
@@ -103,7 +98,6 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
               GetNearbyStoresStreamFamily._allTransitiveDependencies,
           context: context,
           isBottomSheetOpen: isBottomSheetOpen,
-          userLocation: userLocation,
         );
 
   GetNearbyStoresStreamProvider._internal(
@@ -115,12 +109,10 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
     required super.from,
     required this.context,
     required this.isBottomSheetOpen,
-    required this.userLocation,
   }) : super.internal();
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
-  final ValueNotifier<LatLng> userLocation;
 
   @override
   Override overrideWith(
@@ -137,7 +129,6 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
         debugGetCreateSourceHash: null,
         context: context,
         isBottomSheetOpen: isBottomSheetOpen,
-        userLocation: userLocation,
       ),
     );
   }
@@ -151,8 +142,7 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
   bool operator ==(Object other) {
     return other is GetNearbyStoresStreamProvider &&
         other.context == context &&
-        other.isBottomSheetOpen == isBottomSheetOpen &&
-        other.userLocation == userLocation;
+        other.isBottomSheetOpen == isBottomSheetOpen;
   }
 
   @override
@@ -160,7 +150,6 @@ class GetNearbyStoresStreamProvider extends AutoDisposeStreamProvider<dynamic> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, context.hashCode);
     hash = _SystemHash.combine(hash, isBottomSheetOpen.hashCode);
-    hash = _SystemHash.combine(hash, userLocation.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -172,9 +161,6 @@ mixin GetNearbyStoresStreamRef on AutoDisposeStreamProviderRef<dynamic> {
 
   /// The parameter `isBottomSheetOpen` of this provider.
   ValueNotifier<bool> get isBottomSheetOpen;
-
-  /// The parameter `userLocation` of this provider.
-  ValueNotifier<LatLng> get userLocation;
 }
 
 class _GetNearbyStoresStreamProviderElement
@@ -187,12 +173,9 @@ class _GetNearbyStoresStreamProviderElement
   @override
   ValueNotifier<bool> get isBottomSheetOpen =>
       (origin as GetNearbyStoresStreamProvider).isBottomSheetOpen;
-  @override
-  ValueNotifier<LatLng> get userLocation =>
-      (origin as GetNearbyStoresStreamProvider).userLocation;
 }
 
-String _$getNearbyStoresHash() => r'd18339fff7b982bec163da138b06511445f2fed7';
+String _$getNearbyStoresHash() => r'21f26d21ff33787c3d283cdcbce269e8c14ebbcb';
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)
@@ -207,12 +190,10 @@ class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
   GetNearbyStoresProvider call({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
-    required ValueNotifier<LatLng> userLocation,
   }) {
     return GetNearbyStoresProvider(
       context: context,
       isBottomSheetOpen: isBottomSheetOpen,
-      userLocation: userLocation,
     );
   }
 
@@ -223,7 +204,6 @@ class GetNearbyStoresFamily extends Family<AsyncValue<dynamic>> {
     return call(
       context: provider.context,
       isBottomSheetOpen: provider.isBottomSheetOpen,
-      userLocation: provider.userLocation,
     );
   }
 
@@ -248,13 +228,11 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
   GetNearbyStoresProvider({
     required BuildContext context,
     required ValueNotifier<bool> isBottomSheetOpen,
-    required ValueNotifier<LatLng> userLocation,
   }) : this._internal(
           (ref) => getNearbyStores(
             ref as GetNearbyStoresRef,
             context: context,
             isBottomSheetOpen: isBottomSheetOpen,
-            userLocation: userLocation,
           ),
           from: getNearbyStoresProvider,
           name: r'getNearbyStoresProvider',
@@ -267,7 +245,6 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
               GetNearbyStoresFamily._allTransitiveDependencies,
           context: context,
           isBottomSheetOpen: isBottomSheetOpen,
-          userLocation: userLocation,
         );
 
   GetNearbyStoresProvider._internal(
@@ -279,12 +256,10 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
     required super.from,
     required this.context,
     required this.isBottomSheetOpen,
-    required this.userLocation,
   }) : super.internal();
 
   final BuildContext context;
   final ValueNotifier<bool> isBottomSheetOpen;
-  final ValueNotifier<LatLng> userLocation;
 
   @override
   Override overrideWith(
@@ -301,7 +276,6 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
         debugGetCreateSourceHash: null,
         context: context,
         isBottomSheetOpen: isBottomSheetOpen,
-        userLocation: userLocation,
       ),
     );
   }
@@ -315,8 +289,7 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
   bool operator ==(Object other) {
     return other is GetNearbyStoresProvider &&
         other.context == context &&
-        other.isBottomSheetOpen == isBottomSheetOpen &&
-        other.userLocation == userLocation;
+        other.isBottomSheetOpen == isBottomSheetOpen;
   }
 
   @override
@@ -324,7 +297,6 @@ class GetNearbyStoresProvider extends AutoDisposeFutureProvider<dynamic> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, context.hashCode);
     hash = _SystemHash.combine(hash, isBottomSheetOpen.hashCode);
-    hash = _SystemHash.combine(hash, userLocation.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -336,9 +308,6 @@ mixin GetNearbyStoresRef on AutoDisposeFutureProviderRef<dynamic> {
 
   /// The parameter `isBottomSheetOpen` of this provider.
   ValueNotifier<bool> get isBottomSheetOpen;
-
-  /// The parameter `userLocation` of this provider.
-  ValueNotifier<LatLng> get userLocation;
 }
 
 class _GetNearbyStoresProviderElement
@@ -350,9 +319,6 @@ class _GetNearbyStoresProviderElement
   @override
   ValueNotifier<bool> get isBottomSheetOpen =>
       (origin as GetNearbyStoresProvider).isBottomSheetOpen;
-  @override
-  ValueNotifier<LatLng> get userLocation =>
-      (origin as GetNearbyStoresProvider).userLocation;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

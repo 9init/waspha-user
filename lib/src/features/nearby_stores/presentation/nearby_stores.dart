@@ -28,12 +28,11 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   @override
   Widget build(BuildContext context) {
     final isBottomSheetOpen = useState(false);
-    final userLocation = useState(LatLng(0.0, 0.0));
     return Scaffold(body: Consumer(builder: (context, ref, child) {
       final nearbyStores = ref.watch(getNearbyStoresStreamProvider(
-          context: context,
-          isBottomSheetOpen: isBottomSheetOpen,
-          userLocation: userLocation));
+        context: context,
+        isBottomSheetOpen: isBottomSheetOpen,
+      ));
       final isPicking = ref.watch(isPickingLocationProvider);
       final markerLocation = ref.watch(getUserLocation);
       double? latitude =
@@ -41,7 +40,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       double? longitude =
           ref.watch(locationStreamProvider).asData?.value.longitude;
 
-      if(latitude == null && longitude == null){
+      if (latitude == null && longitude == null) {
         return Container();
       }
 
@@ -58,8 +57,9 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         markers.clear();
 
         final String message = data["message"];
-        final stores = data["stores"] ?? [];
+        final List<dynamic> stores = data["stores"] ?? [];
         List categories = data["categories"];
+        ref.watch(getStoresProvider.notifier).update((state) => stores);
 
         for (var store in stores.toSet()) {
           final image = ref.watch(imageBytesProvider(store.image)).value;

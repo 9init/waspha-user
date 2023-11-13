@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../constants/constants.dart';
 import '../../login/domain/login_domain.dart';
+import '../../nearby_stores/domain/stores_repository.dart';
 import '../data/item_data.dart';
 import '../domain/custom_need_domain.dart';
 import 'custom_need.dart';
@@ -109,7 +110,7 @@ class PickupConfirmationDialog extends StatelessWidget {
                 leading: CircleAvatar(
                   child: Icon(Icons.location_on),
                 ),
-                title: Text("Drop off at "),
+                title: Text("SDF"),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,

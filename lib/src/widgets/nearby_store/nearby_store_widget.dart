@@ -175,11 +175,12 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                                     (state) => v.toString());
                                             method.value = v.toString();
                                             ref
-                                                .refresh(getNearbyStoresProvider(
-                                                    context: context,
-                                                    isBottomSheetOpen: widget
-                                                        .isBottomSheetOpen,
-                                                    userLocation: userLocation))
+                                                .refresh(
+                                                    getNearbyStoresProvider(
+                                                  context: context,
+                                                  isBottomSheetOpen:
+                                                      widget.isBottomSheetOpen,
+                                                ))
                                                 .value;
                                             ;
                                           },
@@ -490,10 +491,10 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
 
                                 await ref
                                     .refresh(getNearbyStoresProvider(
-                                        context: context,
-                                        isBottomSheetOpen:
-                                            widget.isBottomSheetOpen,
-                                        userLocation: userLocation))
+                                      context: context,
+                                      isBottomSheetOpen:
+                                          widget.isBottomSheetOpen,
+                                    ))
                                     .value;
                               },
                               child: Text("Confirm Location")),

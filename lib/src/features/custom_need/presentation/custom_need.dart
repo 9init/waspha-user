@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +16,6 @@ import '../../login/domain/login_domain.dart';
 import '../../menu/menu_detail/presentation/menu_detail.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 import '../data/item_data.dart';
-import '../domain/custom_need_domain.dart';
 import 'delivery_confimration_dialog.dart';
 import 'item_widget.dart';
 import 'select_date.dart';
@@ -295,7 +293,6 @@ class ReadyRequestButton extends StatelessWidget {
               context: context,
               builder: (context) {
                 final method = ref.watch(methodProvider);
-
                 final itemsJsonList =
                     items.map((item) => item.toJson()).toList();
                 final currentPlace = ref.watch(currentPlaceDescription);
