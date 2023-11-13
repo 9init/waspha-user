@@ -217,9 +217,7 @@ class MenuDetailsBody extends HookWidget {
               maxLines: maxLines,
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: isExpanded.value
-                ? Icon(Icons.exposure_minus_1)
-                : Icon(Icons.add),
+            trailing: isExpanded.value ? Icon(Icons.remove) : Icon(Icons.add),
           ),
           SizedBox(height: 15),
           ListTile(
@@ -244,7 +242,7 @@ class MenuDetailsBody extends HookWidget {
             leading: Icon(Icons.lock_clock),
             title: Text(
                 "${timings != "fulltime" ? "Opens until " + convertTimeToAMPM(timings?[0]["to"]) : "Fulltime"}"),
-            trailing: Icon(Icons.exposure_minus_1),
+            trailing: Icon(Icons.remove),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),

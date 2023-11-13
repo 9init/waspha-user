@@ -131,7 +131,7 @@ class _ItemWidgetExpandedState extends ConsumerState<ItemWidgetExpanded> {
                           }
                         },
                         icon: Icon(
-                          Icons.exposure_minus_1,
+                          Icons.remove,
                           size: 20,
                           color: Colors.black,
                         ),
