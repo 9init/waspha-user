@@ -106,27 +106,25 @@ class MenuOffer extends HookWidget {
                   );
                 }),
               ),
-              Consumer(
-                builder: (context,ref,child) {
-                  final subCategory = ref.watch(subCategoryProvider);
-                  final category = ref.watch(categoryProvider);
-                  return RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "${category["name"]} \n",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: "${subCategory["name"]}",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                  ]));
-                }
-              ),
+              Consumer(builder: (context, ref, child) {
+                final subCategory = ref.watch(subCategoryProvider);
+                final category = ref.watch(categoryProvider);
+                return RichText(
+                    text: TextSpan(children: [
+                  TextSpan(
+                      text: "${category["name"]} \n",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: "${subCategory["name"]}",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                ]));
+              }),
             ],
           ),
           Padding(

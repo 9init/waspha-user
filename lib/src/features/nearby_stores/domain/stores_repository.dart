@@ -44,10 +44,11 @@ Stream<dynamic> getNearbyStoresStream(
   while (true) {
     await Future.delayed(Duration(seconds: 5));
 
-    yield await getNearbyStores(ref,
-        context: context,
-        isBottomSheetOpen: isBottomSheetOpen,
-        );
+    yield await getNearbyStores(
+      ref,
+      context: context,
+      isBottomSheetOpen: isBottomSheetOpen,
+    );
   }
 }
 
@@ -158,9 +159,9 @@ Future<dynamic> getNearbyStores(
                             onPressed: () async {
                               await ref
                                   .refresh(getNearbyStoresProvider(
-                                      context: context,
-                                      isBottomSheetOpen: isBottomSheetOpen,
-                                      ))
+                                    context: context,
+                                    isBottomSheetOpen: isBottomSheetOpen,
+                                  ))
                                   .value;
                             },
                             child: Text("Refresh")),

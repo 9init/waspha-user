@@ -19,7 +19,7 @@ class BufferBrand extends ConsumerWidget {
         child: Consumer(
           builder: (context, ref, child) {
             final location = ref.watch(userLocationProvider);
-            final List<dynamic> stores = ref.watch(getStoresProvider);
+            final List<dynamic> stores = ref.read(getStoresProvider);
 
             return location.when(
                 data: (data) => Column(

@@ -167,9 +167,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     additional_notes: _noteController.text,
                                     product_id: widget.data["id"]));
 
-                            // ignore: unused_result
-                            // ref.refresh(itemsProvider);
-
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Item added')));
 

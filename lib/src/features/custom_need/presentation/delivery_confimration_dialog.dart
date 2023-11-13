@@ -31,7 +31,7 @@ class DeliveryConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> stores = consumer.watch(getStoresProvider);
+    final List<dynamic> stores = consumer.read(getStoresProvider);
 
     return Dialog(
       backgroundColor: Colors.white,
