@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/custom_need/presentation/pickup_confirmation_dialog.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 
@@ -299,7 +300,16 @@ class ReadyRequestButton extends StatelessWidget {
                     items.map((item) => item.toJson()).toList();
                 final currentPlace = ref.watch(currentPlaceDescription);
 
-                return DeliveryConfirmationDialog(
+                if (method == "delivery")
+                  return DeliveryConfirmationDialog(
+                      consumer: ref,
+                      items: items,
+                      method: method,
+                      currentPlace: currentPlace,
+                      isScheduled: isScheduled,
+                      itemsJsonList: itemsJsonList);
+
+                return PickupConfirmationDialog(
                     consumer: ref,
                     items: items,
                     method: method,
