@@ -112,18 +112,19 @@ class BufferBrand extends ConsumerWidget {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: stores.length == 5 ? 0 : 30),
-                                  child: Text(
-                                    stores.length > 5
-                                        ? "+${stores.length - 5}"
-                                        : stores.length == 1
-                                            ? stores[0].address
-                                            : "",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            stores.length == 5 ? 0 : 30),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            text: stores.length > 5
+                                                ? "+${stores.length - 5}"
+                                                : stores.length == 1
+                                                    ? stores[0].address
+                                                    : "",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            )))),
                               )
                             ],
                           ),
@@ -139,42 +140,109 @@ class BufferBrand extends ConsumerWidget {
                           ),
                           title: Text("56h:08m:23s"),
                         ),
-                        Center(
-                          child: ToggleButtons(
-                            borderWidth: 0,
-                            constraints:
-                                BoxConstraints(minWidth: 150, minHeight: 50),
-                            borderColor: Colors.transparent,
-                            disabledColor: Colors.purple,
-                            borderRadius: BorderRadius.circular(10),
-                            textStyle: TextStyle(color: Colors.white),
-                            fillColor: Colors.red,
-                            children: [
-                              Text("Go to Activity"),
-                              Text(
-                                "Cancel my request",
-                                style: TextStyle(color: Colors.white),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Container(
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Color(0xff663399),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 10,
+                                    child: InkWell(
+                                      onTap: () {
+                                        context.go('/activity');
+                                      },
+                                      child: Container(
+                                        child: Center(
+                                          child: Text(
+                                            "Go to Activity",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 12,
+                                    child: Consumer(
+                                      builder: (context, ref, child) => InkWell(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              backgroundColor: Colors.white,
+                                              isScrollControlled: true,
+                                              useSafeArea: false,
+                                              builder: (context) {
+                                                return CancellationReasonsBottomSheet(
+                                                  rfpID: rfpID,
+                                                );
+                                              });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Cancel my request",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
-                            onPressed: (index) {
-                              if (index == 0) {
-                                context.go('/activity');
-                              } else {
-                                showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.white,
-                                    isScrollControlled: true,
-                                    useSafeArea: false,
-                                    builder: (context) {
-                                      return CancellationReasonsBottomSheet(
-                                        rfpID: rfpID,
-                                      );
-                                    });
-                              }
-                            },
-                            isSelected: [false, true],
+                            ),
                           ),
-                        )
+                        ),
+                        // Center(
+                        //   child: ToggleButtons(
+                        //     borderWidth: 0,
+                        //     constraints:
+                        //         BoxConstraints(minWidth: 150, minHeight: 50),
+                        //     borderRadius: BorderRadius.circular(10),
+                        //     textStyle: TextStyle(color: Colors.white),
+                        //     fillColor: Colors.red,
+                        //     children: [
+                        //       Text(
+                        //         "Cancel my request",
+                        //         style: TextStyle(color: Colors.white),
+                        //       ),
+                        //     ],
+                        //     onPressed: (index) {
+                        //       if (index == 0) {
+                        //         context.go('/activity');
+                        //       } else {
+                        //         showModalBottomSheet(
+                        //             context: context,
+                        //             backgroundColor: Colors.white,
+                        //             isScrollControlled: true,
+                        //             useSafeArea: false,
+                        //             builder: (context) {
+                        //               return CancellationReasonsBottomSheet();
+                        //             });
+                        //       }
+                        //     },
+                        //     isSelected: [false, true],
+                        //   ),
+                        // )
                       ],
                     ),
                 error: (e, s) {

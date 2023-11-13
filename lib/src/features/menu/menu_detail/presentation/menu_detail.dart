@@ -25,17 +25,7 @@ class MenuDetailScreen extends ConsumerWidget {
         final storeDetails = ref.watch(getStoresDetailsProvider(id: id));
         return storeDetails.when(
             data: (data) {
-              return MenuDetailsBody(
-                id: id,
-                isFavorite: data["is_favorite"],
-                imageURL: data["image"],
-                address: data["more_information"]["address"],
-                name: data["business_name"]["en"],
-                timings: data["timings"],
-                ratings: data["average_rating"].toDouble(),
-                categories:
-                    data["categories"].map((e) => e["name"]["en"]).join(" - "),
-              );
+              return MenuDetailsBody(store: data);
             },
             error: (e, s) {
               return Center(child: Text("Error"));
@@ -47,24 +37,9 @@ class MenuDetailScreen extends ConsumerWidget {
 }
 
 class MenuDetailsBody extends HookWidget {
-  const MenuDetailsBody({
-    super.key,
-    required this.id,
-    required this.imageURL,
-    required this.address,
-    required this.name,
-    required this.ratings,
-    required this.timings,
-    required this.categories,
-    required this.isFavorite,
-  });
+  const MenuDetailsBody({super.key, required this.store});
 
-  final id;
-  final bool isFavorite;
-  final String imageURL, address, name;
-
-  final double ratings;
-  final timings, categories;
+  final store;
   String convertTimeToAMPM(String timeString) {
     // Parse the time string into a DateTime object
     final DateTime time = DateTime.parse('1970-01-01 ' + timeString);
@@ -79,6 +54,16 @@ class MenuDetailsBody extends HookWidget {
     final isExpanded = useState(false);
     final maxLines = isExpanded.value ? 100 : 2;
     final isStoreFavored = useState<bool>(false);
+
+    final id = store["id"];
+    final isFavorite = store["is_favorite"];
+    final imageURL = store["image"];
+    final address = store["more_information"]["address"];
+    final name = store["business_name"]["en"];
+    final timings = store["timings"];
+    final ratings = store["average_rating"].toDouble();
+    final categories =
+        store["categories"].map((e) => e["name"]["en"]).join(" - ");
 
     return SingleChildScrollView(
       child: Column(
