@@ -34,14 +34,31 @@ class BufferBrand extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: GoogleMap(
-                              zoomControlsEnabled: false,
                               zoomGesturesEnabled: false,
+                              scrollGesturesEnabled: false,
+                              tiltGesturesEnabled: false,
+                              rotateGesturesEnabled: false,
+                              zoomControlsEnabled: false,
                               markers: {
                                 Marker(
                                     markerId: MarkerId('1'),
                                     position: data,
                                     icon: BitmapDescriptor.defaultMarkerWithHue(
-                                        BitmapDescriptor.hueBlue))
+                                        BitmapDescriptor.hueBlue)),
+                                ...stores.map((e) {
+                                  final image = ref
+                                      .watch(imageBytesProvider(e.image))
+                                      .value;
+
+                                  return Marker(
+                                      markerId: MarkerId(e.id.toString()),
+                                      position: LatLng(e.lat, e.lng),
+                                      icon: image != null
+                                          ? image
+                                          : BitmapDescriptor
+                                              .defaultMarkerWithHue(
+                                                  BitmapDescriptor.hueRed));
+                                })
                               },
                               circles: {
                                 Circle(
