@@ -42,7 +42,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
           ref.watch(locationStreamProvider).asData?.value.longitude;
 
       if(latitude == null && longitude == null){
-        return CircularProgressIndicator();
+        return Container();
       }
 
       if (!isPicking) {
