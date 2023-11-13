@@ -12,7 +12,7 @@ import '../../nearby_stores/domain/stores_repository.dart';
 part 'custom_need_domain.g.dart';
 
 @riverpod
-Future createRFP(
+Future<int> createRFP(
   Ref ref, {
   required List<Map<String, dynamic>> items,
   required BuildContext context,
@@ -36,9 +36,11 @@ Future createRFP(
           "items": items,
         }));
     print(request.data);
+    return request.data["data"]["id"];
   } on DioError catch (e) {
     print("Custom Need ${e.response?.data}");
   }
+  return -1;
 }
 
 enum QueueStatus {

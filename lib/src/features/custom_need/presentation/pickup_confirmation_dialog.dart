@@ -190,9 +190,12 @@ class PickupConfirmationDialog extends StatelessWidget {
                                       borderRadius:
                                           BorderRadius.circular(13)))),
                       onPressed: () {
-                        consumer.watch(createRFPProvider(
-                            items: itemsJsonList, context: context));
-                        context.push('/buffer_brand');
+                        consumer
+                            .read(createRFPProvider(
+                                    items: itemsJsonList, context: context)
+                                .future)
+                            .then((value) =>
+                                context.push('/buffer_brand', extra: value));
                       },
                       child: Text(
                         "Confirm my request",

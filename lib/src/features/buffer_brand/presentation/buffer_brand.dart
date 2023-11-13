@@ -9,7 +9,8 @@ import 'package:waspha/src/features/buffer_brand/presentation/cancellation_reaso
 import '../../nearby_stores/domain/stores_repository.dart';
 
 class BufferBrand extends ConsumerWidget {
-  const BufferBrand({super.key});
+  final int rfpID;
+  const BufferBrand({super.key, required this.rfpID});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -165,7 +166,9 @@ class BufferBrand extends ConsumerWidget {
                                     isScrollControlled: true,
                                     useSafeArea: false,
                                     builder: (context) {
-                                      return CancellationReasonsBottomSheet();
+                                      return CancellationReasonsBottomSheet(
+                                        rfpID: rfpID,
+                                      );
                                     });
                               }
                             },
