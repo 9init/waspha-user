@@ -48,7 +48,7 @@ class _ItemWidgetExpandedState extends ConsumerState<ItemWidgetExpanded> {
             Align(
               alignment: Alignment.topCenter,
               child: CircleAvatar(
-                  radius: 40,
+                  radius: 35,
                   backgroundColor: Colors.grey[200],
                   backgroundImage:
                       CachedNetworkImageProvider(widget.item.image ?? ""),

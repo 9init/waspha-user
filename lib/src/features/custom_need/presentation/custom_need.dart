@@ -32,9 +32,16 @@ class CustomNeedScreen extends StatefulHookConsumerWidget {
 
 class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
   @override
+  void initState() {
+    ref.read(itemsProvider).clear();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isScheduled = useState(false);
     final isLogged = ref.watch(isLoggedInProvider);
+
     return isLogged.when(data: (data) {
       if (data == false) {
         return NeedLoginScreen();
@@ -332,7 +339,7 @@ class ReadyRequestButton extends StatelessWidget {
                             itemBuilder: (context, index) => Text(
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                "${items[index].quantity} x ${items[index].name }"),
+                                "${items[index].quantity} x ${items[index].name ?? "item" }"),
                             itemCount: items.length,
                           )),
                           SizedBox(

@@ -39,21 +39,18 @@ class ItemWidgetCollapsed extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                    radius: 35,
-                    backgroundImage:
-                        CachedNetworkImageProvider(item.image ?? ""),
-                    child: item.image == null
-                        ? Icon(
-                            Icons.add,
-                          )
-                        : null),
-              ),
+              CircleAvatar(
+                  radius: 35,
+                  backgroundImage: CachedNetworkImageProvider(item.image ?? ""),
+                  backgroundColor: Colors.grey[200],
+                  child: item.image == null
+                      ? Icon(
+                          Icons.add,
+                        )
+                      : null),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(1),
+                  padding: const EdgeInsets.only(left: 10, top: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
