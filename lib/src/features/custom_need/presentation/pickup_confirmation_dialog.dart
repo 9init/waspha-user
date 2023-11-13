@@ -107,34 +107,72 @@ class PickupConfirmationDialog extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 7.5),
                 child: Icon(Icons.arrow_downward),
               ),
-              Container(
-                height: 100,
-                child: ListView.separated(
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(height: 3);
-                    },
-                    itemCount: stores.length,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      print(stores[index]);
-                      return ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(stores[index].image),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 38,
+                      child: ListView.builder(
+                          itemCount: stores.length > 5 ? 5 : stores.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return AnimatedAlign(
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.easeIn,
+                              alignment: Alignment.centerLeft,
+                              widthFactor: 0.6,
+                              child: CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                    stores[index].image),
+                              ),
+                            );
+                          }),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: stores.length == 5 ? 0 : 30),
+                        child: Text(
+                          stores.length > 5
+                              ? "+${stores.length - 5}"
+                              : stores.length == 1
+                                  ? stores[0].address
+                                  : "",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      );
-                    }),
+                      ),
+                    )
+                  ],
+                ),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CircleAvatar(
                   child: Icon(Icons.access_time_filled),
                 ),
-                title: Text(isScheduled.value
-                    ? "Pick up on ${consumer.watch(selectedTimeProvider)}"
-                    : "Pickup Now"),
+                title: Padding(
+                    padding: const EdgeInsets.only(right: 30),
+                    child: RichText(
+                      text: TextSpan(
+                        text: isScheduled.value
+                            ? "Pick up on "
+                            : "Pickup ", // Common text
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: isScheduled.value
+                                ? consumer.watch(selectedTimeProvider)
+                                : "Now",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
               ),
               SizedBox(
                 height: 20,
