@@ -95,7 +95,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 }
                               },
                               icon: Icon(
-                                Icons.minimize,
+                                Icons.exposure_minus_1,
                                 size: 20,
                                 color: Colors.black,
                               ),
@@ -166,6 +166,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     quantity: counter.value,
                                     additional_notes: _noteController.text,
                                     product_id: widget.data["id"]));
+
+                            // ignore: unused_result
                             ref.refresh(itemsProvider);
 
                             ScaffoldMessenger.of(context).showSnackBar(
