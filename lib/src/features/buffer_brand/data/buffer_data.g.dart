@@ -10,12 +10,14 @@ _$CancelReasonImpl _$$CancelReasonImplFromJson(Map<String, dynamic> json) =>
     _$CancelReasonImpl(
       id: json['id'] as int,
       value: Value.fromJson(json['value'] as Map<String, dynamic>),
+      checked: json['checked'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$CancelReasonImplToJson(_$CancelReasonImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'value': instance.value,
+      'checked': instance.checked,
     };
 
 _$ValueImpl _$$ValueImplFromJson(Map<String, dynamic> json) => _$ValueImpl(

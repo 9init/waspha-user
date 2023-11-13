@@ -1,17 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/buffer_brand/domain/buffer_brand_domain.dart';
-import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 
-class CancellationReasonsBottomSheet extends StatelessWidget {
+class CancellationReasonsBottomSheet extends StatefulWidget {
   const CancellationReasonsBottomSheet({
     super.key,
   });
 
+  @override
+  State<CancellationReasonsBottomSheet> createState() =>
+      _CancellationReasonsBottomSheetState();
+}
+
+class _CancellationReasonsBottomSheetState
+    extends State<CancellationReasonsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +36,6 @@ class CancellationReasonsBottomSheet extends StatelessWidget {
             ),
             Consumer(builder: (context, ref, child) {
               final reasons = ref.watch(getCancelReasonsProvider);
-              final isChecked = ref.watch(isCheckedListProvider);
               return reasons.when(
                   data: (data) {
                     return Container(
@@ -41,16 +44,16 @@ class CancellationReasonsBottomSheet extends StatelessWidget {
                       itemBuilder: (context, index) =>
                           CheckboxListTile.adaptive(
                               controlAffinity: ListTileControlAffinity.leading,
-                              value: isChecked[index],
+                              value: data[index].checked,
                               onChanged: (value) {
-                                isChecked[index] = value!;
+                                data[index].checked = !data[index].checked;
+                                setState(() {});
                               },
                               title: Text(data[index].value.en)),
                       itemCount: data.length,
                     ));
                   },
                   error: (e, s) {
-                    log("Error: $e");
                     return Container();
                   },
                   loading: () => Center(

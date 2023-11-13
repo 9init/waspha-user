@@ -6,13 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/cancellation_reasons_bottom_sheet.dart';
-import '../../custom_need/presentation/custom_need.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
-import '../domain/buffer_brand_domain.dart';
-
-final isCheckedListProvider = Provider<List<bool>>((ref) {
-  return List.generate(5, (index) => false);
-});
 
 class BufferBrand extends ConsumerWidget {
   const BufferBrand({super.key});

@@ -21,7 +21,11 @@ CancelReason _$CancelReasonFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CancelReason {
   int get id => throw _privateConstructorUsedError;
+  set id(int value) => throw _privateConstructorUsedError;
   Value get value => throw _privateConstructorUsedError;
+  set value(Value value) => throw _privateConstructorUsedError;
+  bool get checked => throw _privateConstructorUsedError;
+  set checked(bool value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +39,7 @@ abstract class $CancelReasonCopyWith<$Res> {
           CancelReason value, $Res Function(CancelReason) then) =
       _$CancelReasonCopyWithImpl<$Res, CancelReason>;
   @useResult
-  $Res call({int id, Value value});
+  $Res call({int id, Value value, bool checked});
 
   $ValueCopyWith<$Res> get value;
 }
@@ -55,6 +59,7 @@ class _$CancelReasonCopyWithImpl<$Res, $Val extends CancelReason>
   $Res call({
     Object? id = null,
     Object? value = null,
+    Object? checked = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -65,6 +70,10 @@ class _$CancelReasonCopyWithImpl<$Res, $Val extends CancelReason>
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
               as Value,
+      checked: null == checked
+          ? _value.checked
+          : checked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -85,7 +94,7 @@ abstract class _$$CancelReasonImplCopyWith<$Res>
       __$$CancelReasonImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, Value value});
+  $Res call({int id, Value value, bool checked});
 
   @override
   $ValueCopyWith<$Res> get value;
@@ -104,6 +113,7 @@ class __$$CancelReasonImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? value = null,
+    Object? checked = null,
   }) {
     return _then(_$CancelReasonImpl(
       id: null == id
@@ -114,6 +124,10 @@ class __$$CancelReasonImplCopyWithImpl<$Res>
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
               as Value,
+      checked: null == checked
+          ? _value.checked
+          : checked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -121,33 +135,24 @@ class __$$CancelReasonImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CancelReasonImpl implements _CancelReason {
-  _$CancelReasonImpl({required this.id, required this.value});
+  _$CancelReasonImpl(
+      {required this.id, required this.value, this.checked = false});
 
   factory _$CancelReasonImpl.fromJson(Map<String, dynamic> json) =>
       _$$CancelReasonImplFromJson(json);
 
   @override
-  final int id;
+  int id;
   @override
-  final Value value;
+  Value value;
+  @override
+  @JsonKey()
+  bool checked;
 
   @override
   String toString() {
-    return 'CancelReason(id: $id, value: $value)';
+    return 'CancelReason(id: $id, value: $value, checked: $checked)';
   }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CancelReasonImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.value, value) || other.value == value));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, value);
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +169,7 @@ class _$CancelReasonImpl implements _CancelReason {
 }
 
 abstract class _CancelReason implements CancelReason {
-  factory _CancelReason({required final int id, required final Value value}) =
+  factory _CancelReason({required int id, required Value value, bool checked}) =
       _$CancelReasonImpl;
 
   factory _CancelReason.fromJson(Map<String, dynamic> json) =
@@ -172,8 +177,13 @@ abstract class _CancelReason implements CancelReason {
 
   @override
   int get id;
+  set id(int value);
   @override
   Value get value;
+  set value(Value value);
+  @override
+  bool get checked;
+  set checked(bool value);
   @override
   @JsonKey(ignore: true)
   _$$CancelReasonImplCopyWith<_$CancelReasonImpl> get copyWith =>
