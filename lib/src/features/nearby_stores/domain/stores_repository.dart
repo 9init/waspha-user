@@ -92,7 +92,6 @@ Future<dynamic> getNearbyStores(
 }) async {
   final url = "user/get-nearby-stores";
 
-
   LatLng location = await ref.watch(userLocationProvider.future);
 
   try {
@@ -194,7 +193,7 @@ Future<BitmapDescriptor> imageBytes({required String imageURL}) async {
 }
 
 Future<String> getCountryCode(ref) async {
-  const googelApiKey = 'AIzaSyCvpTXATfxER0gnLrqbQ1FJmSVtA2-5KXo';
+  const googelApiKey = 'AIzaSyDkxNsmr6MY8Aa-iDZx_9P8SJsmFs_4le8';
   LatLng location = await ref.watch(userLocationProvider.future);
 
   GeoData data = await Geocoder2.getDataFromCoordinates(
@@ -233,7 +232,7 @@ final userLocationProvider = FutureProvider<LatLng>((ref) async {
 });
 
 Future<String> getPlaceDetails(ref, {required LatLng location}) async {
-  const googelApiKey = 'AIzaSyCvpTXATfxER0gnLrqbQ1FJmSVtA2-5KXo';
+  const googelApiKey = 'AIzaSyDkxNsmr6MY8Aa-iDZx_9P8SJsmFs_4le8';
 
   GeoData data = await Geocoder2.getDataFromCoordinates(
     latitude: location.latitude,

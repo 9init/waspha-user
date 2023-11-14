@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>254995855199-sam3rvqjjjk4bgtc213j2c3hbmqbgh37.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.254995855199-sam3rvqjjjk4bgtc213j2c3hbmqbgh37</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>254995855199-386bas36hm6u9m8s9bc2q4mqq6a4r6ns.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDgzMNzEej8CtpA8VdMd1EuoVejrNRPnOg</string>
+	<string>AIzaSyBS6oVVmQ07hPxsWzZ8jTw6DCJoCo9yBfo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>781755219907</string>
+	<string>254995855199</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.waspha.app</string>
+	<string>com.waspha.user</string>
 	<key>PROJECT_ID</key>
-	<string>massive-capsule-246916</string>
+	<string>waspha-b0ef3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>massive-capsule-246916.appspot.com</string>
+	<string>waspha-b0ef3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:781755219907:ios:cd14cbfc1b77bb05198776</string>
+	<string>1:254995855199:ios:d050a581362958d6</string>
+	<key>DATABASE_URL</key>
+	<string>https://waspha-b0ef3.firebaseio.com</string>
 </dict>
 </plist>

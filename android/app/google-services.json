@@ -1,45 +1,148 @@
 {
   "project_info": {
-    "project_number": "781755219907",
-    "project_id": "massive-capsule-246916",
-    "storage_bucket": "massive-capsule-246916.appspot.com"
+    "project_number": "254995855199",
+    "firebase_url": "https://waspha-b0ef3.firebaseio.com",
+    "project_id": "waspha-b0ef3",
+    "storage_bucket": "waspha-b0ef3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:781755219907:android:d9ca0f281761c7de198776",
+        "mobilesdk_app_id": "1:254995855199:android:488538e80d34d00b",
         "android_client_info": {
-          "package_name": "com.livine.app"
+          "package_name": "com.app.washpa.u"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "254995855199-386bas36hm6u9m8s9bc2q4mqq6a4r6ns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.washpa.u",
+            "certificate_hash": "985f69c1a207bb9051d5e874f679d6a9f2229a74"
+          }
+        },
+        {
+          "client_id": "254995855199-7dubgtjrs3u7i965ppf35iu20ofaoar2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.washpa.u",
+            "certificate_hash": "a6e43fd11d6ded944ed17edeb4f23d2904db0447"
+          }
+        },
+        {
+          "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCdqVlHUJrKxMvY-QBrZcxY_21BsgPcJyM"
+          "current_key": "AIzaSyDm-WrjWHSZ1CKxRkgIcXSmDpeGVAUNKOM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gropse.wasphaProvider"
+              }
+            }
+          ]
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:781755219907:android:468b6d536dad5e03198776",
+        "mobilesdk_app_id": "1:254995855199:android:986e59cd408c3074",
         "android_client_info": {
-          "package_name": "com.waspha.app"
+          "package_name": "com.gropse.waspha.provider"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "254995855199-g0q5q3i7vbm89hluioeg22qlo3afrmma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gropse.waspha.provider",
+            "certificate_hash": "0c31e4c9b0299e4b93064da76556ec386ba7e484"
+          }
+        },
+        {
+          "client_id": "254995855199-n1e65l6r2jo14lg40oev54h42s5vd19k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gropse.waspha.provider",
+            "certificate_hash": "5ad593159c4dbb06cb77128edb76d37e93369c44"
+          }
+        },
+        {
+          "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCdqVlHUJrKxMvY-QBrZcxY_21BsgPcJyM"
+          "current_key": "AIzaSyDm-WrjWHSZ1CKxRkgIcXSmDpeGVAUNKOM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gropse.wasphaProvider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254995855199:android:08476352d49d14d8f568ea",
+        "android_client_info": {
+          "package_name": "com.waspha.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm-WrjWHSZ1CKxRkgIcXSmDpeGVAUNKOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gropse.wasphaProvider"
+              }
+            }
+          ]
         }
       }
     }
