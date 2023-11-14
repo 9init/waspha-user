@@ -1,4 +1,4 @@
-package com.waspha.user
+package com.waspha
 
 import io.flutter.embedding.android.FlutterActivity
 

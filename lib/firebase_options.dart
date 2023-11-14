@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDm-WrjWHSZ1CKxRkgIcXSmDpeGVAUNKOM',
-    appId: '1:254995855199:android:08476352d49d14d8f568ea',
+    appId: '1:254995855199:android:f835cc7a03a1a394f568ea',
     messagingSenderId: '254995855199',
     projectId: 'waspha-b0ef3',
     databaseURL: 'https://waspha-b0ef3.firebaseio.com',

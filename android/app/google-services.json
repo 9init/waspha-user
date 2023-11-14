@@ -112,9 +112,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:254995855199:android:08476352d49d14d8f568ea",
+        "mobilesdk_app_id": "1:254995855199:android:f835cc7a03a1a394f568ea",
         "android_client_info": {
-          "package_name": "com.waspha.user"
+          "package_name": "com.waspha"
         }
       },
       "oauth_client": [

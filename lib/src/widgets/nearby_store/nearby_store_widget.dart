@@ -490,10 +490,9 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
 
                                 await ref
                                     .refresh(getNearbyStoresProvider(
-                                      context: context,
-                                      isBottomSheetOpen:
-                                          widget.isBottomSheetOpen,
-                                    ))
+                                        context: context,
+                                        isBottomSheetOpen: ValueNotifier(
+                                            widget.isBottomSheetOpen)))
                                     .value;
                               },
                               child: Text("Confirm Location")),

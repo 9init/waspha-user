@@ -9,9 +9,9 @@ import 'package:waspha/src/features/profile/presentation/profile.dart';
 
 class NeedLocationPermission extends StatelessWidget {
   const NeedLocationPermission({super.key});
-
   @override
   Widget build(BuildContext context) {
+    print("hello");
     return MaterialApp(
       home: Scaffold(
         body: Center(
