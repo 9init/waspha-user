@@ -6,7 +6,7 @@ import 'package:waspha/src/utils/dio_helper.dart';
 
 final getRFPListingProvider =
     FutureProvider.family((ref, BuildContext context) async {
-  const url = 'user/my-rfp-listing';
+  const url = 'user/my-orders-listing';
   final option = ref.watch(activityProvider);
   try {
     final request = await ref.watch(dioProvider).post(url, {'status': option});
@@ -15,7 +15,6 @@ final getRFPListingProvider =
     return response;
   } on DioError catch (e) {
     print("ST ERROR: ${e.response?.statusCode}");
-    if (e.response?.statusCode == 403) {
-    }
+    if (e.response?.statusCode == 403) {}
   }
 });

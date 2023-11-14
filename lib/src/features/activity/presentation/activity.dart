@@ -314,68 +314,55 @@ class ActivityScreen extends StatelessWidget {
                           child:
                               Text("You don't have either request/offer yet"),
                         );
-                      } else {
-                        return Column(
-                          children: [
-                            Container(
-                                height: 268,
-                                child: ListView.separated(
-                                    itemCount: data?.length ?? 0,
-                                    controller: _pageTwoController,
-                                    scrollDirection: Axis.horizontal,
-                                    separatorBuilder: (context, index) =>
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                    itemBuilder: (context, index) {
-                                      String rfpStatus =
-                                          data[index]["rfp_status"];
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (rfpStatus ==
-                                                    QueueStatus
-                                                        .REQUIRE_QUEUE.name
-                                                        .toLowerCase() ||
-                                                rfpStatus ==
-                                                    QueueStatus.CURRENT.name
-                                                        .toLowerCase()) {
-                                              context.go('/activity_offers');
-                                            }
-                                          },
-                                          child: RequestBody(
-                                            isPast: isPast,
-                                            expiredTime: data[index]
-                                                ["expiry_time"],
-                                            currentTime: data[index]
-                                                ["order_date"],
-                                            queueStatus: rfpStatus,
-                                            image: data[index]["category"]
-                                                ["image"],
-                                            name: data[index]["category"]
-                                                ["name"]["en"],
-                                            type: data[index]["type"],
-                                          ),
-                                        ),
-                                      );
-                                    })),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            SmoothPageIndicator(
-                              count: (data?.length - 1.5).round(),
-                              controller: _pageTwoController,
-                              effect: ExpandingDotsEffect(
-                                dotWidth: 8,
-                                dotHeight: 8,
-                                activeDotColor: Colors.purple,
-                              ),
-                            )
-                          ],
-                        );
                       }
+                      return Column(
+                        children: [
+                          Container(
+                              height: 268,
+                              child: ListView.separated(
+                                  itemCount: data?.length ?? 0,
+                                  controller: _pageTwoController,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                  itemBuilder: (context, index) {
+                                    String rfpStatus =
+                                        data[index]["rfp_status"];
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (rfpStatus ==
+                                                  QueueStatus.REQUIRE_QUEUE.name
+                                                      .toLowerCase() ||
+                                              rfpStatus ==
+                                                  QueueStatus.CURRENT.name
+                                                      .toLowerCase()) {
+                                            context.go('/activity_offers');
+                                          }
+                                        },
+                                        child: RequestBody(
+                                            isPast: isPast,
+                                            proposal: data[index]),
+                                      ),
+                                    );
+                                  })),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          SmoothPageIndicator(
+                            count: (data?.length - 1.5).round(),
+                            controller: _pageTwoController,
+                            effect: ExpandingDotsEffect(
+                              dotWidth: 8,
+                              dotHeight: 8,
+                              activeDotColor: Colors.purple,
+                            ),
+                          )
+                        ],
+                      );
                     },
                     error: (e, s) {
                       return Text("Error happened");
@@ -396,20 +383,15 @@ class ActivityScreen extends StatelessWidget {
 class RequestBody extends StatelessWidget {
   const RequestBody({
     super.key,
+    required this.proposal,
     required this.isPast,
-    required this.image,
-    required this.name,
-    required this.type,
-    this.queueStatus = "closed",
-    required this.currentTime,
-    required this.expiredTime,
   });
 
+  final proposal;
   final bool isPast;
-  final String image, name, type, queueStatus, currentTime, expiredTime;
 
   String formatTime(String time) {
-    DateTime now = DateTime.parse(currentTime);
+    DateTime now = DateTime.parse(time);
     DateFormat formatter = DateFormat('dd/MM/y H:mm a');
     String formatted = formatter.format(now);
     return formatted;
@@ -417,16 +399,34 @@ class RequestBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final proposalId = proposal["id"];
+    final currentTime = proposal["order_date"];
+    final name = proposal["category"]["name"]["en"];
+    final image = proposal["category"]["image"];
+    final expiredTime = proposal["expiry_time"];
+    final type = proposal["type"];
+    final stores = proposal["stores"];
+
+    List<String> allClosedStatus = [
+      QueueStatus.EXPIRED.name,
+      QueueStatus.REJECTED.name,
+      "cancelled",
+    ];
+
     DateTime now = DateTime.now();
     bool isExpired = now.isAfter(DateTime.parse(expiredTime));
+    final queueStatus =
+        isExpired ? QueueStatus.EXPIRED.name : proposal["rfp_status"];
+
     return Container(
-      width: 312,
+      width: 300,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300]!),
           color: Colors.white,
           borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding:
+            const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -437,7 +437,7 @@ class RequestBody extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundImage: CachedNetworkImageProvider(image),
+                      backgroundImage: CachedNetworkImageProvider(image ?? ""),
                     ),
                     Container(
                         width: 80,
@@ -499,17 +499,9 @@ class RequestBody extends StatelessWidget {
                                                             : "",
                               ),
                             ),
-                            SizedBox(
-                              width: 80,
-                            ),
-                            Visibility(
-                                child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ))
                           ],
                         ),
-                        Text("Request #120"),
+                        Text("Request #${proposalId}"),
                         Text(formatTime(currentTime)),
                         Text(capitalize(type),
                             style: TextStyle(fontWeight: FontWeight.bold)),
@@ -520,35 +512,57 @@ class RequestBody extends StatelessWidget {
                 ),
               ],
             ),
-            Visibility(
-                visible: false, //TODO: This is for the divider
-                child: Center(child: Text("No more offer"))),
-            ListTile(
-              leading: Icon(Icons.lock_clock),
-              title: Text("56h:08m:23s"),
-            ),
-            Center(child: Text("Offer recieved (12)")),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Container(
-                      height: 50,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) => SizedBox(
-                                width: 2,
-                              ),
-                          itemBuilder: (context, index) => CircleAvatar(),
-                          itemCount: 4)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text("+2")
-              ],
-            )
+            !allClosedStatus.contains(queueStatus) && !isExpired
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Visibility(
+                            visible: false, //TODO: This is for the divider
+                            child: Center(child: Text("No more offer"))),
+                        Icon(Icons.lock_clock),
+                        Text(formatTime(expiredTime)),
+                        Spacer()
+                      ],
+                    ),
+                  )
+                : SizedBox(height: 30),
+            Center(
+                child: Text(stores.length > 0
+                    ? "Offer received (${stores.length})"
+                    : "No offer received")),
+            stores.length > 0
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                            height: 50,
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                separatorBuilder: (context, index) => SizedBox(
+                                      width: 2,
+                                    ),
+                                itemBuilder: (context, index) => CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                              stores[index]["image"] ?? ""),
+                                    ),
+                                itemCount:
+                                    stores.length > 5 ? 5 : stores.length)),
+                      ),
+                      stores.length > 5
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("+2"),
+                            )
+                          : Container()
+                    ],
+                  )
+                : Container()
           ],
         ),
       ),

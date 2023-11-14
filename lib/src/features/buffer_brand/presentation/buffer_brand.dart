@@ -82,7 +82,7 @@ class BufferBrand extends ConsumerWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Text("Offers may be recieved from"),
+                          child: Text("Offers may be received from"),
                         ),
                         SizedBox(height: 10),
                         Padding(
