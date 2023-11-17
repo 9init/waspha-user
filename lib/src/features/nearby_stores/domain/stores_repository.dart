@@ -63,8 +63,8 @@ Future<LocationData> getLocation() async {
     _serviceEnabled = await location.requestService();
     if (!_serviceEnabled) {
       return LocationData.fromMap({
-        "latitude": 0.0,
-        "longitude": 0.0,
+        "latitude": 30.0444,
+        "longitude": 31.2357,
       });
     }
   }
@@ -74,13 +74,21 @@ Future<LocationData> getLocation() async {
     _permissionGranted = await location.requestPermission();
     if (_permissionGranted != PermissionStatus.granted) {
       return LocationData.fromMap({
-        "latitude": 0.0,
-        "longitude": 0.0,
+        "latitude": 30.0444,
+        "longitude": 31.2357,
       });
     }
   }
 
-  _locationData = await location.getLocation();
+  _locationData = await Future.any([
+    location.getLocation(),
+    Future.delayed(
+        Duration(seconds: 5),
+        () => LocationData.fromMap({
+              "latitude": 30.0444,
+              "longitude": 31.2357,
+            })),
+  ]);
   return _locationData;
 }
 

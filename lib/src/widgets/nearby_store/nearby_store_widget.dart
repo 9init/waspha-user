@@ -108,6 +108,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
               _onMapCreated(controller);
               widget.onMapCreated?.call(controller);
             },
+            myLocationButtonEnabled: false,
             myLocationEnabled: false,
             zoomGesturesEnabled: true,
             scrollGesturesEnabled: true,
@@ -488,12 +489,10 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                     .read(isPickingLocationProvider.notifier)
                                     .update((state) => false);
 
-                                await ref
-                                    .refresh(getNearbyStoresProvider(
-                                        context: context,
-                                        isBottomSheetOpen: ValueNotifier(
-                                            widget.isBottomSheetOpen)))
-                                    .value;
+                                ref.invalidate(getNearbyStoresProvider(
+                                    context: context,
+                                    isBottomSheetOpen:
+                                        widget.isBottomSheetOpen));
                               },
                               child: Text("Confirm Location")),
                         ),

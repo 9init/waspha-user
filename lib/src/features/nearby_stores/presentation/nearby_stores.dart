@@ -40,7 +40,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       double? longitude =
           ref.watch(locationStreamProvider).asData?.value.longitude;
 
-      if (latitude == null && longitude == null) {
+      if (latitude == null || longitude == null) {
         return Container();
       }
 
