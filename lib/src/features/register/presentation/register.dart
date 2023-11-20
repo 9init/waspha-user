@@ -43,7 +43,6 @@ class RegisterScreen extends ConsumerWidget {
         child: Column(
           children: [
             AuthContainer(
-              height: 150,
               title: "Sign up now",
               text: "Please fill the details",
               titleSize: 30,

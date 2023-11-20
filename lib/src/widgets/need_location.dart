@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,9 +11,29 @@ import 'package:waspha/src/features/profile/presentation/profile.dart';
 class NeedLocationPermission extends StatelessWidget {
   const NeedLocationPermission({super.key});
   @override
+  Future<void> showCustomTrackingDialog(BuildContext context) async =>
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Dear User'),
+          content: const Text(
+            'We care about your privacy and data security.'
+            'We use user tracking to provide personalized advertising.'
+            'By allowing tracking, you help us improve your experience.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Continue'),
+            ),
+          ],
+        ),
+      );
+
   Widget build(BuildContext context) {
     print("hello");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
           child: Padding(
@@ -38,7 +59,20 @@ class NeedLocationPermission extends StatelessWidget {
                       onPressed: () async {
                         PermissionStatus status =
                             await Permission.location.request();
+
                         if (status.isGranted) {
+                          // If the system can show an authorization request dialog
+                          if (await AppTrackingTransparency
+                                  .trackingAuthorizationStatus ==
+                              TrackingStatus.notDetermined) {
+                            // Wait for dialog popping animation
+                            await Future.delayed(
+                                const Duration(milliseconds: 200));
+                            // Request system's tracking authorization dialog
+                            await AppTrackingTransparency
+                                .requestTrackingAuthorization();
+                          }
+
                           runApp(const ProviderScope(child: MyApp()));
                         }
                       },
