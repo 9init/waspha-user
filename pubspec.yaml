@@ -69,6 +69,7 @@ dependencies:
   flutter_credit_card: ^4.0.1
   credit_card_type_detector: ^3.0.0
   permission_handler: ^11.0.1
+  flutter_contacts: ^1.1.7+1
 
 
 dev_dependencies:
