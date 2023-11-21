@@ -9,7 +9,7 @@ class ContactList extends ConsumerWidget {
   final List<Contact> data;
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Choose contact'),
