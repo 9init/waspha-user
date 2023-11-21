@@ -121,11 +121,11 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
             child: Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 25),
-                child: Icon(
-                  Icons.location_on,
-                  size: 50,
-                  color: Colors.red,
+                padding: const EdgeInsets.only(bottom: 35),
+                child: Image(
+                  image:
+                      AssetImage("assets/images/map_markers/destination.png"),
+                  width: 50,
                 ),
               ),
             ),

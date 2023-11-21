@@ -65,10 +65,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
                     rotateGesturesEnabled: true,
                     zoomControlsEnabled: false,
                   ),
-                  Image(
-                    image:
-                        AssetImage("assets/images/map_markers/destination.png"),
-                  ),
+                  Icon(Icons.location_on, color: Colors.red, size: 50),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(

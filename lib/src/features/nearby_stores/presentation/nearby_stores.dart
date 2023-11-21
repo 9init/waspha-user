@@ -44,17 +44,23 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         return Container();
       }
 
-      if (!isPicking) {
-        locationMarkers.removeWhere((item) => item.markerId.value == 'user');
-        locationMarkers.add(
-          Marker(
-            markerId: MarkerId("user"),
-            position: markerLocation,
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          ),
-        );
-      }
+      Future(() async {
+        if (!isPicking) {
+          locationMarkers.removeWhere((item) => item.markerId.value == 'user');
+          locationMarkers.add(
+            Marker(
+              markerId: MarkerId("user"),
+              position: markerLocation,
+              icon: BitmapDescriptor.fromBytes(
+                await assetToUint8List(
+                  "assets/images/map_markers/location.png",
+                  135,
+                ),
+              ),
+            ),
+          );
+        }
+      });
 
       return nearbyStores.when(data: (data) {
         markers.clear();
@@ -70,7 +76,8 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         for (var store in stores.toSet()) {
           final image = ref.watch(imageBytesProvider(store.image)).value;
 
-          markers.add(Marker(
+          markers.add(
+            Marker(
               icon: image != null
                   ? image
                   : BitmapDescriptor.defaultMarkerWithHue(
@@ -78,8 +85,11 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
               markerId: MarkerId(store.id.toString()),
               position: LatLng(store.lat, store.lng),
               infoWindow: InfoWindow(
-                  title: store.business_name["en"],
-                  snippet: store.average_rating.toString())));
+                title: store.business_name["en"],
+                snippet: store.average_rating.toString(),
+              ),
+            ),
+          );
         }
         return NearbyStoreMap(
             isBottomSheetOpen: isBottomSheetOpen,
