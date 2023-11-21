@@ -94,37 +94,42 @@ class LikesBody extends StatelessWidget {
                         builder: (context, ref, child) {
                           final locations = ref.watch(getLocationsProvider);
                           return locations.when(data: (data) {
-                            return Container(
-                              height: 150,
-                              child: ListView.builder(
-                                itemCount: data.length,
-                                shrinkWrap: true,
-                                itemBuilder: ((context, index) {
-                                  return Dismissible(
-                                    key: UniqueKey(),
-                                    onDismissed: (direction) {
-                                      print(data[index]);
-                                      ref.read(deleteLocationProvider(
-                                          id: data[index].id));
-                                      data.removeAt(index);
-                                    },
-                                    child: ListTile(
-                                      onTap: () => context.pushNamed(
-                                          "EditLocation",
-                                          pathParameters: {
-                                            "title":
+                            return data.isEmpty
+                                ? Center(
+                                    child: Text("No address found"),
+                                  )
+                                : Container(
+                                    height: 150,
+                                    child: ListView.builder(
+                                      itemCount: data.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: ((context, index) {
+                                        return Dismissible(
+                                          key: UniqueKey(),
+                                          onDismissed: (direction) {
+                                            print(data[index]);
+                                            ref.read(deleteLocationProvider(
+                                                id: data[index].id));
+                                            data.removeAt(index);
+                                          },
+                                          child: ListTile(
+                                            onTap: () => context.pushNamed(
+                                                "EditLocation",
+                                                pathParameters: {
+                                                  "title": data[index]
+                                                          .location_string ??
+                                                      "",
+                                                }),
+                                            leading: Icon(Icons.location_on),
+                                            title: Text(
                                                 data[index].location_string ??
-                                                    "",
-                                          }),
-                                      leading: Icon(Icons.location_on),
-                                      title: Text(
-                                          data[index].location_string ?? ""),
-                                      trailing: Icon(Icons.arrow_forward),
+                                                    ""),
+                                            trailing: Icon(Icons.arrow_forward),
+                                          ),
+                                        );
+                                      }),
                                     ),
                                   );
-                                }),
-                              ),
-                            );
                           }, error: (e, s) {
                             print("Location Error $e $s");
                             return Text("Error");
@@ -187,40 +192,46 @@ class LikesBody extends StatelessWidget {
                         final favStores = ref.watch(getFavStoresProvider);
                         return favStores.when(
                             data: (data) {
-                              return Center(
-                                child: Container(
-                                  width: 400,
-                                  height: 200,
-                                  child: data.isEmpty
-                                      ? Center(
-                                          child: Text("No providers found"),
-                                        )
-                                      : ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          itemCount: data.length,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return MenuCard(
-                                              imageURl: data[index]["store"]
-                                                      ["image"] ??
-                                                  "",
-                                              companyName: data[index]["store"]
-                                                  ["business_name"]["en"],
-                                              width: 0.8,
-                                              favWidth: 200,
-                                              isProvider: true,
-                                              onFavored: () async {
-                                                ref.read(deleteStoreFavProvider(
-                                                    id: data[index]["store"]
-                                                        ["id"]));
-                                                ref.invalidate(
-                                                    getFavStoresProvider);
-                                              },
-                                              isFavored: true,
-                                            );
-                                          }),
-                                ),
-                              );
+                              return data.isEmpty
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: Center(
+                                        child: Text("No providers found"),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Container(
+                                        width: 400,
+                                        height: 200,
+                                        child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: data.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return MenuCard(
+                                                imageURl: data[index]["store"]
+                                                        ["image"] ??
+                                                    "",
+                                                companyName: data[index]
+                                                        ["store"]
+                                                    ["business_name"]["en"],
+                                                width: 0.8,
+                                                favWidth: 200,
+                                                isProvider: true,
+                                                onFavored: () async {
+                                                  ref.read(
+                                                      deleteStoreFavProvider(
+                                                          id: data[index]
+                                                              ["store"]["id"]));
+                                                  ref.invalidate(
+                                                      getFavStoresProvider);
+                                                },
+                                                isFavored: true,
+                                              );
+                                            }),
+                                      ),
+                                    );
                             },
                             error: (e, s) {
                               return Text("Error");
