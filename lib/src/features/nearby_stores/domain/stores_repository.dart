@@ -5,6 +5,7 @@ import 'package:bitmap/bitmap.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:location/location.dart';
 import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
+import 'package:image/image.dart' as img;
 
 import '../../../routes/routes.dart';
 import '../../get_location/domain/get_location_domain.dart';
@@ -216,6 +218,44 @@ Future<String> getCountryCode(ref) async {
 final getCountryCodeProvider = FutureProvider<String>((ref) async {
   return await getCountryCode(ref);
 });
+
+Uint8List addPaddingToImage(Uint8List bitmap, int topPadding, int rightPadding,
+    int bottomPadding, int leftPadding) {
+  // Decode the bitmap
+  img.Image image = img.decodeImage(bitmap)!;
+
+  // Calculate the new width and height with padding
+  int newWidth = image.width + leftPadding + rightPadding;
+  int newHeight = image.height + topPadding + bottomPadding;
+
+  // Create a new image with added padding
+  img.Image newImage = img.Image(width: newWidth, height: newHeight);
+
+  newImage = img.fill(newImage, color: img.ColorUint8.rgba(0, 0, 0, 0));
+
+  // Copy pixels from the original image to the new image
+  for (int y = 0; y < image.height; y++) {
+    for (int x = 0; x < image.width; x++) {
+      final pixelColor = image.getPixel(x, y);
+      newImage.setPixel(x + leftPadding, y + topPadding, pixelColor);
+    }
+  }
+
+  // Encode the new image to Uint8List
+  Uint8List result = Uint8List.fromList(img.encodePng(newImage)!);
+
+  return result;
+}
+
+Future<Uint8List> assetToUint8List(String assetLocation, int width) async {
+  ByteData data = await rootBundle.load(assetLocation);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+      .buffer
+      .asUint8List();
+}
 
 Future<Uint8List> svgToBitMap(String svg_path, BuildContext context) async {
   String svgString = await DefaultAssetBundle.of(context).loadString(svg_path);

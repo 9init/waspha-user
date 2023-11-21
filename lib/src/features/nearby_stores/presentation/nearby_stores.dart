@@ -40,18 +40,20 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       double? longitude =
           ref.watch(locationStreamProvider).asData?.value.longitude;
 
-      print("lat $latitude, lng $longitude");
       if (latitude == null || longitude == null) {
         return Container();
       }
 
       if (!isPicking) {
         locationMarkers.removeWhere((item) => item.markerId.value == 'user');
-        locationMarkers.add(Marker(
+        locationMarkers.add(
+          Marker(
             markerId: MarkerId("user"),
             position: markerLocation,
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueBlue)));
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          ),
+        );
       }
 
       return nearbyStores.when(data: (data) {
@@ -104,15 +106,18 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                 return;
               }
 
-              locationMarkers.add(Marker(
+              locationMarkers.add(
+                Marker(
                   markerId: MarkerId("gpsLocation"),
                   position: LatLng(await latitude, await longitude),
                   infoWindow: InfoWindow(
                       title: "Your Location", snippet: "You are here"),
-                  icon: BitmapDescriptor.fromBytes(
-                      await svgToBitMap(
-                          "assets/images/nearby/userLocation.svg", context),
-                      size: Size(110, 110))));
+                  icon: BitmapDescriptor.fromBytes(await assetToUint8List(
+                    "assets/images/map_markers/user.png",
+                    135,
+                  )),
+                ),
+              );
             },
             message: "Loading...",
             categoryName: [],
