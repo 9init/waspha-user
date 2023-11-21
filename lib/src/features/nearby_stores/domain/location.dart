@@ -9,13 +9,14 @@ class PersonLocationProvider extends ChangeNotifier {
   PersonLocationProvider() {
     _init();
   }
-  location.Location _location = new location.Location();
+
+  final location.Location _location = location.Location();
   location.PermissionStatus _permissionGranted =
       location.PermissionStatus.denied;
   StreamController<location.LocationData> currentLocation =
       StreamController.broadcast();
 
-  _checkPermission() async {
+  Future<void> _checkPermission() async {
     _permissionGranted = await _location.hasPermission();
     if (_permissionGranted == location.PermissionStatus.denied) {
       _permissionGranted = await _location.requestPermission();
@@ -25,9 +26,21 @@ class PersonLocationProvider extends ChangeNotifier {
     }
   }
 
-  _init() {
-    _checkPermission();
-    currentLocation.addStream(_location.onLocationChanged);
+  Future<void> _init() async {
+    await _checkPermission();
+
+    final locationData = await Future.any([
+      _location.getLocation(),
+      Future.delayed(
+        Duration(microseconds: 1500), // One second and half
+        () => location.LocationData.fromMap({
+          'latitude': 30.0444,
+          'longitude': 31.2357,
+        }),
+      ),
+    ]);
+
+    currentLocation.add(locationData);
   }
 }
 
