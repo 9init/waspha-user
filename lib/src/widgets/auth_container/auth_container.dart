@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waspha/src/colors/colors.dart';
 
 import '../../features/login/presentation/custom_clip.dart';
 
@@ -6,14 +7,12 @@ class AuthContainer extends StatelessWidget {
   const AuthContainer({
     super.key,
     this.text,
-    this.height = 250,
-    this.title = "We are \n WASPHA",
+    this.title = "We are\nWASPHA",
     this.titleSize = 40,
   });
 
   final String? text;
   final String title;
-  final double height;
   final double titleSize;
 
   @override
@@ -25,15 +24,12 @@ class AuthContainer extends StatelessWidget {
           clipper: CurveClipper(),
           child: Container(
             width: double.infinity,
-            height: height,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: [
-                    Color(0xFF002286),
-                    Color.fromARGB(255, 161, 75, 95),
-                  ]),
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [WasphaColors.tertiary, WasphaColors.secondary],
+              ),
             ),
             child: SafeArea(
               child: Padding(
@@ -49,12 +45,13 @@ class AuthContainer extends StatelessWidget {
                           fontSize: titleSize,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     text != null
                         ? Text(text!,
-                            style: TextStyle(color: Colors.white, fontSize: 15))
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 15))
                         : Container(),
                   ],
                 ),
@@ -67,7 +64,7 @@ class AuthContainer extends StatelessWidget {
           child: Image.asset(
             "assets/images/onboarding/atom.png",
             scale: 1.2,
-            opacity: AlwaysStoppedAnimation(0.2),
+            opacity: const AlwaysStoppedAnimation(0.2),
           ),
         ),
       ],

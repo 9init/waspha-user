@@ -60,13 +60,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBS6oVVmQ07hPxsWzZ8jTw6DCJoCo9yBfo',
-    appId: '1:254995855199:ios:d050a581362958d6',
+    appId: '1:254995855199:ios:e6d1b915394ce908f568ea',
     messagingSenderId: '254995855199',
     projectId: 'waspha-b0ef3',
     databaseURL: 'https://waspha-b0ef3.firebaseio.com',
     storageBucket: 'waspha-b0ef3.appspot.com',
     androidClientId: '254995855199-386bas36hm6u9m8s9bc2q4mqq6a4r6ns.apps.googleusercontent.com',
-    iosClientId: '254995855199-sam3rvqjjjk4bgtc213j2c3hbmqbgh37.apps.googleusercontent.com',
-    iosBundleId: 'com.waspha.user',
+    iosBundleId: 'com.waspha.user.sg',
   );
 }

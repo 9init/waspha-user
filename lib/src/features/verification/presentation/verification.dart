@@ -34,7 +34,6 @@ class VerificationScreen extends HookConsumerWidget {
           child: Column(
             children: [
               AuthContainer(
-                height: 150,
                 title: "Verification",
                 titleSize: 30,
               ),
