@@ -11,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
+import 'package:waspha/src/features/likes/presentation/contact_list.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 import '../domain/likes_domain.dart';
@@ -29,9 +30,6 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   TextEditingController _titleController = TextEditingController();
 
   TextEditingController _landmarkController = TextEditingController();
-
-  PhoneController _phoneController =
-      PhoneController(PhoneNumber(isoCode: IsoCode.KW, nsn: ""));
 
   final List<String> iconsImages = [
     "assets/images/address/home.svg",
@@ -77,8 +75,19 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
         });
   }
 
+  PhoneController _phoneController = PhoneController(
+    PhoneNumber(
+      isoCode: IsoCode.KW,
+      nsn: "",
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(getContactProvider, (prev, next) {
+      _phoneController.value = PhoneNumber(isoCode: IsoCode.KW, nsn: next);
+    });
+
     final isMeChecked = useState(true);
     final isOtherChecked = useState(false);
     return Scaffold(
@@ -322,9 +331,11 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                               .requestPermission()) {
                                             List<Contact> contacts =
                                                 await FlutterContacts
-                                                    .getContacts();
-                                            print(
-                                                "Contact length: ${contacts}");
+                                                    .getContacts(
+                                              withProperties: true,
+                                            );
+                                            context.push('/contacts',
+                                                extra: contacts);
                                           }
                                         },
                                         child: Container(
@@ -414,6 +425,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                             ? "Choose location"
                                                             : details[
                                                                 "address"];
+
                                                     return Text(text);
                                                   }()
                                                 ],
