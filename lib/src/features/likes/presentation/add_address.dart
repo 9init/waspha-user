@@ -1,30 +1,26 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
-import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 import '../domain/likes_domain.dart';
 import 'choose_location.dart';
 import 'contact_list.dart';
 
-class AddAddressScreen extends StatefulHookConsumerWidget {
+class AddAddressScreen extends StatefulHookWidget {
   AddAddressScreen({super.key});
 
   @override
-  ConsumerState<AddAddressScreen> createState() => _AddAddressScreenState();
+  State<AddAddressScreen> createState() => _AddAddressScreenState();
 }
 
-class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
+class _AddAddressScreenState extends State<AddAddressScreen> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
@@ -40,58 +36,10 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
     "assets/images/address/beach.svg"
   ];
   Map<int, bool> homeChecked = {0: true, 1: false, 2: false};
-
-  _initMap(WidgetRef ref) {
-    return FutureBuilder(
-      future: ref.read(userLocationProvider.future),
-      builder: (BuildContext context, AsyncSnapshot<LatLng> data) {
-        final location = data.data;
-        if (location == null) return Center(child: CircularProgressIndicator());
-
-        final Completer<GoogleMapController> _controller =
-            Completer<GoogleMapController>();
-
-        _onMapCreated(GoogleMapController controller) {
-          // TODO - Check whhy this is not working
-          controller.setMapStyle(
-              '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
-          _controller.complete(controller);
-        }
-
-        CameraPosition _kGooglePlex = CameraPosition(
-          target: location,
-          zoom: 14.4746,
-        );
-
-        return AbsorbPointer(
-          absorbing: true,
-          child: GoogleMap(
-            initialCameraPosition: _kGooglePlex,
-            myLocationButtonEnabled: false,
-            onMapCreated: _onMapCreated,
-            markers: Set.from(
-              [Marker(markerId: MarkerId("location"), position: location)],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  initState() {
-    super.initState();
-    final contactNumber = ref.read(getContactProvider);
-    if (contactNumber != "") {
-      _phoneController =
-          PhoneController(PhoneNumber(isoCode: IsoCode.KW, nsn: contactNumber));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isMeChecked = useState(true);
     final isOtherChecked = useState(false);
-
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -107,7 +55,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -119,6 +67,8 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                   height: 20,
                 ),
                 Container(
+                  width: 348,
+                  height: 750,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(18),
@@ -214,13 +164,11 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                           return null;
                                         },
                                         decoration: InputDecoration(
-                                          labelText: "Address Title",
-                                          hintText: "Enter title",
-                                          border: UnderlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
+                                            labelText: "Address Title",
+                                            hintText: "Enter title",
+                                            border: UnderlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
                                       ),
                                     ),
                                     SizedBox(
@@ -339,6 +287,14 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                               );
                                               context.push('/contacts',
                                                   extra: contacts);
+                                              setState(() {
+                                                final contactNumber = ref
+                                                    .read(getContactProvider);
+                                                _phoneController.value =
+                                                    PhoneNumber(
+                                                        isoCode: IsoCode.KW,
+                                                        nsn: contactNumber);
+                                              });
                                             }
                                           },
                                           child: Container(
@@ -374,13 +330,12 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                               return null;
                                             },
                                             decoration: InputDecoration(
-                                              labelText: "Landmark",
-                                              hintText: "Landmark",
-                                              border: UnderlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
+                                                labelText: "Landmark",
+                                                hintText: "Landmark",
+                                                border: UnderlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10))),
                                           ),
                                         ),
                                         Icon(Icons.info)
@@ -396,46 +351,28 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                             fontSize: 16,
                                           )),
                                     ),
-                                    InkWell(
+                                    GestureDetector(
                                       onTap: () {
                                         context.push('/choose_location');
                                       },
-                                      child: Container(
-                                        height: 100,
-                                        child: Stack(
-                                          children: [
-                                            _initMap(ref),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 30,
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Location"),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  () {
-                                                    final details = ref.watch(
-                                                        getChoosenLocationProvider);
-
-                                                    final text =
-                                                        details["address"] == ""
-                                                            ? "Choose location"
-                                                            : details[
-                                                                "address"];
-                                                    return Text(text);
-                                                  }()
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          final details = ref.watch(
+                                              getChoosenLocationProvider);
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              details["address"] != ""
+                                                  ? Expanded(
+                                                      child: Text(
+                                                          details["address"]))
+                                                  : Text(
+                                                      "Choose location on map"),
+                                              Icon(Icons.location_on)
+                                            ],
+                                          );
+                                        },
                                       ),
                                     ),
                                     SizedBox(
@@ -444,53 +381,52 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                     Consumer(
                                       builder: (context, ref, child) {
                                         return SizedBox(
-                                          height: 50,
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: MaterialStatePropertyAll(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color(0xFF663399)),
-                                            ),
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                ref
-                                                    .read(addLocationProvider(
-                                                      landmark:
-                                                          _landmarkController
-                                                              .text,
-                                                      title:
-                                                          _titleController.text,
-                                                      phone: _phoneController
-                                                          .value!.international
-                                                          .toString(),
-                                                    ).future)
-                                                    .then(
-                                                      (value) =>
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                        SnackBar(
-                                                          content: Text(value),
-                                                        ),
-                                                      ),
-                                                    );
-                                              }
-                                            },
-                                            child: Text(
-                                              "Save",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 17),
-                                            ),
-                                          ),
-                                        );
+                                            height: 50,
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStatePropertyAll(
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15))),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Color(0xFF663399)),
+                                                ),
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    ref
+                                                        .read(
+                                                            addLocationProvider(
+                                                          landmark:
+                                                              _landmarkController
+                                                                  .text,
+                                                          title:
+                                                              _titleController
+                                                                  .text,
+                                                          phone:
+                                                              _phoneController
+                                                                  .value!
+                                                                  .international
+                                                                  .toString(),
+                                                        ).future)
+                                                        .then((value) =>
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    SnackBar(
+                                                                        content:
+                                                                            Text(value))));
+                                                  }
+                                                },
+                                                child: Text("Save",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 17))));
                                       },
                                     )
                                   ],
