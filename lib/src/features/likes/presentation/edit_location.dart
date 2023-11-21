@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -164,19 +165,30 @@ class EditAddressScreen extends HookWidget {
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
-                                  child: Container(
-                                      width: 244,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF663399),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Pick from contact list",
-                                          style: TextStyle(color: Colors.white),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      if (await FlutterContacts
+                                          .requestPermission()) {
+                                        List<Contact> contacts =
+                                            await FlutterContacts.getContacts();
+                                      }
+                                    },
+                                    child: Container(
+                                        width: 244,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF663399),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                      )),
+                                        child: Center(
+                                          child: Text(
+                                            "Pick from contact list",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        )),
+                                  ),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
