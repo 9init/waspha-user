@@ -181,9 +181,11 @@ class MenuCard extends StatelessWidget {
                               : MainAxisAlignment.start,
                           children: [
                             !isOffer ? Icon(Icons.abc) : Container(),
-                            FittedBox(
+                            Container(
+                              width: 130,
                               child: Text(
                                 companyName,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 17),
                               ),
