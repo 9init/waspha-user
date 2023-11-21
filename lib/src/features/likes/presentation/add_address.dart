@@ -15,6 +15,7 @@ import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart'
 
 import '../domain/likes_domain.dart';
 import 'choose_location.dart';
+import 'contact_list.dart';
 
 class AddAddressScreen extends StatefulHookConsumerWidget {
   AddAddressScreen({super.key});
@@ -42,45 +43,55 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
   _initMap(WidgetRef ref) {
     return FutureBuilder(
-        future: ref.read(userLocationProvider.future),
-        builder: (BuildContext context, AsyncSnapshot<LatLng> data) {
-          final location = data.data;
-          if (location == null)
-            return Center(child: CircularProgressIndicator());
+      future: ref.read(userLocationProvider.future),
+      builder: (BuildContext context, AsyncSnapshot<LatLng> data) {
+        final location = data.data;
+        if (location == null) return Center(child: CircularProgressIndicator());
 
-          final Completer<GoogleMapController> _controller =
-              Completer<GoogleMapController>();
+        final Completer<GoogleMapController> _controller =
+            Completer<GoogleMapController>();
 
-          _onMapCreated(GoogleMapController controller) {
-            // TODO - Check whhy this is not working
-            controller.setMapStyle(
-                '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
-            _controller.complete(controller);
-          }
+        _onMapCreated(GoogleMapController controller) {
+          // TODO - Check whhy this is not working
+          controller.setMapStyle(
+              '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
+          _controller.complete(controller);
+        }
 
-          CameraPosition _kGooglePlex = CameraPosition(
-            target: location,
-            zoom: 14.4746,
-          );
+        CameraPosition _kGooglePlex = CameraPosition(
+          target: location,
+          zoom: 14.4746,
+        );
 
-          return AbsorbPointer(
-            absorbing: true,
-            child: GoogleMap(
-              initialCameraPosition: _kGooglePlex,
-              myLocationButtonEnabled: false,
-              onMapCreated: _onMapCreated,
-              markers: Set.from(
-                [Marker(markerId: MarkerId("location"), position: location)],
-              ),
+        return AbsorbPointer(
+          absorbing: true,
+          child: GoogleMap(
+            initialCameraPosition: _kGooglePlex,
+            myLocationButtonEnabled: false,
+            onMapCreated: _onMapCreated,
+            markers: Set.from(
+              [Marker(markerId: MarkerId("location"), position: location)],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
+  }
+
+  initState() {
+    super.initState();
+    final contactNumber = ref.read(getContactProvider);
+    if (contactNumber != "") {
+      _phoneController =
+          PhoneController(PhoneNumber(isoCode: IsoCode.KW, nsn: contactNumber));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isMeChecked = useState(true);
     final isOtherChecked = useState(false);
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -314,36 +325,40 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                     SizedBox(
                                       height: 8,
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          if (await FlutterContacts
-                                              .requestPermission()) {
-                                            List<Contact> contacts =
-                                                await FlutterContacts
-                                                    .getContacts();
-                                            print(
-                                                "Contact length: ${contacts}");
-                                          }
-                                        },
-                                        child: Container(
-                                            width: 244,
-                                            height: 44,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF663399),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Pick from contact list",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                    Consumer(builder: (context, ref, child) {
+                                      return Align(
+                                        alignment: Alignment.centerRight,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            if (await FlutterContacts
+                                                .requestPermission()) {
+                                              List<Contact> contacts =
+                                                  await FlutterContacts
+                                                      .getContacts(
+                                                withProperties: true,
+                                              );
+                                              context.push('/contacts',
+                                                  extra: contacts);
+                                            }
+                                          },
+                                          child: Container(
+                                              width: 244,
+                                              height: 44,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF663399),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
-                                            )),
-                                      ),
-                                    ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Pick from contact list",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              )),
+                                        ),
+                                      );
+                                    }),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
