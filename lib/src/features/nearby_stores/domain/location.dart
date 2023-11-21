@@ -27,7 +27,7 @@ class PersonLocationProvider extends ChangeNotifier {
   }
 
   Future<void> _init() async {
-    await _checkPermission();
+    // await _checkPermission();
 
     final locationData = await Future.any([
       _location.getLocation(),

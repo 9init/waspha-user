@@ -1,10 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/get_location/domain/get_location_domain.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
@@ -24,6 +26,73 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   final List<Marker> markers = [];
   List menuCategories = [];
   final List<Marker> locationMarkers = [];
+
+  Future<void> showCustomTrackingDialog(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Dear User'),
+        content: const Text(
+          'We care about your privacy and data security.'
+          'We use user tracking to provide personalized advertising.'
+          'By allowing tracking, you help us improve your experience.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Permission.location.request();
+              context.pop();
+            },
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> showPermissionDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: const Text("Submit Exam"),
+        content: Text(
+            "We use your location to find nearby stores, categories and products for you."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.pop();
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Permission.location.request();
+            },
+            child: const Text(
+              "Allow",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Future.delayed(Duration(seconds: 1), () async {
+    //   bool isGranted = await isLocationGranted();
+    //   if (isGranted) return;
+
+    //   if (Platform.isIOS) {
+    //     showCustomTrackingDialog(context);
+    //   } else {
+    //     showPermissionDialog(context);
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {

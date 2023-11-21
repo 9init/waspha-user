@@ -11,6 +11,7 @@ import 'package:geocoder2/geocoder2.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
@@ -57,24 +58,12 @@ Future<LocationData> getLocation() async {
   Location location = new Location();
 
   bool _serviceEnabled;
-  PermissionStatus _permissionGranted;
   LocationData _locationData;
 
   _serviceEnabled = await location.serviceEnabled();
   if (!_serviceEnabled) {
     _serviceEnabled = await location.requestService();
     if (!_serviceEnabled) {
-      return LocationData.fromMap({
-        "latitude": 30.0444,
-        "longitude": 31.2357,
-      });
-    }
-  }
-
-  _permissionGranted = await location.hasPermission();
-  if (_permissionGranted == PermissionStatus.denied) {
-    _permissionGranted = await location.requestPermission();
-    if (_permissionGranted != PermissionStatus.granted) {
       return LocationData.fromMap({
         "latitude": 30.0444,
         "longitude": 31.2357,

@@ -14,10 +14,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   bool isGranted = await isLocationGranted();
-  if (isGranted) {
-    runApp(const ProviderScope(child: MyApp()));
-  } else {
-    runApp(NeedLocationPermission());
-  }
+  // if (isGranted) {
+  runApp(const ProviderScope(child: MyApp()));
+  // } else {
+  //   runApp(NeedLocationPermission());
+  // }
   await CacheHelper.init();
 }
