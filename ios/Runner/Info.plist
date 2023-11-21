@@ -38,8 +38,8 @@
 		<string>This app uses App Tracking Transparency to collect data for personalized advertising
 			and to improve your experience.</string>
 		<key>NSContactsUsageDescription</key>
-		<string>"This app needs access to your contact list to enhance your experience and provide
-			you with personalized features." </string>
+		<string>This app needs access to your contact list to enhance your experience and provide
+			you with personalized features.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
 		<key>UILaunchStoryboardName</key>
