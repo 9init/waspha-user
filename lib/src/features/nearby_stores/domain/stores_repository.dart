@@ -14,6 +14,7 @@ import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:waspha/src/features/nearby_stores/domain/location.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 import 'package:image/image.dart' as img;
 
@@ -52,35 +53,6 @@ Stream<dynamic> getNearbyStoresStream(
       isBottomSheetOpen: isBottomSheetOpen,
     );
   }
-}
-
-Future<LocationData> getLocation() async {
-  Location location = new Location();
-
-  bool _serviceEnabled;
-  LocationData _locationData;
-
-  _serviceEnabled = await location.serviceEnabled();
-  if (!_serviceEnabled) {
-    _serviceEnabled = await location.requestService();
-    if (!_serviceEnabled) {
-      return LocationData.fromMap({
-        "latitude": 30.0444,
-        "longitude": 31.2357,
-      });
-    }
-  }
-
-  _locationData = await Future.any([
-    location.getLocation(),
-    Future.delayed(
-        Duration(seconds: 5),
-        () => LocationData.fromMap({
-              "latitude": 30.0444,
-              "longitude": 31.2357,
-            })),
-  ]);
-  return _locationData;
 }
 
 @riverpod

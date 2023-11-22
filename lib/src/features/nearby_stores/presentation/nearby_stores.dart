@@ -82,16 +82,17 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   void initState() {
     super.initState();
 
-    // Future.delayed(Duration(seconds: 1), () async {
-    //   bool isGranted = await isLocationGranted();
-    //   if (isGranted) return;
+    Future.delayed(Duration(seconds: 1), () async {
+      bool isGranted = await isLocationGranted();
+      print("IS Granted: $isGranted");
+      if (isGranted) return;
 
-    //   if (Platform.isIOS) {
-    //     showCustomTrackingDialog(context);
-    //   } else {
-    //     showPermissionDialog(context);
-    //   }
-    // });
+      if (Platform.isIOS) {
+        showCustomTrackingDialog(context);
+      } else {
+        showPermissionDialog(context);
+      }
+    });
   }
 
   @override
@@ -102,8 +103,9 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         context: context,
         isBottomSheetOpen: isBottomSheetOpen,
       ));
-      final isPicking = ref.watch(isPickingLocationProvider);
+      final isPicking = false; // ref.watch(isPickingLocationProvider);
       final markerLocation = ref.watch(getUserLocation);
+
       double? latitude =
           ref.watch(locationStreamProvider).asData?.value.latitude;
       double? longitude =

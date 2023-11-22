@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:location/location.dart';
+import 'package:waspha/src/features/nearby_stores/domain/location.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 class GetLocationMapScreen extends HookWidget {

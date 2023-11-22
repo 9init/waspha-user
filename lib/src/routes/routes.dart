@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
-import 'package:waspha/src/features/likes/presentation/contact_list.dart';
 import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
@@ -231,14 +229,6 @@ final router = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       path: '/edit_profile',
       builder: (context, state) => EditProfile(),
-    ),
-    GoRoute(
-      parentNavigatorKey: rootNavigatorKey,
-      path: '/contacts',
-      builder: (context, state) {
-        List<Contact> s = state.extra as List<Contact>;
-        return ContactList(data: s);
-      },
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
