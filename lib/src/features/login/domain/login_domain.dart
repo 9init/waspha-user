@@ -8,7 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/utils/cache_helper.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 
-
 part 'login_domain.g.dart';
 
 final accessTokenProvider = StateProvider<String>((ref) {

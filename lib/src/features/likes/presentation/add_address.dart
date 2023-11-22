@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
- 
+
 import 'dart:async';
- 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -13,23 +13,23 @@ import 'package:phone_form_field/phone_form_field.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/likes/presentation/contact_list.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
- 
+
 import '../domain/likes_domain.dart';
 import 'choose_location.dart';
 import 'contact_list.dart';
- 
+
 class AddAddressScreen extends StatefulHookConsumerWidget {
   AddAddressScreen({super.key});
- 
+
   @override
   ConsumerState<AddAddressScreen> createState() => _AddAddressScreenState();
 }
- 
+
 class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   final _formKey = GlobalKey<FormState>();
- 
+
   TextEditingController _titleController = TextEditingController();
- 
+
   TextEditingController _landmarkController = TextEditingController();
   final List<String> iconsImages = [
     "assets/images/address/home.svg",
@@ -37,30 +37,30 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
     "assets/images/address/beach.svg"
   ];
   Map<int, bool> homeChecked = {0: true, 1: false, 2: false};
- 
+
   _initMap(WidgetRef ref) {
     return FutureBuilder(
         future: ref.read(userLocationProvider.future),
-        builder: (BuildContext context, AsyncSnapshot<LatLng> data) {
+        builder: (BuildContext context, AsyncSnapshot<LatLng?> data) {
           final location = data.data;
           if (location == null)
             return Center(child: CircularProgressIndicator());
- 
+
           final Completer<GoogleMapController> _controller =
               Completer<GoogleMapController>();
- 
+
           _onMapCreated(GoogleMapController controller) {
             // TODO - Check whhy this is not working
             controller.setMapStyle(
                 '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
             _controller.complete(controller);
           }
- 
+
           CameraPosition _kGooglePlex = CameraPosition(
             target: location,
             zoom: 14.4746,
           );
- 
+
           return AbsorbPointer(
             absorbing: true,
             child: GoogleMap(
@@ -152,7 +152,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                   return GestureDetector(
                                     onTap: () {
                                       homeChecked[index] = true;
- 
+
                                       setState(() {
                                         for (int i = 0;
                                             i < homeChecked.length;
@@ -179,7 +179,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                 setState(() {
                                                   homeChecked[index] = v!;
                                                 });
- 
+
                                                 for (int i = 0;
                                                     i < homeChecked.length;
                                                     i++) {
@@ -419,7 +419,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                   () {
                                                     final details = ref.watch(
                                                         getChoosenLocationProvider);
- 
+
                                                     final text =
                                                         details["address"] == ""
                                                             ? "Choose location"
@@ -506,4 +506,3 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
     );
   }
 }
- 

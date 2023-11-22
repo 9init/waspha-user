@@ -39,7 +39,7 @@ class BufferBrand extends ConsumerWidget {
                               markers: {
                                 Marker(
                                     markerId: MarkerId('1'),
-                                    position: data,
+                                    position: data!,
                                     icon: BitmapDescriptor.defaultMarkerWithHue(
                                         BitmapDescriptor.hueBlue)),
                                 ...stores.map((e) {

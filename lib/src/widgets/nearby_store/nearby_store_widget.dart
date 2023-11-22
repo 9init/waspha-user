@@ -70,7 +70,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final subCatsCloned = widget.categoryName.isEmpty
         ? useState([])
         : useState([...widget.categoryName[category.value].sub_categories]);
-    final userLocation = useState(LatLng(0.0, 0.0));
+    final userLocation = useState<LatLng?>(null);
     final currentLocation = ref.watch(userLocationProvider).asData?.value;
     final isPicking = ref.watch(isPickingLocationProvider);
     final isNearbyClicked = useState(false);
@@ -222,12 +222,14 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                               SizedBox(width: 10),
                               GestureDetector(
                                   onTap: () async {
+                                    if (userLocation.value == null) return;
+
                                     final details = await getPlaceDetails(ref,
-                                        location: userLocation.value);
+                                        location: userLocation.value!);
 
                                     final result = await ref.read(
                                         addLocationFavProvider(
-                                                location: userLocation.value,
+                                                location: userLocation.value!,
                                                 address: details)
                                             .future);
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -269,13 +271,17 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     child: IconButton(
-                        onPressed: () async {
-                          print(userLocation.value);
-                          await mapController?.animateCamera(
-                              CameraUpdate.newCameraPosition(CameraPosition(
-                                  target: currentLocation!, zoom: 14.74)));
-                        },
-                        icon: Icon(Icons.gps_fixed)),
+                      onPressed: () async {
+                        print(userLocation.value);
+                        await mapController?.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                target: currentLocation!, zoom: 14.74),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.gps_fixed),
+                    ),
                   ),
                 ],
               ),

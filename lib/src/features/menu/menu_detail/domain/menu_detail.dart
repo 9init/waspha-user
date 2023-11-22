@@ -15,8 +15,8 @@ Future<dynamic> getStoresDetails(Ref ref, {required int id}) async {
       "store_id": id,
       "location": {
         "address": "abc xyz",
-        "lat": location.latitude,
-        "lng": location.longitude
+        "lat": location!.latitude,
+        "lng": location!.longitude
       }
     });
     return request.data["data"];

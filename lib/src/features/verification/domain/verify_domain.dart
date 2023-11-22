@@ -38,15 +38,14 @@ Future verifyOTP(
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
-    
-      String accessToken = response["data"]["access_token"];
-      print(accessToken);
-      await CacheHelper.setString("accessToken", accessToken);
-      await ref
-          .watch(accessTokenProvider.notifier)
-          .update((state) => accessToken);
-      context.go('/');
-    
+
+    String accessToken = response["data"]["access_token"];
+    print(accessToken);
+    await CacheHelper.setString("accessToken", accessToken);
+    await ref
+        .watch(accessTokenProvider.notifier)
+        .update((state) => accessToken);
+    context.go('/');
   } catch (e) {}
 }
 

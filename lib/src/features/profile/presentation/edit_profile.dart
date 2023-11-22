@@ -114,7 +114,8 @@ class EditProfile extends StatelessWidget {
                       ],
                     ),
                     trailing: Icon(Icons.arrow_forward),
-                    subtitle: Text("+${data.country?.phonecode} ${data.contact}"),
+                    subtitle:
+                        Text("+${data.country?.phonecode} ${data.contact}"),
                     onTap: () => context.push('/update_profile', extra: {
                       "isNumber": true,
                       "iso": IsoCode.fromJson(data.country!.iso),

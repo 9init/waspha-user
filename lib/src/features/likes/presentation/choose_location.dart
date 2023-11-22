@@ -42,7 +42,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
                 children: [
                   GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: data,
+                      target: data!,
                       zoom: 14.4746,
                     ),
                     myLocationEnabled: false,

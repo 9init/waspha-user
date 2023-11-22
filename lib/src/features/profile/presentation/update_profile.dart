@@ -119,7 +119,10 @@ class UpdateGender extends StatelessWidget {
                 ListTile(
                   onTap: () {
                     ref.read(editProfileProvider(
-                        userName: "", gender: "male", dob: "", context: context));
+                        userName: "",
+                        gender: "male",
+                        dob: "",
+                        context: context));
                     ref.refresh(getProfileDataProvider(context)).value;
                   },
                   title: Text("Male"),
@@ -127,7 +130,10 @@ class UpdateGender extends StatelessWidget {
                 ListTile(
                   onTap: () {
                     ref.read(editProfileProvider(
-                        userName: "", gender: "female", dob: "", context: context));
+                        userName: "",
+                        gender: "female",
+                        dob: "",
+                        context: context));
                     ref.refresh(getProfileDataProvider(context)).value;
                   },
                   title: Text("Female"),

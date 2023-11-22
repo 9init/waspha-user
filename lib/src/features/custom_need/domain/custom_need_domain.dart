@@ -28,8 +28,8 @@ Future<int> createRFP(
           "subcategory_id": ref.watch(subCategoryIDProvider),
           "delivery_location": {
             "address": "4K Chowrangi",
-            "lat": location.latitude,
-            "lng": location.longitude,
+            "lat": location!.latitude,
+            "lng": location!.longitude,
           },
           "delivery_mode_id": 3,
           "type": type,

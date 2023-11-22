@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -33,15 +34,22 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Dear User'),
         content: const Text(
-          'We care about your privacy and data security.'
-          'We use user tracking to provide personalized advertising.'
+          'We care about your privacy and data security. '
+          'We use user tracking to provide personalized advertising. '
           'By allowing tracking, you help us improve your experience.',
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Permission.location.request();
-              context.pop();
+            onPressed: () async {
+              Navigator.pop(context);
+              // Wait for dialog popping animation
+              await Future.delayed(const Duration(milliseconds: 200));
+              // Request system's tracking authorization dialog
+              await AppTrackingTransparency.requestTrackingAuthorization();
+
+              bool isDenied = await Permission.location.isDenied ||
+                  await Permission.location.isRestricted;
+              if (!isDenied) showPermissionDialog(context);
             },
             child: const Text('Continue'),
           ),
@@ -54,22 +62,17 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog.adaptive(
-        title: const Text("Submit Exam"),
+        title: const Text("Location"),
         content: Text(
             "We use your location to find nearby stores, categories and products for you."),
         actions: [
           TextButton(
             onPressed: () {
-              context.pop();
-            },
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
+              Navigator.pop(context);
               Permission.location.request();
             },
             child: const Text(
-              "Allow",
+              "Continue",
               style: TextStyle(color: Colors.red),
             ),
           ),
@@ -83,14 +86,14 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
     super.initState();
 
     Future.delayed(Duration(seconds: 1), () async {
-      bool isGranted = await isLocationGranted();
-      print("IS Granted: $isGranted");
-      if (isGranted) return;
-
-      if (Platform.isIOS) {
+      if (Platform.isIOS &&
+          await AppTrackingTransparency.trackingAuthorizationStatus ==
+              TrackingStatus.notDetermined) {
         showCustomTrackingDialog(context);
       } else {
-        showPermissionDialog(context);
+        bool isDenied = await Permission.location.isDenied ||
+            await Permission.location.isRestricted;
+        if (!isDenied) showPermissionDialog(context);
       }
     });
   }
@@ -116,7 +119,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       }
 
       Future(() async {
-        if (!isPicking) {
+        if (!isPicking && markerLocation != null) {
           locationMarkers.removeWhere((item) => item.markerId.value == 'user');
           locationMarkers.add(
             Marker(
@@ -131,6 +134,25 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             ),
           );
         }
+      });
+
+      Future(() {
+        ref.watch(locationStreamProvider).whenData((value) async {
+          locationMarkers.removeWhere(
+              (element) => element.markerId.value == "gpsLocation");
+          locationMarkers.add(
+            Marker(
+              markerId: MarkerId("gpsLocation"),
+              position: LatLng(value.latitude!, value.longitude!),
+              infoWindow:
+                  InfoWindow(title: "Your Location", snippet: "You are here"),
+              icon: BitmapDescriptor.fromBytes(await assetToUint8List(
+                "assets/images/map_markers/user.png",
+                135,
+              )),
+            ),
+          );
+        });
       });
 
       return nearbyStores.when(data: (data) {
@@ -181,25 +203,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             stores: [],
             initialLocation: LatLng(latitude!, longitude!),
             dataLength: 0,
-            onMapCreated: (controller) async {
-              if (locationMarkers
-                  .any((element) => element.markerId.value == "gpsLocation")) {
-                return;
-              }
-
-              locationMarkers.add(
-                Marker(
-                  markerId: MarkerId("gpsLocation"),
-                  position: LatLng(await latitude, await longitude),
-                  infoWindow: InfoWindow(
-                      title: "Your Location", snippet: "You are here"),
-                  icon: BitmapDescriptor.fromBytes(await assetToUint8List(
-                    "assets/images/map_markers/user.png",
-                    135,
-                  )),
-                ),
-              );
-            },
+            onMapCreated: (controller) => {},
             message: "Loading...",
             categoryName: [],
             markers: locationMarkers.toSet());

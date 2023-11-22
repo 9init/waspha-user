@@ -62,7 +62,6 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                     if (context.mounted) context.pop();
                   },
                   itemBuilder: (context, index, prediction) {
-                    print("LAT2 : ${prediction.lat ?? '0.0'}");
                     return Column(
                       children: [
                         Container(
@@ -144,7 +143,7 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                   },
                   loading: () => Container(),
                   error: (e, s) {
-                    debugPrint(e.toString());
+                    print(e.toString());
                     return Container();
                   },
                 ),

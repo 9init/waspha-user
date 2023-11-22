@@ -17,9 +17,7 @@ Future<dynamic> getMenuCategories(Ref ref, {required int id}) async {
     var response = request.data;
     var data = response["data"];
     return data.map((e) => MapCategories.fromJson(e)).toList();
-
-   
-  }  catch (e) {
+  } catch (e) {
     print("Menu Domain Error : ${e}");
   }
   return [];

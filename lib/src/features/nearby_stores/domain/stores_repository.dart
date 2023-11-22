@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
 
@@ -63,10 +64,10 @@ Future<dynamic> getNearbyStores(
 }) async {
   final url = "user/get-nearby-stores";
 
-  LatLng location = await ref.watch(userLocationProvider.future);
+  LatLng? location = (await ref.read(userLocationProvider.future))!;
 
   try {
-    var request = await ref.watch(dioProvider).post(
+    var request = await ref.read(dioProvider).post(
         url,
         jsonEncode({
           "location": {
@@ -172,7 +173,6 @@ Future<String> getCountryCode(ref) async {
     longitude: location.longitude,
     googleMapApiKey: googelApiKey,
   );
-  print("COUNTRY CODE: ${data.countryCode}");
   return data.countryCode;
 }
 
@@ -230,14 +230,18 @@ Future<Uint8List> svgToBitMap(String svg_path, BuildContext context) async {
   return bytes.buffer.asUint8List();
 }
 
-final userLocationProvider = FutureProvider<LatLng>((ref) async {
-  final gpsLocation = await getLocation();
-  print("GPS: ${gpsLocation.latitude}");
+final userLocationProvider = StreamProvider<LatLng?>((ref) {
+  final gpsLocationStream = ref.watch(locationStreamProvider);
   final chosenLocation = ref.watch(getUserLocation);
-  print("CHOSEN: ${chosenLocation.latitude}");
-  return chosenLocation.latitude == 0.0
-      ? LatLng(gpsLocation.latitude ?? 0.0, gpsLocation.longitude ?? 0.0)
-      : chosenLocation;
+  final streamController = StreamController<LatLng>();
+
+  gpsLocationStream.whenData((value) {
+    final location =
+        chosenLocation ?? LatLng(value.latitude!, value.longitude!);
+    streamController.add(location);
+  });
+
+  return streamController.stream;
 });
 
 Future<String> getPlaceDetails(ref, {required LatLng location}) async {
