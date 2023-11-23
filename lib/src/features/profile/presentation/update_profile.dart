@@ -69,7 +69,7 @@ class UpdateProfile extends StatelessWidget {
                         height: 40,
                       ),
                       Consumer(
-                        builder: (context, ref, child) => AuthButton(
+                        builder: (context, ref, child) => WasphaButton(
                           onTap: () {
                             ref.read(editProfileProvider(
                                 userName: _controller.text,
@@ -190,7 +190,7 @@ class UpdateDOB extends HookWidget {
               height: 40,
             ),
             Consumer(
-              builder: (context, ref, child) => AuthButton(
+              builder: (context, ref, child) => WasphaButton(
                 onTap: () {
                   ref.read(editProfileProvider(
                       userName: '',

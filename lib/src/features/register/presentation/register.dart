@@ -109,7 +109,7 @@ class RegisterScreen extends ConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            AuthButton(
+            WasphaButton(
               onTap: () => validateForm(),
               text: "Sign up",
             ),

@@ -67,12 +67,12 @@ class MenuOffer extends HookWidget {
             ),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 100,
-                height: 100,
+                height: 60,
                 child: Consumer(builder: (context, ref, child) {
                   final subCategory = ref.watch(subCategoryProvider);
                   final category = ref.watch(categoryProvider);
@@ -106,40 +106,42 @@ class MenuOffer extends HookWidget {
                   );
                 }),
               ),
-              Consumer(builder: (context, ref, child) {
-                final subCategory = ref.watch(subCategoryProvider);
-                final category = ref.watch(categoryProvider);
-                return RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: "${category["name"]} \n",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
-                  TextSpan(
-                      text: "${subCategory["name"]}",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
-                ]));
-              }),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Consumer(builder: (context, ref, child) {
+                  final subCategory = ref.watch(subCategoryProvider);
+                  final category = ref.watch(categoryProvider);
+                  return RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: "${category["name"]} \n",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: "${subCategory["name"]}",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ]));
+                }),
+              ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(right: 20, left: 20, top: 15),
             child: TextField(
               decoration: InputDecoration(
                   hintText: "Find products",
                   prefixIcon: Icon(Icons.search),
-                  suffixIcon: Icon(Icons.filter_alt_outlined),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20))),
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 15,
           ),
           // Padding(
           //   padding: const EdgeInsets.all(8.0),

@@ -74,7 +74,7 @@ class VerificationScreen extends HookConsumerWidget {
               SizedBox(
                 height: 20,
               ),
-              AuthButton(onTap: () => validateForm(), text: "Verify"),
+              WasphaButton(onTap: () => validateForm(), text: "Verify"),
               SizedBox(
                 height: 20,
               ),

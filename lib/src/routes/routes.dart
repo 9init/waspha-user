@@ -11,6 +11,7 @@ import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dar
 import 'package:waspha/src/features/notification/presentation/notification.dart';
 import 'package:waspha/src/features/profile/presentation/legal.dart';
 import 'package:waspha/src/features/profile/presentation/pending_task.dart';
+import 'package:waspha/src/features/profile/presentation/pickup_radius.dart';
 import 'package:waspha/src/features/profile/presentation/privacy.dart';
 import 'package:waspha/src/features/profile/presentation/settings.dart';
 import 'package:waspha/src/features/profile/presentation/update_profile.dart';
@@ -304,6 +305,11 @@ final router = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       path: '/change_location',
       builder: (context, state) => ChangeLocationScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: '/pickup_radius',
+      builder: (context, state) => PickupRadius(),
     ),
     GoRoute(
       path: '/add_address',

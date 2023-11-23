@@ -181,7 +181,7 @@ class AddCreditCard extends HookWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                return AuthButton(
+                return WasphaButton(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
                       await ref

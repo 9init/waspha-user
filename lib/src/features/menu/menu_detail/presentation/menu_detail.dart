@@ -20,10 +20,9 @@ class MenuDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print("BEE $id");
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
-        final storeDetails = ref.watch(getStoresDetailsProvider(id: id));
+        final storeDetails = ref.read(getStoresDetailsProvider(id: id));
         return storeDetails.when(
             data: (data) {
               return MenuDetailsBody(store: data);
@@ -185,8 +184,15 @@ class MenuDetailsBody extends HookWidget {
                                   'Are you sure you want to report this store?'),
                               actions: [
                                 TextButton(
-                                    onPressed: () {}, child: Text('Yes')),
-                                TextButton(onPressed: () {}, child: Text('No')),
+                                    onPressed: () {
+                                      context.pop();
+                                    },
+                                    child: Text('Yes')),
+                                TextButton(
+                                    onPressed: () {
+                                      context.pop();
+                                    },
+                                    child: Text('No')),
                               ],
                             ));
                   },

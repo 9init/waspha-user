@@ -154,25 +154,26 @@ class DeliveryConfirmationDialog extends StatelessWidget {
                   child: Icon(Icons.lock_clock_rounded),
                 ),
                 title: Padding(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: RichText(
-                      text: TextSpan(
-                        text: isScheduled.value
-                            ? "Delivery on "
-                            : "Delivery ", // Common text
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: isScheduled.value
-                                ? consumer.watch(selectedTimeProvider)
-                                : "Now",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                  padding: const EdgeInsets.only(right: 30),
+                  child: RichText(
+                    text: TextSpan(
+                      text: isScheduled.value
+                          ? "Delivery on "
+                          : "Delivery ", // Common text
+                      style: DefaultTextStyle.of(context).style,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: isScheduled.value
+                              ? consumer.watch(selectedTimeProvider)
+                              : "Now",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                    )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 20,

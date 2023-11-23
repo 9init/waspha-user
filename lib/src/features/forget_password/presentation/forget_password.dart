@@ -57,7 +57,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     height: 40,
                   ),
                   Consumer(
-                    builder: (context, ref, child) => AuthButton(
+                    builder: (context, ref, child) => WasphaButton(
                       onTap: () {
                         ref.read(forgetPasswordProvider(
                             user_id: emailController.text, context: context));

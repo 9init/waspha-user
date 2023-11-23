@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 
 import '../../custom_need/presentation/custom_need.dart';
 
@@ -59,6 +61,19 @@ class SettingsScreen extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward),
                 onTap: () {},
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Divider(),
+              ),
+              Consumer(builder: (context, ref, _) {
+                final pickupRadius =
+                    ref.watch(pickupRadiusProvider).pickupRadius;
+                return ListTile(
+                  title: Text("Pickup Radius ($pickupRadius km)"),
+                  trailing: Icon(Icons.arrow_forward),
+                  onTap: () => context.push('/pickup_radius'),
+                );
+              }),
               SizedBox(height: MediaQuery.of(context).size.height * 0.4),
               DangerosArea(),
             ],
@@ -84,24 +99,25 @@ class DangerosArea extends StatelessWidget {
           trailing: Icon(Icons.info),
         ),
         ElevatedButton(
-            onPressed: () {
-              context.push('/pending_screen');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey[300],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(13)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Delete Account",
-                  style: TextStyle(color: Colors.black),
-                ),
-                Icon(Icons.arrow_forward, color: Colors.black),
-              ],
-            ))
+          onPressed: () {
+            context.push('/pending_screen');
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey[300],
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Delete Account",
+                style: TextStyle(color: Colors.black),
+              ),
+              Icon(Icons.arrow_forward, color: Colors.black),
+            ],
+          ),
+        )
       ],
     );
   }

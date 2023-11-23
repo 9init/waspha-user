@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AuthButton extends StatelessWidget {
-  const AuthButton({
+class WasphaButton extends StatelessWidget {
+  const WasphaButton({
     super.key,
     required this.onTap,
     required this.text,
@@ -13,30 +13,29 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SizedBox(
-          width: double.infinity,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
           height: 50,
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              width: 110,
-              height: 50,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      colors: [
-                        Color(0xFF002286),
-                        Color.fromARGB(255, 161, 75, 95),
-                      ]),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                  child: Text(
-                text.toUpperCase(),
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              )),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Color(0xFF002286),
+                Color.fromARGB(255, 161, 75, 95),
+              ],
             ),
-          )),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

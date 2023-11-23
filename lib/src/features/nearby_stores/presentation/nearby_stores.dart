@@ -47,8 +47,8 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
               // Request system's tracking authorization dialog
               await AppTrackingTransparency.requestTrackingAuthorization();
 
-              bool isDenied = await Permission.location.isDenied ||
-                  await Permission.location.isRestricted;
+              bool isDenied = await Permission.location.isDenied &&
+                  !await Permission.location.isRestricted;
               if (!isDenied) showPermissionDialog(context);
             },
             child: const Text('Continue'),
@@ -91,8 +91,9 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
               TrackingStatus.notDetermined) {
         showCustomTrackingDialog(context);
       } else {
-        bool isDenied = await Permission.location.isDenied ||
-            await Permission.location.isRestricted;
+        bool isDenied = await Permission.location.isGranted &&
+            !await Permission.location.isRestricted;
+        debugPrint("isDenied $isDenied");
         if (!isDenied) showPermissionDialog(context);
       }
     });
@@ -138,6 +139,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
 
       Future(() {
         ref.watch(locationStreamProvider).whenData((value) async {
+          debugPrint("Location is $value");
           locationMarkers.removeWhere(
               (element) => element.markerId.value == "gpsLocation");
           locationMarkers.add(

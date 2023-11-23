@@ -89,7 +89,7 @@ class LoginScreen extends HookConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            AuthButton(
+            WasphaButton(
               onTap: validateForm,
               text: "Continue",
             ),
