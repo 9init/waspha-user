@@ -6,31 +6,31 @@ class PreferencesService {
   static const String _pickupRadiusKey = 'pickupRadius';
 
   // Getter for pickupRadius
-  static Future<int?> getPickupRadius() async {
+  static Future<double?> getPickupRadius() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_pickupRadiusKey);
+    return prefs.getDouble(_pickupRadiusKey);
   }
 
   // Setter for pickupRadius
-  static Future<void> setPickupRadius(int radius) async {
+  static Future<void> setPickupRadius(double radius) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_pickupRadiusKey, radius);
+    await prefs.setDouble(_pickupRadiusKey, radius);
   }
 }
 
 class PickupRadiusProvider extends ChangeNotifier {
-  static const int _defaultPickupRadius = 15;
+  static const double _defaultPickupRadius = 15;
 
-  int? _pickupRadius;
-  int? _tempPickupRadius;
+  double? _pickupRadius;
+  double? _tempPickupRadius;
 
   // Getter for pickupRadius with a default value of 15
-  int get pickupRadius => _pickupRadius ?? _defaultPickupRadius;
-  int get tempPickupRadius => _tempPickupRadius ?? _defaultPickupRadius;
+  double get pickupRadius => _pickupRadius ?? _defaultPickupRadius;
+  double get tempPickupRadius => _tempPickupRadius ?? _defaultPickupRadius;
 
   // Setter for pickupRadius
   Future<void> setPickupRadius(int radius) async {
-    _tempPickupRadius = radius;
+    _tempPickupRadius = radius.toDouble();
     notifyListeners();
   }
 

@@ -76,7 +76,7 @@ class _PickupRadiusSlider extends ConsumerState<PickupRadiusSlider> {
   void initState() {
     Future(() async {
       final radiusProvider = ref.read(pickupRadiusProvider);
-      radiusProvider.setPickupRadius(radiusProvider.pickupRadius);
+      radiusProvider.setPickupRadius(radiusProvider.pickupRadius.toInt());
     });
     super.initState();
   }

@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
+import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 
@@ -64,6 +65,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final isClicked = useState(false);
     final method = ref.watch(methodProvider);
     final category = useState(0);
+    final radius = ref.watch(pickupRadiusProvider).pickupRadius * 1000;
     final isCategoryClicked = useState(false);
     final isSubCategoryClicked = useState(false);
     final subCatIndex = useState(0);
@@ -94,7 +96,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
               Circle(
                   visible: method == 'pickup',
                   circleId: CircleId("circle"),
-                  radius: 15000,
+                  radius: radius,
                   strokeColor: Colors.transparent,
                   fillColor: Colors.purple.withOpacity(0.2),
                   center: currentLocation ?? LatLng(0.0, 0.0)),
