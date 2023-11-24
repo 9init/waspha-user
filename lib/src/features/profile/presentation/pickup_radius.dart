@@ -30,7 +30,7 @@ class PickupRadius extends StatelessWidget {
               "within which available providers will be displayed "
               "for you to send requests and receive offers",
               style: TextStyle(
-                fontSize: 17,
+                fontSize: 15,
               ),
             ),
             SizedBox(height: 40),
@@ -38,7 +38,10 @@ class PickupRadius extends StatelessWidget {
               text: TextSpan(
                 text:
                     "Define the distance by sliding the bar - you can choose a distance of up to ", // Common text
-                style: TextStyle(fontSize: 17, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
                 children: <TextSpan>[
                   TextSpan(
                     text: "20 km",
@@ -55,7 +58,17 @@ class PickupRadius extends StatelessWidget {
             Consumer(builder: (context, ref, _) {
               final radiusProvider = ref.watch(pickupRadiusProvider);
               return WasphaButton(
-                onTap: () => radiusProvider.savePickupRadius(),
+                onTap: () {
+                  radiusProvider.savePickupRadius().then(
+                    (value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Radius saved"),
+                        ),
+                      );
+                    },
+                  );
+                },
                 text: "Confirm",
               );
             })
@@ -95,11 +108,15 @@ class _PickupRadiusSlider extends ConsumerState<PickupRadiusSlider> {
           children: [
             Text(
               'Maximum distance to pickup',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
             Text(
               '$pickupRadius km',
               style: TextStyle(
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),

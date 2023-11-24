@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:waspha/src/constants/constants.dart';
+import 'package:waspha/src/features/activity/model/order/order_model.dart';
+import 'package:waspha/src/features/activity/presentation/order_card.dart';
 import 'package:waspha/src/features/custom_need/domain/custom_need_domain.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
 import 'package:waspha/src/widgets/need_login.dart';
@@ -155,128 +157,34 @@ class ActivityScreen extends StatelessWidget {
               final rfpList = ref.watch(getRFPListingProvider(context));
               return rfpList.when(
                   data: (data) {
+                    data = data["orders"];
                     if (data == null || data?.length == 0) {
                       return Center(
                         child: Text("You don't have an order yet"),
                       );
                     }
 
+                    final orders = List<OrderModel>.from(
+                        data.map((map) => OrderModel.fromJson(map)));
+
                     return Column(
                       children: [
                         Container(
-                            height: 265,
-                            child: ListView.builder(
-                                itemCount: data?.length ?? 0,
-                                controller: _pageController,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 156,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey[300]!),
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                CircleAvatar(
-                                                  backgroundImage:
-                                                      CachedNetworkImageProvider(
-                                                          'https://cdn.shopify.com/s/files/1/0584/4425/1314/products/IMG_8760_800x.jpg'),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  capitalize(
-                                                    data[index]["type"],
-                                                  ),
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text("Order #120",
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                )),
-                                            Text("cash on delivery"),
-                                            Text(
-                                              "In Pickup",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text("5/5/5"),
-                                                    Text("5:00 PM"),
-                                                  ],
-                                                ),
-                                                CircleAvatar(
-                                                  backgroundImage:
-                                                      CachedNetworkImageProvider(
-                                                          data[index]
-                                                                  ["category"]
-                                                              ["image"]),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: ListTile(
-                                                leading: Icon(Icons.schedule,
-                                                    size: 17),
-                                                contentPadding:
-                                                    EdgeInsets.all(2),
-                                                title: Text(
-                                                  "56h:08m:23s",
-                                                  style:
-                                                      TextStyle(fontSize: 13),
-                                                ),
-                                              ),
-                                            ),
-                                            // Text(
-                                            //   "56h:08m:23s",
-                                            //   style: TextStyle(fontSize: 15),
-                                            // ),
-                                            Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: Icon(
-                                                  Icons.arrow_forward,
-                                                  size: 17,
-                                                ))
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                })),
+                          height: 230,
+                          child: ListView.builder(
+                            itemCount: orders.length,
+                            controller: _pageController,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return OrderCard(order: orders[index]);
+                            },
+                          ),
+                        ),
                         SizedBox(
                           height: 10,
                         ),
                         SmoothPageIndicator(
-                          count: (data.length / 2).round(),
+                          count: (orders.length / 2).round(),
                           controller: _pageController,
                           effect: ExpandingDotsEffect(
                             dotWidth: 7,
@@ -309,12 +217,14 @@ class ActivityScreen extends StatelessWidget {
                 final rfpList = ref.watch(getRFPListingProvider(context));
                 return rfpList.when(
                     data: (data) {
-                      if (data == null || data?.length == 0) {
+                      data = data["proposals"];
+                      if (data == null || data.length == 0) {
                         return Center(
                           child:
                               Text("You don't have either request/offer yet"),
                         );
                       }
+
                       return Column(
                         children: [
                           Container(

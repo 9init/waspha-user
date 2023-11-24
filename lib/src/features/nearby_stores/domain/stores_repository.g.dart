@@ -175,7 +175,7 @@ class _GetNearbyStoresStreamProviderElement
       (origin as GetNearbyStoresStreamProvider).isBottomSheetOpen;
 }
 
-String _$getNearbyStoresHash() => r'd2939ad91d0dda29f38d40e6ccce6c57d777c3f1';
+String _$getNearbyStoresHash() => r'481a3d7e0523ba94825bc360918488ffd7999be1';
 
 /// See also [getNearbyStores].
 @ProviderFor(getNearbyStores)

@@ -6,7 +6,7 @@ part of 'custom_need_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createRFPHash() => r'bfb18a4c99424cabb73391e563317d52fe75d9e5';
+String _$createRFPHash() => r'81c40657ba78e2028c784eb91dea0378641bf421';
 
 /// Copied from Dart SDK
 class _SystemHash {

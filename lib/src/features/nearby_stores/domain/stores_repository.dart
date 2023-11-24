@@ -16,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
+import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/utils/dio_helper.dart';
 import 'package:image/image.dart' as img;
 
@@ -64,8 +65,8 @@ Future<dynamic> getNearbyStores(
 }) async {
   final url = "user/get-nearby-stores";
 
-  LatLng? location = (await ref.read(userLocationProvider.future))!;
-
+  final location = (await ref.read(userLocationProvider.future))!;
+  final range = ref.read(pickupRadiusProvider).pickupRadius;
   try {
     var request = await ref.read(dioProvider).post(
         url,
@@ -76,7 +77,8 @@ Future<dynamic> getNearbyStores(
             "country_code":
                 ref.read(getCountryCodeProvider).asData?.valueOrNull ?? "EG"
           },
-          "method": ref.watch(methodProvider.notifier).state
+          "method": ref.watch(methodProvider.notifier).state,
+          "range": range
         }));
 
     var response = request.data;
