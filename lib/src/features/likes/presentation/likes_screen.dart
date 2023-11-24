@@ -114,16 +114,11 @@ class LikesBody extends StatelessWidget {
                                           },
                                           child: ListTile(
                                             onTap: () => context.pushNamed(
-                                                "EditLocation",
-                                                pathParameters: {
-                                                  "title": data[index]
-                                                          .location_string ??
-                                                      "",
-                                                }),
+                                              "EditLocation",
+                                              extra: data[index],
+                                            ),
                                             leading: Icon(Icons.location_on),
-                                            title: Text(
-                                                data[index].location_string ??
-                                                    ""),
+                                            title: Text(data[index].title),
                                             trailing: Icon(Icons.arrow_forward),
                                           ),
                                         );

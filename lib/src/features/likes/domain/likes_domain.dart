@@ -11,25 +11,40 @@ import '../presentation/choose_location.dart';
 part 'likes_domain.g.dart';
 
 @riverpod
-Future<String> addLocation(Ref ref,
-    {required String title,
-    required String phone,
-    bool isMeChecked = false,
-    required String landmark}) async {
-  final url = 'user/add-location';
-  final details = ref.watch(getChoosenLocationProvider);
+Future<String> addLocation(
+  Ref ref, {
+  required String title,
+  required String? phone,
+  required String? userName,
+  required String landmark,
+  required String locationType,
+  bool isMeChecked = false,
+}) async {
+  final url = 'user/add-location-to-fav';
+  final details = ref.watch(getChosenLocationProvider);
+  if (details == null) return "Please add location";
   try {
-    final request = await ref.watch(dioProvider).post(url, {
+    final payload = {
       "title": title,
-      "phone": phone,
       "landmark": landmark,
+      "location_type": locationType,
       "location": {
+        "country_code":
+            await getCountryCodeFromLatLng(details["lat"], details["lng"]),
         "address": details["address"],
         "lat": details["lat"],
-        "lng": details["lng"]
+        "lng": details["lng"],
       }
-    });
+    };
+    if (phone != null) {
+      payload["phone"] = phone;
+    }
+    if (userName != null) {
+      payload["user_phone_number"] = userName;
+    }
+    final request = await ref.watch(dioProvider).post(url, payload);
     print(request);
+    ref.invalidate(getLocationsProvider);
     return request.data["message"];
   } on DioError catch (e) {
     print("ADD LOCATION ERROR ${e.response?.data}");

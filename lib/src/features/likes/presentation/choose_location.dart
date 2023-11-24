@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../nearby_stores/domain/stores_repository.dart';
 
-final getChoosenLocationProvider = StateProvider<Map<String, dynamic>>(
-    (ref) => {"lat": 0.0, "lng": 0.0, "address": ""});
+final getChosenLocationProvider =
+    StateProvider<Map<String, dynamic>?>((ref) => null);
 
 class ChooseLocation extends StatefulHookWidget {
   const ChooseLocation({super.key});
@@ -32,8 +32,8 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
-        final location = ref.watch(userLocationProvider);
-        final currentLocation = ref.watch(userLocationProvider).asData?.value;
+        final location = ref.read(userLocationProvider);
+        final currentLocation = ref.read(userLocationProvider).asData?.value;
 
         return location.when(
             data: (data) {
@@ -47,20 +47,24 @@ class _ChooseLocationState extends State<ChooseLocation> {
                     ),
                     myLocationEnabled: false,
                     mapType: mapType.value,
+                    myLocationButtonEnabled: false,
                     onMapCreated: (controller) {
                       _onMapCreated(controller);
                     },
                     zoomGesturesEnabled: true,
                     onCameraMove: (position) => userLocation.value = LatLng(
-                        position.target.latitude, position.target.longitude),
+                      position.target.latitude,
+                      position.target.longitude,
+                    ),
                     scrollGesturesEnabled: true,
                     tiltGesturesEnabled: false,
                     markers: {
                       Marker(
-                          markerId: MarkerId("user"),
-                          position: data,
-                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                              BitmapDescriptor.hueBlue)),
+                        markerId: MarkerId("user"),
+                        position: data,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueBlue),
+                      ),
                     },
                     rotateGesturesEnabled: true,
                     zoomControlsEnabled: false,
@@ -92,14 +96,16 @@ class _ChooseLocationState extends State<ChooseLocation> {
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: IconButton(
-                                onPressed: () async {
-                                  await mapController?.animateCamera(
-                                      CameraUpdate.newCameraPosition(
-                                          CameraPosition(
-                                              target: currentLocation!,
-                                              zoom: 14.74)));
-                                },
-                                icon: Icon(Icons.gps_fixed)),
+                              onPressed: () async {
+                                await mapController?.animateCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(
+                                        target: currentLocation!, zoom: 14.74),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Icons.gps_fixed),
+                            ),
                           ),
                         ],
                       ),
@@ -114,19 +120,21 @@ class _ChooseLocationState extends State<ChooseLocation> {
                           width: MediaQuery.of(context).size.width * 0.8,
                           height: 50,
                           child: ElevatedButton(
-                              onPressed: () async {
-                                final details = await getPlaceDetails(ref,
-                                    location: userLocation.value);
-                                ref
-                                    .read(getChoosenLocationProvider.notifier)
-                                    .state = {
-                                  "lat": userLocation.value.latitude,
-                                  "lng": userLocation.value.longitude,
-                                  "address": details
-                                };
-                                context.pop();
-                              },
-                              child: Text("Confirm Location")),
+                            onPressed: () async {
+                              final details = await getPlaceDetails(ref,
+                                  location: userLocation.value);
+                              ref
+                                  .read(getChosenLocationProvider.notifier)
+                                  .state = {
+                                "lat": userLocation.value.latitude,
+                                "lng": userLocation.value.longitude,
+                                "address": details
+                              };
+                              // ref.refresh(getChosenLocationProvider);
+                              context.pop();
+                            },
+                            child: Text("Confirm Location"),
+                          ),
                         ),
                       ],
                     ),

@@ -167,12 +167,15 @@ Future<BitmapDescriptor> imageBytes({required String imageURL}) async {
 }
 
 Future<String> getCountryCode(ref) async {
-  const googelApiKey = 'AIzaSyDkxNsmr6MY8Aa-iDZx_9P8SJsmFs_4le8';
   LatLng location = await ref.watch(userLocationProvider.future);
+  return getCountryCodeFromLatLng(location.latitude, location.longitude);
+}
 
+Future<String> getCountryCodeFromLatLng(double lat, double lng) async {
+  const googelApiKey = 'AIzaSyDkxNsmr6MY8Aa-iDZx_9P8SJsmFs_4le8';
   GeoData data = await Geocoder2.getDataFromCoordinates(
-    latitude: location.latitude,
-    longitude: location.longitude,
+    latitude: lat,
+    longitude: lng,
     googleMapApiKey: googelApiKey,
   );
   return data.countryCode;

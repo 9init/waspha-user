@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
+import 'package:waspha/src/features/likes/data/likes_data.dart';
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
 import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
@@ -326,11 +327,10 @@ final router = GoRouter(
     GoRoute(
         path: '/edit_location',
         name: "EditLocation",
-        builder: (context, state) => EditAddressScreen(
-              title: state.pathParameters['title']!,
-              address: state.pathParameters['address']!,
-              landmark: state.pathParameters['landmark']!,
-              phone: state.pathParameters['phone']!,
-            )),
+        builder: (context, state) {
+          DataLocation locationModel =
+              state.extra as DataLocation; // 👈 casting is important
+          return EditAddressScreen(locationModel: locationModel);
+        }),
   ],
 );

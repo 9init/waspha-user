@@ -6,7 +6,7 @@ part of 'likes_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addLocationHash() => r'e28b67d86761a0af16796ade06780941a14693bd';
+String _$addLocationHash() => r'2b4640ce9a5064b7b9b8a2a84ed289d453d10693';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -41,15 +41,19 @@ class AddLocationFamily extends Family<AsyncValue<String>> {
   /// See also [addLocation].
   AddLocationProvider call({
     required String title,
-    required String phone,
-    bool isMeChecked = false,
+    required String? phone,
+    required String? userName,
     required String landmark,
+    required String locationType,
+    bool isMeChecked = false,
   }) {
     return AddLocationProvider(
       title: title,
       phone: phone,
-      isMeChecked: isMeChecked,
+      userName: userName,
       landmark: landmark,
+      locationType: locationType,
+      isMeChecked: isMeChecked,
     );
   }
 
@@ -60,8 +64,10 @@ class AddLocationFamily extends Family<AsyncValue<String>> {
     return call(
       title: provider.title,
       phone: provider.phone,
-      isMeChecked: provider.isMeChecked,
+      userName: provider.userName,
       landmark: provider.landmark,
+      locationType: provider.locationType,
+      isMeChecked: provider.isMeChecked,
     );
   }
 
@@ -85,16 +91,20 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
   /// See also [addLocation].
   AddLocationProvider({
     required String title,
-    required String phone,
-    bool isMeChecked = false,
+    required String? phone,
+    required String? userName,
     required String landmark,
+    required String locationType,
+    bool isMeChecked = false,
   }) : this._internal(
           (ref) => addLocation(
             ref as AddLocationRef,
             title: title,
             phone: phone,
-            isMeChecked: isMeChecked,
+            userName: userName,
             landmark: landmark,
+            locationType: locationType,
+            isMeChecked: isMeChecked,
           ),
           from: addLocationProvider,
           name: r'addLocationProvider',
@@ -107,8 +117,10 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
               AddLocationFamily._allTransitiveDependencies,
           title: title,
           phone: phone,
-          isMeChecked: isMeChecked,
+          userName: userName,
           landmark: landmark,
+          locationType: locationType,
+          isMeChecked: isMeChecked,
         );
 
   AddLocationProvider._internal(
@@ -120,14 +132,18 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
     required super.from,
     required this.title,
     required this.phone,
-    required this.isMeChecked,
+    required this.userName,
     required this.landmark,
+    required this.locationType,
+    required this.isMeChecked,
   }) : super.internal();
 
   final String title;
-  final String phone;
-  final bool isMeChecked;
+  final String? phone;
+  final String? userName;
   final String landmark;
+  final String locationType;
+  final bool isMeChecked;
 
   @override
   Override overrideWith(
@@ -144,8 +160,10 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
         debugGetCreateSourceHash: null,
         title: title,
         phone: phone,
-        isMeChecked: isMeChecked,
+        userName: userName,
         landmark: landmark,
+        locationType: locationType,
+        isMeChecked: isMeChecked,
       ),
     );
   }
@@ -160,8 +178,10 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
     return other is AddLocationProvider &&
         other.title == title &&
         other.phone == phone &&
-        other.isMeChecked == isMeChecked &&
-        other.landmark == landmark;
+        other.userName == userName &&
+        other.landmark == landmark &&
+        other.locationType == locationType &&
+        other.isMeChecked == isMeChecked;
   }
 
   @override
@@ -169,8 +189,10 @@ class AddLocationProvider extends AutoDisposeFutureProvider<String> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, title.hashCode);
     hash = _SystemHash.combine(hash, phone.hashCode);
-    hash = _SystemHash.combine(hash, isMeChecked.hashCode);
+    hash = _SystemHash.combine(hash, userName.hashCode);
     hash = _SystemHash.combine(hash, landmark.hashCode);
+    hash = _SystemHash.combine(hash, locationType.hashCode);
+    hash = _SystemHash.combine(hash, isMeChecked.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -181,13 +203,19 @@ mixin AddLocationRef on AutoDisposeFutureProviderRef<String> {
   String get title;
 
   /// The parameter `phone` of this provider.
-  String get phone;
+  String? get phone;
 
-  /// The parameter `isMeChecked` of this provider.
-  bool get isMeChecked;
+  /// The parameter `userName` of this provider.
+  String? get userName;
 
   /// The parameter `landmark` of this provider.
   String get landmark;
+
+  /// The parameter `locationType` of this provider.
+  String get locationType;
+
+  /// The parameter `isMeChecked` of this provider.
+  bool get isMeChecked;
 }
 
 class _AddLocationProviderElement
@@ -197,11 +225,15 @@ class _AddLocationProviderElement
   @override
   String get title => (origin as AddLocationProvider).title;
   @override
-  String get phone => (origin as AddLocationProvider).phone;
+  String? get phone => (origin as AddLocationProvider).phone;
   @override
-  bool get isMeChecked => (origin as AddLocationProvider).isMeChecked;
+  String? get userName => (origin as AddLocationProvider).userName;
   @override
   String get landmark => (origin as AddLocationProvider).landmark;
+  @override
+  String get locationType => (origin as AddLocationProvider).locationType;
+  @override
+  bool get isMeChecked => (origin as AddLocationProvider).isMeChecked;
 }
 
 String _$getLocationsHash() => r'7f92a9e1c21c1ed317510e2cb37290b42bd9aa1c';

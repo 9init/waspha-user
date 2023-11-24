@@ -29,8 +29,9 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
-
+  TextEditingController _userNameController = TextEditingController();
   TextEditingController _landmarkController = TextEditingController();
+
   final List<String> iconsImages = [
     "assets/images/address/home.svg",
     "assets/images/address/work.svg",
@@ -39,22 +40,53 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   Map<int, bool> homeChecked = {0: true, 1: false, 2: false};
 
   _initMap(WidgetRef ref) {
-    return FutureBuilder(
-        future: ref.read(userLocationProvider.future),
+    final location = ref.watch(getChosenLocationProvider);
+    final userLocation = ref.read(userLocationProvider.future);
+
+    final Completer<GoogleMapController> _controller =
+        Completer<GoogleMapController>();
+
+    _onMapCreated(GoogleMapController controller) {
+      controller.setMapStyle(
+          '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
+      _controller.complete(controller);
+    }
+
+    Future<void> moveCamera(LatLng position) async {
+      final GoogleMapController controller = await _controller.future;
+      controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: position,
+        zoom: 14.4746,
+      )));
+    }
+
+    if (location != null) {
+      final position = LatLng(
+        location["lat"],
+        location["lng"],
+      );
+      CameraPosition _kGooglePlex = CameraPosition(
+        target: position,
+        zoom: 14.4746,
+      );
+      return AbsorbPointer(
+        absorbing: true,
+        child: GoogleMap(
+          initialCameraPosition: _kGooglePlex,
+          myLocationButtonEnabled: false,
+          onMapCreated: _onMapCreated,
+          markers: Set.from(
+            [Marker(markerId: MarkerId("location"), position: position)],
+          ),
+        ),
+      );
+    } else {
+      return FutureBuilder(
+        future: userLocation,
         builder: (BuildContext context, AsyncSnapshot<LatLng?> data) {
           final location = data.data;
           if (location == null)
             return Center(child: CircularProgressIndicator());
-
-          final Completer<GoogleMapController> _controller =
-              Completer<GoogleMapController>();
-
-          _onMapCreated(GoogleMapController controller) {
-            // TODO - Check whhy this is not working
-            controller.setMapStyle(
-                '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
-            _controller.complete(controller);
-          }
 
           CameraPosition _kGooglePlex = CameraPosition(
             target: location,
@@ -72,7 +104,9 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
               ),
             ),
           );
-        });
+        },
+      );
+    }
   }
 
   PhoneController _phoneController = PhoneController(
@@ -81,6 +115,12 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
       nsn: "",
     ),
   );
+
+  @override
+  void initState() {
+    Future(() => ref.read(getChosenLocationProvider.notifier).state = null);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,14 +158,16 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 1)
-                      ]),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      )
+                    ],
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(13.0),
                     child: SingleChildScrollView(
@@ -134,8 +176,10 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Pick an icon",
-                                style: TextStyle(fontSize: 16)),
+                            child: Text(
+                              "Pick an icon",
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                           SizedBox(
                             height: 10,
@@ -143,56 +187,57 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                           Container(
                             height: 80,
                             child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 3,
-                                separatorBuilder: (context, index) => SizedBox(
-                                      width: 10,
-                                    ),
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      homeChecked[index] = true;
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 3,
+                              separatorBuilder: (context, index) => SizedBox(
+                                width: 10,
+                              ),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    homeChecked[index] = true;
 
-                                      setState(() {
-                                        for (int i = 0;
-                                            i < homeChecked.length;
-                                            i++) {
-                                          if (i != index) {
-                                            homeChecked[i] = false;
-                                          }
+                                    setState(() {
+                                      for (int i = 0;
+                                          i < homeChecked.length;
+                                          i++) {
+                                        if (i != index) {
+                                          homeChecked[i] = false;
                                         }
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        SvgPicture.asset(
-                                          iconsImages[index],
-                                          width: 30,
-                                          height: 30,
-                                        ),
-                                        Transform.scale(
-                                          scale: 0.8,
-                                          child: Checkbox(
-                                              shape: CircleBorder(),
-                                              value: homeChecked[index],
-                                              onChanged: (v) {
-                                                setState(() {
-                                                  homeChecked[index] = v!;
-                                                });
+                                      }
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SvgPicture.asset(
+                                        iconsImages[index],
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      Transform.scale(
+                                        scale: 0.8,
+                                        child: Checkbox(
+                                            shape: CircleBorder(),
+                                            value: homeChecked[index],
+                                            onChanged: (v) {
+                                              setState(() {
+                                                homeChecked[index] = v!;
+                                              });
 
-                                                for (int i = 0;
-                                                    i < homeChecked.length;
-                                                    i++) {
-                                                  if (i != index) {
-                                                    homeChecked[i] = false;
-                                                  }
+                                              for (int i = 0;
+                                                  i < homeChecked.length;
+                                                  i++) {
+                                                if (i != index) {
+                                                  homeChecked[i] = false;
                                                 }
-                                              }),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }),
+                                              }
+                                            }),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -290,6 +335,14 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
                                             child: TextFormField(
+                                              controller: _userNameController,
+                                              validator: (value) {
+                                                if (isOtherChecked.value &&
+                                                    value!.isEmpty) {
+                                                  return "User name is required";
+                                                }
+                                                return null;
+                                              },
                                               decoration: InputDecoration(
                                                   hintText: "Name",
                                                   border: InputBorder.none),
@@ -418,13 +471,13 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                   ),
                                                   () {
                                                     final details = ref.watch(
-                                                        getChoosenLocationProvider);
+                                                        getChosenLocationProvider);
 
-                                                    final text =
-                                                        details["address"] == ""
-                                                            ? "Choose location"
-                                                            : details[
-                                                                "address"];
+                                                    final text = details?[
+                                                                "address"] ==
+                                                            null
+                                                        ? "Choose location"
+                                                        : details?["address"];
 
                                                     return Text(text);
                                                   }()
@@ -457,17 +510,36 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                             onPressed: () {
                                               if (_formKey.currentState!
                                                   .validate()) {
+                                                String locationType = "HOME";
+                                                if (homeChecked[1]!) {
+                                                  locationType = "WORK";
+                                                } else if (homeChecked[2]!) {
+                                                  locationType = "COAST";
+                                                }
+
+                                                final userName = isOtherChecked
+                                                        .value
+                                                    ? _userNameController.text
+                                                    : null;
                                                 ref
                                                     .read(addLocationProvider(
-                                                      landmark:
-                                                          _landmarkController
-                                                              .text,
-                                                      title:
-                                                          _titleController.text,
-                                                      phone: _phoneController
-                                                          .value!.international
-                                                          .toString(),
-                                                    ).future)
+                                                            landmark:
+                                                                _landmarkController
+                                                                    .text,
+                                                            title:
+                                                                _titleController
+                                                                    .text,
+                                                            phone: isOtherChecked
+                                                                    .value
+                                                                ? _phoneController
+                                                                    .value!
+                                                                    .international
+                                                                    .toString()
+                                                                : null,
+                                                            userName: userName,
+                                                            locationType:
+                                                                locationType)
+                                                        .future)
                                                     .then(
                                                       (value) =>
                                                           ScaffoldMessenger.of(

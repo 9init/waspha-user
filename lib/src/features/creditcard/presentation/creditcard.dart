@@ -93,159 +93,166 @@ class CreditCardLogged extends StatelessWidget {
               height: 30,
             ),
             Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 248,
-                decoration: BoxDecoration(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Container(
+                  height: 248,
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          spreadRadius: 1)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10, left: 20),
-                      child: Text("Payment Methods",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        final userCredits = ref.watch(getCreditCardsProvider);
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 20),
+                        child: Text("Payment Methods",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final userCredits = ref.watch(getCreditCardsProvider);
 
-                        return userCredits.when(data: (data) {
-                          return SizedBox(
-                            height: 120,
-                            child: ListView.separated(
-                                itemCount: data.length,
-                                separatorBuilder: (context, index) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30),
-                                      child: Divider(),
-                                    ),
-                                itemBuilder: (context, index) {
-                                  return Dismissible(
-                                    key: UniqueKey(),
-                                    onDismissed: (direction) {
-                                      ref.read(deleteCreditCardProvider(
-                                          id: data?[index]["id"]));
-                                    },
-                                    child: ListTile(
-                                      leading: SvgPicture.asset(
-                                        "assets/images/credit/credit_icon.svg",
-                                        width: 30,
+                          return userCredits.when(data: (data) {
+                            return SizedBox(
+                              height: 120,
+                              child: ListView.separated(
+                                  itemCount: data.length,
+                                  separatorBuilder: (context, index) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 30),
+                                        child: Divider(),
                                       ),
-                                      title: Text(
-                                        ".... " +
-                                            data[index]
-                                                .card_number
-                                                .replaceAll("*", ""),
+                                  itemBuilder: (context, index) {
+                                    return Dismissible(
+                                      key: UniqueKey(),
+                                      onDismissed: (direction) {
+                                        ref.read(deleteCreditCardProvider(
+                                            id: data?[index]["id"]));
+                                      },
+                                      child: ListTile(
+                                        leading: SvgPicture.asset(
+                                          "assets/images/credit/credit_icon.svg",
+                                          width: 30,
+                                        ),
+                                        title: Text(
+                                          ".... " +
+                                              data[index]
+                                                  .card_number
+                                                  .replaceAll("*", ""),
+                                        ),
+                                        trailing:
+                                            const Icon(Icons.arrow_forward),
                                       ),
-                                      trailing: const Icon(Icons.arrow_forward),
-                                    ),
-                                  );
-                                }),
-                          );
-                        }, error: (e, s) {
-                          print(e);
-                          return const Text("Error");
-                        }, loading: () {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        });
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.add,
-                        size: 30,
-                      ),
-                      onTap: () => context.push('/add_credit_card'),
-                      title: const Text(
-                        "Add Debit / Credit Card",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 248,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          spreadRadius: 1)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10, left: 20),
-                      child: Text("Promotions",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                      height: 120,
-                      child: ListView.separated(
-                          itemCount: 2,
-                          separatorBuilder: (context, index) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
-                                child: Divider(),
-                              ),
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: SvgPicture.asset(
-                                "assets/images/credit/credit_icon.svg",
-                                width: 30,
-                              ),
-                              title: Text("Pharmacy Free Delivery"),
-                              trailing: const Icon(Icons.arrow_forward),
+                                    );
+                                  }),
                             );
-                          }),
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.add,
-                        size: 30,
+                          }, error: (e, s) {
+                            print(e);
+                            return const Text("Error");
+                          }, loading: () {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          });
+                        },
                       ),
-                      onTap: () => context.push('/add_credit_card'),
-                      title: const Text(
-                        "Add Promo Code",
-                        style: TextStyle(fontSize: 20),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.add,
+                          size: 30,
+                        ),
+                        onTap: () => context.push('/add_credit_card'),
+                        title: const Text(
+                          "Add Debit / Credit Card",
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
             const SizedBox(
               height: 30,
             ),
+            // Center(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 5),
+            //     child: Container(
+            //       height: 248,
+            //       decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.circular(18),
+            //           boxShadow: [
+            //             BoxShadow(
+            //                 color: Colors.black.withOpacity(0.1),
+            //                 blurRadius: 10,
+            //                 spreadRadius: 1)
+            //           ]),
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           const Padding(
+            //             padding: EdgeInsets.only(top: 10, left: 20),
+            //             child: Text("Promotions",
+            //                 style: TextStyle(
+            //                     fontSize: 20, fontWeight: FontWeight.bold)),
+            //           ),
+            //           const SizedBox(
+            //             height: 5,
+            //           ),
+            //           SizedBox(
+            //             height: 120,
+            //             child: ListView.separated(
+            //                 itemCount: 2,
+            //                 separatorBuilder: (context, index) => Padding(
+            //                       padding: const EdgeInsets.symmetric(
+            //                           horizontal: 30),
+            //                       child: Divider(),
+            //                     ),
+            //                 itemBuilder: (context, index) {
+            //                   return ListTile(
+            //                     leading: SvgPicture.asset(
+            //                       "assets/images/credit/credit_icon.svg",
+            //                       width: 30,
+            //                     ),
+            //                     title: Text("Pharmacy Free Delivery"),
+            //                     trailing: const Icon(Icons.arrow_forward),
+            //                   );
+            //                 }),
+            //           ),
+            //           ListTile(
+            //             leading: const Icon(
+            //               Icons.add,
+            //               size: 30,
+            //             ),
+            //             onTap: () => context.push('/add_credit_card'),
+            //             title: const Text(
+            //               "Add Promo Code",
+            //               style: TextStyle(fontSize: 20),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 30,
+            // ),
           ]),
         ),
       ),
@@ -325,7 +332,7 @@ class CredCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push('/credit_detail'),
+      // onTap: () => context.push('/credit_detail'),
       child: Container(
         width: 164,
         height: 121,

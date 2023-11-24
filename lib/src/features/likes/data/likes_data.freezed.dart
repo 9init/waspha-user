@@ -21,27 +21,18 @@ DataLocation _$DataLocationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$DataLocation {
   int get id => throw _privateConstructorUsedError;
-  set id(int value) => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  Location get location => throw _privateConstructorUsedError;
+  String get location_string => throw _privateConstructorUsedError;
   int? get user_id => throw _privateConstructorUsedError;
-  set user_id(int? value) => throw _privateConstructorUsedError;
-  String? get location_string => throw _privateConstructorUsedError;
-  set location_string(String? value) => throw _privateConstructorUsedError;
-  Location? get location => throw _privateConstructorUsedError;
-  set location(Location? value) => throw _privateConstructorUsedError;
   String? get landmark => throw _privateConstructorUsedError;
-  set landmark(String? value) => throw _privateConstructorUsedError;
   String? get location_type => throw _privateConstructorUsedError;
-  set location_type(String? value) => throw _privateConstructorUsedError;
-  int? get is_custom_phone => throw _privateConstructorUsedError;
-  set is_custom_phone(int? value) => throw _privateConstructorUsedError;
+  int get is_custom_phone =>
+      throw _privateConstructorUsedError; // Updated type to bool
   Phone? get phone => throw _privateConstructorUsedError;
-  set phone(Phone? value) => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
-  set createdAt(String? value) => throw _privateConstructorUsedError;
   String? get updatedAt => throw _privateConstructorUsedError;
-  set updatedAt(String? value) => throw _privateConstructorUsedError;
   String? get deletedAt => throw _privateConstructorUsedError;
-  set deletedAt(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,18 +48,19 @@ abstract class $DataLocationCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
+      String title,
+      Location location,
+      String location_string,
       int? user_id,
-      String? location_string,
-      Location? location,
       String? landmark,
       String? location_type,
-      int? is_custom_phone,
+      int is_custom_phone,
       Phone? phone,
       String? createdAt,
       String? updatedAt,
       String? deletedAt});
 
-  $LocationCopyWith<$Res>? get location;
+  $LocationCopyWith<$Res> get location;
   $PhoneCopyWith<$Res>? get phone;
 }
 
@@ -86,12 +78,13 @@ class _$DataLocationCopyWithImpl<$Res, $Val extends DataLocation>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
+    Object? location = null,
+    Object? location_string = null,
     Object? user_id = freezed,
-    Object? location_string = freezed,
-    Object? location = freezed,
     Object? landmark = freezed,
     Object? location_type = freezed,
-    Object? is_custom_phone = freezed,
+    Object? is_custom_phone = null,
     Object? phone = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -102,18 +95,22 @@ class _$DataLocationCopyWithImpl<$Res, $Val extends DataLocation>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Location,
+      location_string: null == location_string
+          ? _value.location_string
+          : location_string // ignore: cast_nullable_to_non_nullable
+              as String,
       user_id: freezed == user_id
           ? _value.user_id
           : user_id // ignore: cast_nullable_to_non_nullable
               as int?,
-      location_string: freezed == location_string
-          ? _value.location_string
-          : location_string // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Location?,
       landmark: freezed == landmark
           ? _value.landmark
           : landmark // ignore: cast_nullable_to_non_nullable
@@ -122,10 +119,10 @@ class _$DataLocationCopyWithImpl<$Res, $Val extends DataLocation>
           ? _value.location_type
           : location_type // ignore: cast_nullable_to_non_nullable
               as String?,
-      is_custom_phone: freezed == is_custom_phone
+      is_custom_phone: null == is_custom_phone
           ? _value.is_custom_phone
           : is_custom_phone // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -147,12 +144,8 @@ class _$DataLocationCopyWithImpl<$Res, $Val extends DataLocation>
 
   @override
   @pragma('vm:prefer-inline')
-  $LocationCopyWith<$Res>? get location {
-    if (_value.location == null) {
-      return null;
-    }
-
-    return $LocationCopyWith<$Res>(_value.location!, (value) {
+  $LocationCopyWith<$Res> get location {
+    return $LocationCopyWith<$Res>(_value.location, (value) {
       return _then(_value.copyWith(location: value) as $Val);
     });
   }
@@ -180,19 +173,20 @@ abstract class _$$DataLocationImplCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
+      String title,
+      Location location,
+      String location_string,
       int? user_id,
-      String? location_string,
-      Location? location,
       String? landmark,
       String? location_type,
-      int? is_custom_phone,
+      int is_custom_phone,
       Phone? phone,
       String? createdAt,
       String? updatedAt,
       String? deletedAt});
 
   @override
-  $LocationCopyWith<$Res>? get location;
+  $LocationCopyWith<$Res> get location;
   @override
   $PhoneCopyWith<$Res>? get phone;
 }
@@ -209,12 +203,13 @@ class __$$DataLocationImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
+    Object? location = null,
+    Object? location_string = null,
     Object? user_id = freezed,
-    Object? location_string = freezed,
-    Object? location = freezed,
     Object? landmark = freezed,
     Object? location_type = freezed,
-    Object? is_custom_phone = freezed,
+    Object? is_custom_phone = null,
     Object? phone = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -225,18 +220,22 @@ class __$$DataLocationImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Location,
+      location_string: null == location_string
+          ? _value.location_string
+          : location_string // ignore: cast_nullable_to_non_nullable
+              as String,
       user_id: freezed == user_id
           ? _value.user_id
           : user_id // ignore: cast_nullable_to_non_nullable
               as int?,
-      location_string: freezed == location_string
-          ? _value.location_string
-          : location_string // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Location?,
       landmark: freezed == landmark
           ? _value.landmark
           : landmark // ignore: cast_nullable_to_non_nullable
@@ -245,10 +244,10 @@ class __$$DataLocationImplCopyWithImpl<$Res>
           ? _value.location_type
           : location_type // ignore: cast_nullable_to_non_nullable
               as String?,
-      is_custom_phone: freezed == is_custom_phone
+      is_custom_phone: null == is_custom_phone
           ? _value.is_custom_phone
           : is_custom_phone // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -271,50 +270,100 @@ class __$$DataLocationImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DataLocationImpl implements _DataLocation {
+class _$DataLocationImpl extends _DataLocation {
   _$DataLocationImpl(
       {required this.id,
+      required this.title,
+      required this.location,
+      required this.location_string,
       this.user_id,
-      this.location_string,
-      this.location,
       this.landmark,
       this.location_type,
-      this.is_custom_phone,
+      this.is_custom_phone = 0,
       this.phone,
       this.createdAt,
       this.updatedAt,
-      this.deletedAt});
+      this.deletedAt})
+      : super._();
 
   factory _$DataLocationImpl.fromJson(Map<String, dynamic> json) =>
       _$$DataLocationImplFromJson(json);
 
   @override
-  int id;
+  final int id;
   @override
-  int? user_id;
+  final String title;
   @override
-  String? location_string;
+  final Location location;
   @override
-  Location? location;
+  final String location_string;
   @override
-  String? landmark;
+  final int? user_id;
   @override
-  String? location_type;
+  final String? landmark;
   @override
-  int? is_custom_phone;
+  final String? location_type;
   @override
-  Phone? phone;
+  @JsonKey()
+  final int is_custom_phone;
+// Updated type to bool
   @override
-  String? createdAt;
+  final Phone? phone;
   @override
-  String? updatedAt;
+  final String? createdAt;
   @override
-  String? deletedAt;
+  final String? updatedAt;
+  @override
+  final String? deletedAt;
 
   @override
   String toString() {
-    return 'DataLocation(id: $id, user_id: $user_id, location_string: $location_string, location: $location, landmark: $landmark, location_type: $location_type, is_custom_phone: $is_custom_phone, phone: $phone, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+    return 'DataLocation(id: $id, title: $title, location: $location, location_string: $location_string, user_id: $user_id, landmark: $landmark, location_type: $location_type, is_custom_phone: $is_custom_phone, phone: $phone, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DataLocationImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
+            (identical(other.location_string, location_string) ||
+                other.location_string == location_string) &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
+            (identical(other.landmark, landmark) ||
+                other.landmark == landmark) &&
+            (identical(other.location_type, location_type) ||
+                other.location_type == location_type) &&
+            (identical(other.is_custom_phone, is_custom_phone) ||
+                other.is_custom_phone == is_custom_phone) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      location,
+      location_string,
+      user_id,
+      landmark,
+      location_type,
+      is_custom_phone,
+      phone,
+      createdAt,
+      updatedAt,
+      deletedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -330,56 +379,49 @@ class _$DataLocationImpl implements _DataLocation {
   }
 }
 
-abstract class _DataLocation implements DataLocation {
+abstract class _DataLocation extends DataLocation {
   factory _DataLocation(
-      {required int id,
-      int? user_id,
-      String? location_string,
-      Location? location,
-      String? landmark,
-      String? location_type,
-      int? is_custom_phone,
-      Phone? phone,
-      String? createdAt,
-      String? updatedAt,
-      String? deletedAt}) = _$DataLocationImpl;
+      {required final int id,
+      required final String title,
+      required final Location location,
+      required final String location_string,
+      final int? user_id,
+      final String? landmark,
+      final String? location_type,
+      final int is_custom_phone,
+      final Phone? phone,
+      final String? createdAt,
+      final String? updatedAt,
+      final String? deletedAt}) = _$DataLocationImpl;
+  _DataLocation._() : super._();
 
   factory _DataLocation.fromJson(Map<String, dynamic> json) =
       _$DataLocationImpl.fromJson;
 
   @override
   int get id;
-  set id(int value);
+  @override
+  String get title;
+  @override
+  Location get location;
+  @override
+  String get location_string;
   @override
   int? get user_id;
-  set user_id(int? value);
-  @override
-  String? get location_string;
-  set location_string(String? value);
-  @override
-  Location? get location;
-  set location(Location? value);
   @override
   String? get landmark;
-  set landmark(String? value);
   @override
   String? get location_type;
-  set location_type(String? value);
   @override
-  int? get is_custom_phone;
-  set is_custom_phone(int? value);
-  @override
+  int get is_custom_phone;
+  @override // Updated type to bool
   Phone? get phone;
-  set phone(Phone? value);
   @override
   String? get createdAt;
-  set createdAt(String? value);
   @override
   String? get updatedAt;
-  set updatedAt(String? value);
   @override
   String? get deletedAt;
-  set deletedAt(String? value);
   @override
   @JsonKey(ignore: true)
   _$$DataLocationImplCopyWith<_$DataLocationImpl> get copyWith =>
@@ -392,8 +434,8 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Location {
-  double? get x => throw _privateConstructorUsedError;
-  double? get y => throw _privateConstructorUsedError;
+  double get x => throw _privateConstructorUsedError;
+  double get y => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -406,7 +448,7 @@ abstract class $LocationCopyWith<$Res> {
   factory $LocationCopyWith(Location value, $Res Function(Location) then) =
       _$LocationCopyWithImpl<$Res, Location>;
   @useResult
-  $Res call({double? x, double? y});
+  $Res call({double x, double y});
 }
 
 /// @nodoc
@@ -422,18 +464,18 @@ class _$LocationCopyWithImpl<$Res, $Val extends Location>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
+    Object? x = null,
+    Object? y = null,
   }) {
     return _then(_value.copyWith(
-      x: freezed == x
+      x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double?,
-      y: freezed == y
+              as double,
+      y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
     ) as $Val);
   }
 }
@@ -446,7 +488,7 @@ abstract class _$$LocationImplCopyWith<$Res>
       __$$LocationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double? x, double? y});
+  $Res call({double x, double y});
 }
 
 /// @nodoc
@@ -460,18 +502,18 @@ class __$$LocationImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
+    Object? x = null,
+    Object? y = null,
   }) {
     return _then(_$LocationImpl(
-      x: freezed == x
+      x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double?,
-      y: freezed == y
+              as double,
+      y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
     ));
   }
 }
@@ -479,15 +521,15 @@ class __$$LocationImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LocationImpl implements _Location {
-  const _$LocationImpl({this.x, this.y});
+  const _$LocationImpl({required this.x, required this.y});
 
   factory _$LocationImpl.fromJson(Map<String, dynamic> json) =>
       _$$LocationImplFromJson(json);
 
   @override
-  final double? x;
+  final double x;
   @override
-  final double? y;
+  final double y;
 
   @override
   String toString() {
@@ -522,15 +564,16 @@ class _$LocationImpl implements _Location {
 }
 
 abstract class _Location implements Location {
-  const factory _Location({final double? x, final double? y}) = _$LocationImpl;
+  const factory _Location({required final double x, required final double y}) =
+      _$LocationImpl;
 
   factory _Location.fromJson(Map<String, dynamic> json) =
       _$LocationImpl.fromJson;
 
   @override
-  double? get x;
+  double get x;
   @override
-  double? get y;
+  double get y;
   @override
   @JsonKey(ignore: true)
   _$$LocationImplCopyWith<_$LocationImpl> get copyWith =>

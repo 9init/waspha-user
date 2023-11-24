@@ -1,19 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-
 part 'likes_data.freezed.dart';
 part 'likes_data.g.dart';
 
-@unfreezed
+@freezed
 class DataLocation with _$DataLocation {
   factory DataLocation({
     required int id,
+    required String title,
+    required Location location,
+    required String location_string,
     int? user_id,
-    String? location_string,
-    Location? location,
     String? landmark,
     String? location_type,
-    int? is_custom_phone,
+    @Default(0) int is_custom_phone, // Updated type to bool
     Phone? phone,
     String? createdAt,
     String? updatedAt,
@@ -21,13 +21,16 @@ class DataLocation with _$DataLocation {
   }) = _DataLocation;
   factory DataLocation.fromJson(Map<String, dynamic> json) =>
       _$DataLocationFromJson(json);
+
+  DataLocation._();
+  bool get isCustomPhone => this.is_custom_phone == 1;
 }
 
 @freezed
 class Location with _$Location {
   const factory Location({
-    double? x,
-    double? y,
+    required double x,
+    required double y,
   }) = _Location;
   factory Location.fromJson(Map<String, dynamic> json) =>
       _$LocationFromJson(json);

@@ -40,62 +40,65 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
           child: Column(
             children: [
               GooglePlaceAutoCompleteTextField(
-                  textEditingController: searchController,
-                  isLatLngRequired: true,
-                  boxDecoration: BoxDecoration(
-                      border: Border.all(color: Colors.transparent)),
-                  getPlaceDetailWithLatLng: (Prediction prediction) {
-                    double lat = double.parse(prediction.lat ?? '0.0');
-                    double lng = double.parse(prediction.lng ?? '0.0');
-                    tempLocation.update((state) => LatLng(lat, lng));
-                    // ref
-                    //     .read(getUserLocationTempProvider.notifier)
-                    //     .update((state) => LatLng(lat, lng));
-                  },
-                  itemClick: (Prediction prediction) async {
-                    await ref
-                        .read(currentPlaceDescription.notifier)
-                        .update((state) => prediction.description ?? "");
-                    await ref
-                        .read(isPickingLocationProvider.notifier)
-                        .update((state) => true);
-                    if (context.mounted) context.pop();
-                  },
-                  itemBuilder: (context, index, prediction) {
-                    return Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          color: Color.fromRGBO(243, 241, 251, 1),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.location_on),
-                                  SizedBox(
-                                    width: 7,
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                          "${prediction.description ?? ""}")),
-                                ],
-                              ),
-                              Divider(),
-                              if (index == 4) GetLocationText()
-                            ],
-                          ),
+                textEditingController: searchController,
+                isLatLngRequired: true,
+                boxDecoration: BoxDecoration(
+                  border: Border.all(color: Colors.transparent),
+                ),
+                getPlaceDetailWithLatLng: (Prediction prediction) {
+                  double lat = double.parse(prediction.lat ?? '0.0');
+                  double lng = double.parse(prediction.lng ?? '0.0');
+                  tempLocation.update((state) => LatLng(lat, lng));
+                  // ref
+                  //     .read(getUserLocationTempProvider.notifier)
+                  //     .update((state) => LatLng(lat, lng));
+                },
+                itemClick: (Prediction prediction) async {
+                  await ref
+                      .read(currentPlaceDescription.notifier)
+                      .update((state) => prediction.description ?? "");
+                  await ref
+                      .read(isPickingLocationProvider.notifier)
+                      .update((state) => true);
+                  if (context.mounted) context.pop();
+                },
+                itemBuilder: (context, index, prediction) {
+                  return Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        color: Color.fromRGBO(243, 241, 251, 1),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.location_on),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Expanded(
+                                    child: Text(
+                                        "${prediction.description ?? ""}")),
+                              ],
+                            ),
+                            Divider(),
+                            if (index == 4) GetLocationText()
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                  inputDecoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      border: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      hintText: "Search for a location"),
-                  debounceTime: 800,
-                  googleAPIKey: APIKEY),
+                      ),
+                    ],
+                  );
+                },
+                inputDecoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    border: UnderlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    hintText: "Search for a location"),
+                debounceTime: 800,
+                googleAPIKey: APIKEY,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: locations.when(
@@ -124,15 +127,15 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                                 children: [
                                   Text("${data[index].location_type}"),
                                   Container(
-                                      width: 100,
-                                      child: Text(
-                                        "${data[index].location_string ?? ""}",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.5)),
-                                      )),
+                                    width: 100,
+                                    child: Text(
+                                      "${data[index].title}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5)),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
