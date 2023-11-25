@@ -40,7 +40,7 @@ Future<String> addLocation(
       payload["phone"] = phone;
     }
     if (userName != null) {
-      payload["user_phone_number"] = userName;
+      payload["phone_username"] = userName;
     }
     final request = await ref.watch(dioProvider).post(url, payload);
     print(request);

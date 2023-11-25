@@ -6,6 +6,25 @@ import '../../../nearby_stores/domain/stores_repository.dart';
 
 part 'menu_detail.g.dart';
 
+Future<dynamic> fetchStoreDetailInfo(int id, WidgetRef ref) async {
+  final String url = "user/store-detail-info";
+  final location = await ref.read(userLocationProvider.future);
+
+  try {
+    final request = await ref.read(dioProvider).post(url, {
+      "store_id": id,
+      "location": {
+        "address": "abc xyz",
+        "lat": location!.latitude,
+        "lng": location.longitude
+      }
+    });
+    return request.data["data"];
+  } catch (e) {
+    throw e;
+  }
+}
+
 @riverpod
 Future<dynamic> getStoresDetails(Ref ref, {required int id}) async {
   final String url = "user/store-detail-info";
@@ -16,11 +35,13 @@ Future<dynamic> getStoresDetails(Ref ref, {required int id}) async {
       "location": {
         "address": "abc xyz",
         "lat": location!.latitude,
-        "lng": location!.longitude
+        "lng": location.longitude
       }
     });
     return request.data["data"];
-  } catch (e) {}
+  } catch (e) {
+    throw e;
+  }
 }
 
 @riverpod

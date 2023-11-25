@@ -36,7 +36,7 @@ class LoginScreen extends HookConsumerWidget {
         key: _formKey,
         child: Column(
           children: [
-            AuthContainer(text: "Welcome, Please login to \n your account."),
+            AuthContainer(text: "Welcome, Please login to\nyour account."),
             SizedBox(
               height: 50,
             ),

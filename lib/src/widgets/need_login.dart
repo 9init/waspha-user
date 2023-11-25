@@ -11,11 +11,13 @@ class NeedLoginScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 40),
             Text(
               'You need to login to access this page',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             Row(
@@ -34,8 +36,12 @@ class NeedLoginScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SvgPicture.asset("assets/images/nearby/login.svg",
-                width: 500, height: 500),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: SvgPicture.asset("assets/images/nearby/login.svg",
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width),
+            ),
           ],
         ),
       ),

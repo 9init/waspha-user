@@ -74,10 +74,13 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () => context.push('/pickup_radius'),
                 );
               }),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.4),
-              DangerosArea(),
             ],
           ),
+        ),
+        Spacer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: DangerosArea(),
         ),
       ]),
     );

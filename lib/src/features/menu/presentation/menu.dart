@@ -37,15 +37,15 @@ class MenuScreen extends StatelessWidget {
                     Icon(Icons.settings),
                   ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                MenuContainer(
-                  rowWidgets: [
-                    Icon(Icons.search),
-                    Center(child: Text("Find Provider / Products")),
-                  ],
-                ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // MenuContainer(
+                //   rowWidgets: [
+                //     Icon(Icons.search),
+                //     Center(child: Text("Find Provider")),
+                //   ],
+                // ),
                 SizedBox(
                   height: 20,
                 ),

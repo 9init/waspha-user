@@ -29,7 +29,7 @@ Future<int> createRFP(
           "delivery_location": {
             "address": "4K Chowrangi",
             "lat": location!.latitude,
-            "lng": location!.longitude,
+            "lng": location.longitude,
           },
           "delivery_mode_id": 3,
           "type": type,

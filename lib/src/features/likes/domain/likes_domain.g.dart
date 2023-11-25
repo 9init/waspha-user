@@ -6,7 +6,7 @@ part of 'likes_domain.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addLocationHash() => r'2b4640ce9a5064b7b9b8a2a84ed289d453d10693';
+String _$addLocationHash() => r'618f31b26d589ca408b5b1ba174c6e35ae027701';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -40,18 +40,21 @@ class ReviewsScreen extends StatelessWidget {
               builder: (context, ref, child) {
                 final reviews = ref.watch(getUserReviewsProvider);
                 return reviews.when(data: (data) {
-                  return Expanded(
-                      child: ListView.separated(
-                          itemCount: data.length,
-                          separatorBuilder: (context, index) => SizedBox(
-                                height: 10,
-                              ),
-                          itemBuilder: (context, index) {
-                            return ReviewWidget(
-                              userName: data?[index]["reviewed_by"]["name"],
-                              userAvatar: data?[index]["reviewed_by"]["image"],
-                            );
-                          }));
+                  return data == null
+                      ? Center(child: Text("No reviews yet"))
+                      : Expanded(
+                          child: ListView.separated(
+                              itemCount: data?.length ?? 0,
+                              separatorBuilder: (context, index) => SizedBox(
+                                    height: 10,
+                                  ),
+                              itemBuilder: (context, index) {
+                                return ReviewWidget(
+                                  userName: data?[index]["reviewed_by"]["name"],
+                                  userAvatar: data?[index]["reviewed_by"]
+                                      ["image"],
+                                );
+                              }));
                 }, error: (e, s) {
                   return Center(child: Text("No reviews yet"));
                 }, loading: () {

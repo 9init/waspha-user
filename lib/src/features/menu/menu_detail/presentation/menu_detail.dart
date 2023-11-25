@@ -21,17 +21,21 @@ class MenuDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: Consumer(builder: (context, ref, child) {
-        final storeDetails = ref.read(getStoresDetailsProvider(id: id));
-        return storeDetails.when(
-            data: (data) {
-              return MenuDetailsBody(store: data);
-            },
-            error: (e, s) {
-              return Center(child: Text("Error"));
-            },
-            loading: () => Center(child: CircularProgressIndicator()));
-      }),
+      body: FutureBuilder<dynamic>(
+        future: fetchStoreDetailInfo(id, ref),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error"));
+          } else {
+            // The Future is complete and returned a result
+            dynamic storeData = snapshot.data!;
+            // Now you can use storeData in your UI
+            return MenuDetailsBody(store: storeData);
+          }
+        },
+      ),
     );
   }
 }

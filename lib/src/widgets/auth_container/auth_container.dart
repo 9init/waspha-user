@@ -49,10 +49,15 @@ class AuthContainer extends StatelessWidget {
                       height: 10,
                     ),
                     text != null
-                        ? Text(text!,
+                        ? Text(
+                            text!,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 15))
+                                color: Colors.white, fontSize: 15),
+                          )
                         : Container(),
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),

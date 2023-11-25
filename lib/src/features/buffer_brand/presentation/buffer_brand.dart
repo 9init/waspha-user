@@ -18,7 +18,7 @@ class BufferBrand extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Consumer(
           builder: (context, ref, child) {
-            final location = ref.watch(userLocationProvider);
+            final location = ref.read(userLocationProvider);
             final List<dynamic> stores = ref.read(getStoresProvider);
 
             return location.when(
@@ -36,6 +36,7 @@ class BufferBrand extends ConsumerWidget {
                               tiltGesturesEnabled: false,
                               rotateGesturesEnabled: false,
                               zoomControlsEnabled: false,
+                              myLocationButtonEnabled: false,
                               markers: {
                                 Marker(
                                     markerId: MarkerId('1'),
@@ -131,14 +132,14 @@ class BufferBrand extends ConsumerWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Text("Offers may be recieved within"),
+                          child: Text("Offers may be received within"),
                         ),
                         SizedBox(height: 5),
                         ListTile(
                           leading: CircleAvatar(
                             child: Icon(Icons.lock_clock),
                           ),
-                          title: Text("56h:08m:23s"),
+                          title: Text("30m"),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20),
