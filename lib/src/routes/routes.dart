@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
+import 'package:waspha/src/features/forget_password/forget_password.dart';
+import 'package:waspha/src/features/forget_password/viewmodel.dart';
+import 'package:waspha/src/features/forget_password_otp/forget_password_otp.dart';
 import 'package:waspha/src/features/likes/data/likes_data.dart';
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
 import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.dart';
@@ -10,6 +13,7 @@ import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
 import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dart';
 import 'package:waspha/src/features/notification/presentation/notification.dart';
+import 'package:waspha/src/features/pass_reset/pass_reset.dart';
 import 'package:waspha/src/features/profile/presentation/legal.dart';
 import 'package:waspha/src/features/profile/presentation/pending_task.dart';
 import 'package:waspha/src/features/profile/presentation/pickup_radius.dart';
@@ -27,7 +31,6 @@ import '../features/creditcard/presentation/creditcard.dart';
 import '../features/creditcard/presentation/creditdetails.dart';
 import '../features/custom_need/presentation/custom_need.dart';
 import '../features/custom_need/presentation/select_date.dart';
-import '../features/forget_password/presentation/forget_password.dart';
 import '../features/get_location/presentation/get_location_map.dart';
 import '../features/likes/presentation/add_address.dart';
 import '../features/likes/presentation/edit_location.dart';
@@ -299,8 +302,17 @@ final router = GoRouter(
       builder: (context, state) => FAQScreen(),
     ),
     GoRoute(
-      path: '/forget_password',
-      builder: (context, state) => ForgetPasswordScreen(),
+        path: '/forget_pass', builder: (context, state) => ForgetPassword()),
+    GoRoute(
+      path: '/forget_pass_otp',
+      builder: (context, state) => ForgetPasswordOtp(
+        passResetModel: state.extra as PasswordResetModel,
+      ),
+    ),
+    GoRoute(
+      path: '/reset_pass',
+      builder: (context, state) =>
+          ResetPassword(followUpCode: state.extra as String),
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,

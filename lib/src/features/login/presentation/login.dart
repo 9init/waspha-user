@@ -81,7 +81,7 @@ class LoginScreen extends HookConsumerWidget {
                   Text("Remember me"),
                   Spacer(),
                   GestureDetector(
-                      onTap: () => context.push("/forget_password"),
+                      onTap: () => context.push("/forget_pass"),
                       child: Text("Forgot Password?")),
                 ],
               ),

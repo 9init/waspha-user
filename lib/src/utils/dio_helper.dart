@@ -31,8 +31,8 @@ class DioHelper {
     baseUrl: baseURL,
     responseType: ResponseType.json,
     receiveDataWhenStatusError: true,
-    connectTimeout: 30000,
-    receiveTimeout: 30000,
+    connectTimeout: Duration(milliseconds: 30000),
+    receiveTimeout: Duration(milliseconds: 30000),
   );
 
   static Future<RequestOptions> requestInterceptor(
@@ -87,7 +87,7 @@ class DioHelper {
       }
 
       return response;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print("ERROR: ${e.response?.data}");
       return e.response!;
     }
