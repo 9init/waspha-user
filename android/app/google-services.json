@@ -48,10 +48,10 @@
               "client_type": 3
             },
             {
-              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_id": "254995855199-85bol1lrctp3tjcadmevd9s1a7hp9mc4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.gropse.wasphaProvider"
+                "bundle_id": "com.waspha.user.sg"
               }
             }
           ]
@@ -100,10 +100,10 @@
               "client_type": 3
             },
             {
-              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_id": "254995855199-85bol1lrctp3tjcadmevd9s1a7hp9mc4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.gropse.wasphaProvider"
+                "bundle_id": "com.waspha.user.sg"
               }
             }
           ]
@@ -118,6 +118,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "254995855199-5v4d8qs2qll641gj7mt681b6h3iena7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.waspha",
+            "certificate_hash": "985f69c1a207bb9051d5e874f679d6a9f2229a74"
+          }
+        },
+        {
+          "client_id": "254995855199-m43mg7uchvhqial13n23d4dij1mjt289.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.waspha",
+            "certificate_hash": "a6e43fd11d6ded944ed17edeb4f23d2904db0447"
+          }
+        },
         {
           "client_id": "254995855199-22dah7ugjms48sqt7cvjud1tf8v8616v.apps.googleusercontent.com",
           "client_type": 3
@@ -136,10 +152,10 @@
               "client_type": 3
             },
             {
-              "client_id": "254995855199-biakipn714fm3ehu88u6rl6knds44plc.apps.googleusercontent.com",
+              "client_id": "254995855199-85bol1lrctp3tjcadmevd9s1a7hp9mc4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.gropse.wasphaProvider"
+                "bundle_id": "com.waspha.user.sg"
               }
             }
           ]

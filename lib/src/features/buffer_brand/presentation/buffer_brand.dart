@@ -93,39 +93,42 @@ class BufferBrand extends ConsumerWidget {
                               Container(
                                 height: 38,
                                 child: ListView.builder(
-                                    itemCount:
-                                        stores.length > 5 ? 5 : stores.length,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return AnimatedAlign(
-                                        duration: Duration(milliseconds: 200),
-                                        curve: Curves.easeIn,
-                                        alignment: Alignment.centerLeft,
-                                        widthFactor: 0.6,
-                                        child: CircleAvatar(
-                                          backgroundImage:
-                                              CachedNetworkImageProvider(
-                                                  stores[index].image),
-                                        ),
-                                      );
-                                    }),
+                                  itemCount:
+                                      stores.length > 5 ? 5 : stores.length,
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return AnimatedAlign(
+                                      duration: Duration(milliseconds: 200),
+                                      curve: Curves.easeIn,
+                                      alignment: Alignment.centerLeft,
+                                      widthFactor: 0.6,
+                                      child: CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                stores[index].image),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               Expanded(
                                 child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            stores.length == 5 ? 0 : 30),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            text: stores.length > 5
-                                                ? "+${stores.length - 5}"
-                                                : stores.length == 1
-                                                    ? stores[0].address
-                                                    : "",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            )))),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: stores.length == 5 ? 0 : 30),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: stores.length > 5
+                                          ? "+${stores.length - 5}"
+                                          : stores.length == 1
+                                              ? stores[0].address
+                                              : "",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               )
                             ],
                           ),

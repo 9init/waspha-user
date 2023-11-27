@@ -66,6 +66,7 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://waspha-b0ef3.firebaseio.com',
     storageBucket: 'waspha-b0ef3.appspot.com',
     androidClientId: '254995855199-386bas36hm6u9m8s9bc2q4mqq6a4r6ns.apps.googleusercontent.com',
+    iosClientId: '254995855199-85bol1lrctp3tjcadmevd9s1a7hp9mc4.apps.googleusercontent.com',
     iosBundleId: 'com.waspha.user.sg',
   );
 }

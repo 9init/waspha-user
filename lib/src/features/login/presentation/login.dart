@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
+import 'package:waspha/src/services/social-auth-services.dart';
 
 import '../../../widgets/auth_btn/auth_btn.dart';
 import '../../../widgets/auth_container/auth_container.dart';
@@ -40,13 +41,12 @@ class LoginScreen extends HookConsumerWidget {
             SizedBox(
               height: 50,
             ),
-            Text("Login  via social networks"),
+            Text("Login via social networks"),
             SizedBox(
               height: 10,
             ),
             SocialMedia(
-              googleOnTap: () =>
-                  ref.watch(googleServiceProvider).signIn(context),
+              googleOnTap: () => SocialAuthServices().singInWithGoogle(),
               facebookOnTap: () {},
               appleOnTap: () => ref.watch(appleServiceProvider).signIn(),
             ),
