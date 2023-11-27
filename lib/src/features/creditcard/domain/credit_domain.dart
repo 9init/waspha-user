@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:waspha/src/utils/dio_helper.dart';
+import 'package:waspha/src/shared/networking/networking.dart';
+import 'package:waspha/src/shared/networking/results.dart';
 
 import '../data/credit_data.dart';
 
@@ -13,46 +14,55 @@ Future<String> addCreditCard(Ref ref,
     required String cvv,
     required int expMonth,
     required int expYear}) async {
-  final url = "user/credit-card";
-  try {
-    final request = await ref.watch(dioProvider).post(url, {
-      "cardNumber": cardNumber,
-      "cardholderName": cardName,
-      "expirationMonth": expMonth,
-      "expirationYear": expYear,
-      "cvv": cvv
-    });
-    return request.data["message"];
-  } catch (e) {}
-  return "";
+  final url = "/credit-card";
+  final result = await Networking.post(url, {
+    "cardNumber": cardNumber,
+    "cardholderName": cardName,
+    "expirationMonth": expMonth,
+    "expirationYear": expYear,
+    "cvv": cvv,
+  });
+
+  return switch (result) {
+    Success(value: final value) => value.data["message"],
+    Failure() => "",
+    Error() => "",
+  };
 }
 
 @riverpod
-Future<dynamic> getCreditCards(Ref ref) async {
-  final url = "user/credit-cards";
-  try {
-    final request = await ref.watch(dioProvider).get(url);
-    return request.data["data"].map((e) => Credit.fromJson(e)).toList();
-  } catch (e) {}
-  return [];
+Future<List<Credit>> getCreditCards(Ref ref) async {
+  final url = "/credit-cards";
+  final result = await Networking.get(url);
+
+  return switch (result) {
+    Success(value: final value) =>
+      value.data["data"].map<Credit>((e) => Credit.fromJson(e)).toList(),
+    Failure() => [],
+    Error() => [],
+  };
 }
 
 @riverpod
 Future<String> deleteCreditCard(Ref ref, {required int id}) async {
-  final url = "user/credit-card/$id";
-  try {
-    final request = await ref.watch(dioProvider).delete(url);
-    return request.data["message"];
-  } catch (e) {}
-  return "";
+  final url = "/credit-card/$id";
+  final result = await Networking.delete(url);
+
+  return switch (result) {
+    Success(value: final value) => value.data["message"],
+    Failure() => "",
+    Error() => "",
+  };
 }
 
 @riverpod
-Future<dynamic> getWallets(Ref ref) async {
-  final url = "user/get-wallets";
-  try {
-    final request = await ref.watch(dioProvider).get(url);
-    return request.data["data"];
-  } catch (e) {}
-  return [];
+Future<List<dynamic>> getWallets(Ref ref) async {
+  final url = "/get-wallets";
+  final result = await Networking.get(url);
+
+  return switch (result) {
+    Success(value: final value) => value.data["data"],
+    Failure() => [],
+    Error() => [],
+  };
 }

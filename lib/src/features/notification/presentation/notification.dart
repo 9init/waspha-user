@@ -50,7 +50,7 @@ class NotificationsScreen extends HookWidget {
                             separatorBuilder: (context, index) => SizedBox(
                                   height: 20,
                                 ),
-                            itemCount: data.length,
+                            itemCount: data?.length ?? 0,
                             itemBuilder: (context, index) {
                               return NotificationCard(
                                 isCollapsed: isCollapsed,
@@ -129,7 +129,8 @@ class NotificationCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(avatarImage),
+                        backgroundImage:
+                            CachedNetworkImageProvider(avatarImage),
                       ),
                       SizedBox(
                         width: 20,

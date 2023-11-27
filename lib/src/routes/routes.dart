@@ -23,8 +23,6 @@ import 'package:waspha/src/features/profile/presentation/update_profile.dart';
 import 'package:waspha/src/features/register/presentation/register.dart';
 import 'package:waspha/src/features/resetPass/presentation/reset_pass.dart';
 import 'package:waspha/src/features/reviews/presentation/reviews.dart';
-import 'package:waspha/src/features/verification/presentation/verification.dart';
-
 import '../features/category/presentation/category.dart';
 import '../features/creditcard/presentation/add_credit.dart';
 import '../features/creditcard/presentation/creditcard.dart';
@@ -177,15 +175,6 @@ final router = GoRouter(
         userLat: double.parse(state.pathParameters['lat']!),
         userLng: double.parse(state.pathParameters['lng']!),
       ),
-    ),
-    GoRoute(
-      path: '/verify',
-      name: "Verification OTP",
-      builder: (context, state) {
-        return VerificationScreen(
-          fullNumber: state.extra,
-        );
-      },
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,

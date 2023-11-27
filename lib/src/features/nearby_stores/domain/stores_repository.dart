@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:bitmap/bitmap.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,13 +9,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:waspha/src/features/nearby_stores/data/stores_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
-import 'package:waspha/src/utils/dio_helper.dart';
+import 'package:waspha/src/shared/networking/networking.dart';
+import 'package:waspha/src/shared/networking/results.dart';
 import 'package:image/image.dart' as img;
 
 import '../../../routes/routes.dart';
@@ -63,80 +60,84 @@ Future<dynamic> getNearbyStores(
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
 }) async {
-  final url = "user/get-nearby-stores";
-
+  final url = "/get-nearby-stores";
   final location = (await ref.read(userLocationProvider.future))!;
   final range = ref.read(pickupRadiusProvider).pickupRadius;
-  try {
-    var request = await ref.read(dioProvider).post(
-        url,
-        jsonEncode({
-          "location": {
-            "lat": location.latitude,
-            "lng": location.longitude,
-            "country_code":
-                ref.read(getCountryCodeProvider).asData?.valueOrNull ?? "EG"
-          },
-          "method": ref.watch(methodProvider.notifier).state,
-          "range": range
-        }));
 
-    var response = request.data;
-
-    String message = response["message"];
-
-    var storesList = response["data"]["stores"];
-
-    var categoriesList = response["data"]["categories"];
-    return {
+  final payload = {
+    "location": {
       "lat": location.latitude,
       "lng": location.longitude,
-      "message": message,
-      "stores": storesList.map((job) => Stores.fromJson(job)).toList(),
-      "categories":
-          categoriesList.map((job) => Categories.fromJson(job)).toList(),
-    };
-  } on DioError catch (e) {
-    print("STORE ERROR:${e.response?.data}");
-    if (!isBottomSheetOpen.value) {
-      isBottomSheetOpen.value = true;
-      final context = rootNavigatorKey.currentState?.overlay?.context;
+      "country_code":
+          ref.read(getCountryCodeProvider).asData?.valueOrNull ?? "EG"
+    },
+    "method": ref.watch(methodProvider.notifier).state,
+    "range": range
+  };
 
-      showModalBottomSheet(
+  final result = await Networking.post(url, payload);
+
+  switch (result) {
+    case Success(value: final value):
+      final response = value.data;
+      String message = response["message"];
+      final storesList = response["data"]["stores"];
+      final categoriesList = response["data"]["categories"];
+
+      return {
+        "lat": location.latitude,
+        "lng": location.longitude,
+        "message": message,
+        "stores": storesList.map((job) => Stores.fromJson(job)).toList(),
+        "categories":
+            categoriesList.map((job) => Categories.fromJson(job)).toList(),
+      };
+    case Failure():
+      if (!isBottomSheetOpen.value) {
+        isBottomSheetOpen.value = true;
+        final context = rootNavigatorKey.currentState?.overlay?.context;
+
+        showModalBottomSheet(
           enableDrag: false,
           context: context!,
           builder: (context) => Container(
-                height: 200,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text("No result Found"),
-                      ),
-                      Text("Stores with Pickup service not found"),
-                      SizedBox(height: 20),
-                      Text("Search another area or order delivery instead"),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await ref
-                                  .refresh(getNearbyStoresProvider(
-                                    context: context,
-                                    isBottomSheetOpen: isBottomSheetOpen,
-                                  ))
-                                  .value;
-                            },
-                            child: Text("Refresh")),
-                      )
-                    ],
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text("No result Found"),
                   ),
-                ),
-              ));
-    }
+                  Text("Stores with Pickup service not found"),
+                  SizedBox(height: 20),
+                  Text("Search another area or order delivery instead"),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .refresh(
+                              getNearbyStoresProvider(
+                                context: context,
+                                isBottomSheetOpen: isBottomSheetOpen,
+                              ),
+                            )
+                            .value;
+                      },
+                      child: Text("Refresh"),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+      break;
+    case Error():
+      break;
   }
 
   return {

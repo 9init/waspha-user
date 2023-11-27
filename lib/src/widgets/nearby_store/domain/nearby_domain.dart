@@ -1,43 +1,29 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:waspha/src/utils/dio_helper.dart';
+import 'package:waspha/src/shared/networking/networking.dart';
+import 'package:waspha/src/shared/networking/results.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'nearby_domain.g.dart';
 
 @riverpod
 Future<bool> addStoreFav(Ref ref, {required int id}) async {
-  final url = "user/add-store-to-fav";
-  try {
-    final request = await ref.watch(dioProvider).post(url, {"store_id": id});
-    if (request.statusCode == 200) {
-      return true;
-    }
-  } catch (e) {}
-  return false;
+  final url = "/add-store-to-fav";
+  final result = await Networking.post(url, {"store_id": id});
+  return result is Success;
 }
 
 @riverpod
 Future<bool> deleteStoreFav(Ref ref, {required int id}) async {
-  final url = "user/fav-stores/$id";
-  try {
-    final request = await ref.watch(dioProvider).delete(url);
-    if (request.statusCode == 200) {
-      return true;
-    }
-  } catch (e) {}
-  return false;
+  final url = "/fav-stores/$id";
+  final result = await Networking.delete(url);
+  return result is Success;
 }
 
 @riverpod
 Future<dynamic> getFavStores(Ref ref) async {
-  final url = "user/fav-stores";
-  try {
-    final request = await ref.watch(dioProvider).get(url);
-    if (request.statusCode == 200) {
-      return request.data["data"];
-    }
-  } catch (e) {}
-  return [];
+  final url = "/fav-stores";
+  final result = await Networking.get(url);
+  return result is Success ? (result as Success).value.data["data"] : [];
 }
 
 @riverpod

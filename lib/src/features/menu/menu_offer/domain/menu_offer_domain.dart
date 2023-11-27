@@ -1,34 +1,33 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../../utils/dio_helper.dart';
+import 'package:waspha/src/shared/networking/networking.dart';
+import 'package:waspha/src/shared/networking/results.dart';
 
 part 'menu_offer_domain.g.dart';
 
 final getStoresCategoriesProvider = FutureProvider.family((ref, id) async {
-  const url = 'user/store-categories';
+  const url = '/store-categories';
+  final result = await Networking.post(url, {'store_id': id});
 
-  try {
-    final request = await ref.watch(dioProvider).post(url, {'store_id': id});
-    final response = request.data["data"];
-    return response;
-  } on DioError catch (e) {
-    print("CAT: ${e.response?.data}");
-  }
+  return switch (result) {
+    Success(value: final value) => value.data["data"],
+    Failure() => [],
+    Error() => [],
+  };
 });
 
-@riverpod
 Future<dynamic> getStoresProducts(Ref ref, {required int categoryID}) async {
-  const url = 'user/store-products';
-  try {
-    final request =
-        await ref.watch(dioProvider).post(url, {'category_id': categoryID});
-    final response = request.data["data"];
+  const url = '/store-products';
+  final result = await Networking.post(url, {'category_id': categoryID});
 
-    return response;
-  } on DioError catch (e) {
-    print("CAT: ${e.response?.data}");
+  switch (result) {
+    case Success(value: final value):
+      final response = value.data["data"];
+      return response;
+    case Failure():
+    case Error():
+      debugPrint("Error fetching store products");
   }
 }
