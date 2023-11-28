@@ -9,15 +9,18 @@ import 'package:waspha/src/models/phone/phone_model.dart';
 
 import '../common/auth/auth_container.dart';
 
-class ForgetPassword extends ConsumerWidget {
-  ForgetPassword({super.key});
+class ForgetPassword extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ForgetPassword();
+}
 
+class _ForgetPassword extends ConsumerState<ForgetPassword> {
   final TextEditingController _emailController = TextEditingController();
   final PhoneController _mobileController = PhoneController(null);
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         key: _formKey,

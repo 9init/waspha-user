@@ -8,21 +8,23 @@ import 'package:waspha/src/widgets/custom_field/custom_field.dart';
 import 'package:waspha/src/widgets/social_media/social_media.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
-class RegisterScreen extends ConsumerWidget {
-  RegisterScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreen();
+}
 
+class _RegisterScreen extends ConsumerState<RegisterScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-
-  final PhoneController mobileController = PhoneController(null);
   final TextEditingController referralController = TextEditingController();
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final PhoneController mobileController = PhoneController(null);
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     validateForm() {
       if (_formKey.currentState!.validate()) {
         ref.watch(sendRegisterProvider(

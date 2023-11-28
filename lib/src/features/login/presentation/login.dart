@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
-import 'package:waspha/src/features/login/services/social-auth-services.dart';
 
 import '../../../widgets/auth_btn/auth_btn.dart';
 import '../../../widgets/auth_container/auth_container.dart';
@@ -11,14 +10,18 @@ import '../../../widgets/custom_field/custom_field.dart';
 import '../../../widgets/social_media/social_media.dart';
 import '../domain/social_service.dart';
 
-class LoginScreen extends HookConsumerWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulHookConsumerWidget {
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreen();
+}
+
+class _LoginScreen extends ConsumerState<LoginScreen> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isRememberBoxChecked = useState(false);
 
     Future validateForm() async {
