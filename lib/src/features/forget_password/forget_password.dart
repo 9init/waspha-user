@@ -14,7 +14,7 @@ class ForgetPassword extends ConsumerWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final PhoneController _mobileController = PhoneController(null);
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

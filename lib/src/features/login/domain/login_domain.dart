@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:waspha/src/features/login/model/login/login_data.dart';
+import 'package:waspha/src/features/login/model/social_token_data.dart';
+import 'package:waspha/src/features/login/model/token_type.dart';
+import 'package:waspha/src/features/profile/data/user_data.dart';
 import 'package:waspha/src/shared/networking/networking.dart';
 import 'package:waspha/src/shared/networking/results.dart';
-import 'package:waspha/src/utils/cache_helper.dart';
 
 part 'login_domain.g.dart';
 
@@ -39,11 +43,49 @@ Future sendLog(Ref ref,
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(response["message"]),
   ));
-  final accessToken = response["data"]["access_token"];
-  debugPrint("Token: $accessToken");
-  await CacheHelper.setString("accessToken", accessToken);
-  ref.watch(accessTokenProvider.notifier).update((state) => accessToken);
   context.go('/');
+}
+
+@riverpod
+Future singInWithGoogle(
+  Ref ref, {
+  required BuildContext context,
+}) async {
+  print("gUser");
+  final GoogleSignInAccount? gUser =
+      await GoogleSignIn(scopes: ['email']).signIn();
+  print("gUse2");
+  print("gUser $gUser");
+  if (gUser == null) return;
+
+  // obtain auth details from request
+  final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+  final tokenData = SocialTokenData(
+    tokenType: TokenType.google,
+    token: gAuth.idToken!,
+  );
+
+  final UserData? result = await _invokeSocialLoginRequest(tokenData);
+  if (result != null) context.go('/');
+}
+
+Future<UserData?> _invokeSocialLoginRequest(SocialTokenData tokenData) async {
+  final url = "/social-login";
+  final result = await Networking.post(url, {
+    "token": tokenData.token,
+    "token_type": tokenData.tokenType.name,
+  });
+
+  return switch (result) {
+    Success(value: final v) => () {
+        final loginData = UserData.fromJson(v.data["data"]);
+        print(loginData);
+        return loginData;
+      }(),
+    Failure() => null,
+    Error() => null,
+  };
 }
 
 @riverpod

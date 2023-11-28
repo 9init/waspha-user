@@ -18,6 +18,7 @@ final getStoresCategoriesProvider = FutureProvider.family((ref, id) async {
   };
 });
 
+@riverpod
 Future<dynamic> getStoresProducts(Ref ref, {required int categoryID}) async {
   const url = '/store-products';
   final result = await Networking.post(url, {'category_id': categoryID});

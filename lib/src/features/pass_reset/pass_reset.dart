@@ -11,7 +11,7 @@ class ResetPassword extends ConsumerWidget {
   ResetPassword({super.key, required this.followUpCode});
 
   final String followUpCode;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();

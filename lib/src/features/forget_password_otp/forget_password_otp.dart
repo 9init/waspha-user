@@ -18,11 +18,8 @@ class ForgetPasswordOtp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        body: _ForgetPasswordOtp(resetModel: passResetModel),
-      ),
-      onWillPop: () async => false,
+    return Scaffold(
+      body: _ForgetPasswordOtp(resetModel: passResetModel),
     );
   }
 }

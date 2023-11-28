@@ -140,7 +140,7 @@ class CreditCardLogged extends StatelessWidget {
                                       key: UniqueKey(),
                                       onDismissed: (direction) {
                                         ref.read(deleteCreditCardProvider(
-                                            id: data?[index]["id"]));
+                                            id: data[index].id));
                                       },
                                       child: ListTile(
                                         leading: SvgPicture.asset(

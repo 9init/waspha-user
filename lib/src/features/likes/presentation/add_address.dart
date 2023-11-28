@@ -26,7 +26,7 @@ class AddAddressScreen extends StatefulHookConsumerWidget {
 }
 
 class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _userNameController = TextEditingController();

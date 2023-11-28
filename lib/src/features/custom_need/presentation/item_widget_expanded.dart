@@ -14,7 +14,7 @@ class ItemWidgetExpanded extends StatefulHookConsumerWidget {
 }
 
 class _ItemWidgetExpandedState extends ConsumerState<ItemWidgetExpanded> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

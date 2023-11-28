@@ -11,7 +11,7 @@ class CreateItemWidget extends HookWidget {
     required this.item,
   });
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Item item;
 
   @override

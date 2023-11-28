@@ -19,7 +19,7 @@ class RegisterScreen extends ConsumerWidget {
 
   final PhoneController mobileController = PhoneController(null);
   final TextEditingController referralController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

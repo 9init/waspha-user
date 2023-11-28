@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
-import 'package:waspha/src/services/social-auth-services.dart';
+import 'package:waspha/src/features/login/services/social-auth-services.dart';
 
 import '../../../widgets/auth_btn/auth_btn.dart';
 import '../../../widgets/auth_container/auth_container.dart';
@@ -15,7 +15,7 @@ class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +46,8 @@ class LoginScreen extends HookConsumerWidget {
               height: 10,
             ),
             SocialMedia(
-              googleOnTap: () => SocialAuthServices().singInWithGoogle(),
+              googleOnTap: () =>
+                  ref.read(singInWithGoogleProvider(context: context)),
               facebookOnTap: () {},
               appleOnTap: () => ref.watch(appleServiceProvider).signIn(),
             ),

@@ -35,7 +35,7 @@ class _EditAddressScreen extends ConsumerState<EditAddressScreen> {
   });
 
   final DataLocation locationModel;
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _landmarkController = TextEditingController();
