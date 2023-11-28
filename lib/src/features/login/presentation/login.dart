@@ -52,7 +52,8 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
               googleOnTap: () =>
                   ref.read(singInWithGoogleProvider(context: context)),
               facebookOnTap: () {},
-              appleOnTap: () => ref.watch(appleServiceProvider).signIn(),
+              appleOnTap: () =>
+                  ref.watch(singInWithAppleProvider(context: context)),
             ),
             SizedBox(
               height: 10,

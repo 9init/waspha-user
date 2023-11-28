@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:waspha/src/features/login/model/login/login_data.dart';
 import 'package:waspha/src/features/login/model/social_token_data.dart';
 import 'package:waspha/src/features/login/model/token_type.dart';
@@ -47,15 +49,12 @@ Future sendLog(Ref ref,
 }
 
 @riverpod
-Future singInWithGoogle(
-  Ref ref, {
-  required BuildContext context,
-}) async {
+Future singInWithGoogle(Ref ref, {required BuildContext context}) async {
   print("gUser");
-  final GoogleSignInAccount? gUser =
-      await GoogleSignIn(scopes: ['email']).signIn();
-  print("gUse2");
-  print("gUser $gUser");
+  GoogleSignInAccount? gUser;
+  try {
+    gUser = await GoogleSignIn().signIn();
+  } catch (e) {}
   if (gUser == null) return;
 
   // obtain auth details from request
@@ -70,11 +69,49 @@ Future singInWithGoogle(
   if (result != null) context.go('/');
 }
 
+@riverpod
+Future singInWithApple(Ref ref, {required BuildContext context}) async {
+  final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+    scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ],
+  );
+
+  final oAuthProvider = OAuthProvider('apple.com');
+  final credential = oAuthProvider.credential(
+    idToken: appleIdCredential.identityToken,
+    accessToken: appleIdCredential.authorizationCode,
+  );
+
+  final userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+  final splittedName = userCredential.user?.displayName?.split(' ');
+  final givenName = splittedName?[0];
+  final familyName =
+      splittedName != null && splittedName.length >= 2 ? splittedName[1] : null;
+
+  final tokenData = SocialTokenData(
+    tokenType: TokenType.apple,
+    token: appleIdCredential.authorizationCode,
+    appleData: {
+      'email': appleIdCredential.email ?? userCredential.user?.email,
+      'given_name': appleIdCredential.givenName ?? givenName,
+      'family_name': appleIdCredential.familyName ?? familyName,
+    },
+  );
+
+  final UserData? result = await _invokeSocialLoginRequest(tokenData);
+  if (result != null) context.go('/');
+}
+
 Future<UserData?> _invokeSocialLoginRequest(SocialTokenData tokenData) async {
   final url = "/social-login";
   final result = await Networking.post(url, {
     "token": tokenData.token,
     "token_type": tokenData.tokenType.name,
+    "apple_data": tokenData.appleData
   });
 
   return switch (result) {

@@ -127,6 +127,14 @@
           }
         },
         {
+          "client_id": "254995855199-889n5pq4emcc9hfhsmt5bdm46cupeacu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.waspha",
+            "certificate_hash": "665537a188226c1df17cf99413d852b994351b85"
+          }
+        },
+        {
           "client_id": "254995855199-m43mg7uchvhqial13n23d4dij1mjt289.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
