@@ -51,6 +51,18 @@ class Networking {
     _dio.interceptors.add(CookieManager(jar));
   }
 
+  /// Delete all cookies
+  static Future<void> deleteCookies() async {
+    if (_self == null) return;
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String appDocPath = appDocDir.path;
+
+    final jar = PersistCookieJar(
+      storage: FileStorage("$appDocPath/.cookies/"),
+    );
+    await jar.deleteAll();
+  }
+
   /// Makes a generic HTTP request with the specified [url], [requestMethod], and optional [data].
   ///
   /// Returns a [Result] containing either a [Response] on success or an [Exception] on failure.

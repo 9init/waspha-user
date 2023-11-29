@@ -33,6 +33,9 @@ final signedOutProvider =
 
   switch (result) {
     case Success():
+      try {
+        await Networking.deleteCookies();
+      } catch (_) {}
       context.go("/login");
       break;
     case Failure():
