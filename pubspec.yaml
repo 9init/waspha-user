@@ -77,7 +77,11 @@ dependencies:
   geolocator: ^10.1.0
   flutter_screenutil: ^5.9.0
   firebase_auth: ^4.15.0
-
+  # Validators for form fields
+  form_builder_validators: ^9.1.0
+  # Form builder creation of data collection forms in Flutter by removing the boilerplate needed to build a form, validate fields, react to changes and collect final user input.
+  flutter_form_builder: ^9.1.1
+  flutter_datetime_picker_plus: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
