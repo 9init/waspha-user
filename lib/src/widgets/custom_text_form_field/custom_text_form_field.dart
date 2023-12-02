@@ -14,7 +14,7 @@ class CustomTextFromField extends StatelessWidget {
     this.fieldName,
     this.maxLines,
     this.minLines,
-     this.textInputAction,
+    this.textInputAction,
   }) : super(key: key);
   final TextEditingController textEditingController;
   final Function(String?)? onChanged;

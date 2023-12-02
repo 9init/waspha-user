@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:waspha/src/widgets/custom_text_form_field/custom_text_form_field.dart';
 
 import '../data/item_data.dart';
+
 // Assuming itemsProvider is a FutureProvider<String>
 class ItemWidgetExpanded extends StatefulHookWidget {
   final Item item;
@@ -21,11 +22,13 @@ class _ItemWidgetExpandedState extends State<ItemWidgetExpanded> {
   @override
   build(BuildContext context) {
     final counter = useState(1);
-    final TextEditingController _nameController =
-        useTextEditingController(text: widget.item.name == null ? "" : widget.item.name);
+    final TextEditingController _nameController = useTextEditingController(
+        text: widget.item.name == null ? "" : widget.item.name);
 
     final TextEditingController _noteController = useTextEditingController(
-        text: widget.item.additional_notes == null ? "" : widget.item.additional_notes);
+        text: widget.item.additional_notes == null
+            ? ""
+            : widget.item.additional_notes);
 
     print("Name: ${widget.item.name}");
     final pickedImagePath = useState<String?>(null);
@@ -42,7 +45,6 @@ class _ItemWidgetExpandedState extends State<ItemWidgetExpanded> {
       }
     }
 
-
     return Column(
       children: [
         Row(
@@ -55,14 +57,16 @@ class _ItemWidgetExpandedState extends State<ItemWidgetExpanded> {
                     return CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.grey[200],
-                      backgroundImage: pickedImagePath.value != null ? FileImage(File(pickedImagePath.value??'')) : null,
+                      backgroundImage: pickedImagePath.value != null
+                          ? FileImage(File(pickedImagePath.value ?? ''))
+                          : null,
                       child: pickedImagePath.value == null
                           ? IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          _pickImage(picker);
-                        },
-                      )
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                _pickImage(picker);
+                              },
+                            )
                           : null,
                     );
                   },

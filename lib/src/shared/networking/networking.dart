@@ -18,7 +18,6 @@ class Networking {
   static const String BASE_URL = "https://api.waspha.com/user";
 
   static BaseOptions options = BaseOptions(
-
     baseUrl: BASE_URL,
     responseType: ResponseType.json,
     receiveDataWhenStatusError: true,
@@ -40,9 +39,7 @@ class Networking {
     await instance._prepareJar();
     _self = instance;
     // Add the AppInterceptors to the Dio instance
-    instance._dio.interceptors.add(
-      AppInterceptors(),
-    );
+    instance._dio.interceptors.add(AppInterceptors());
 
     return _self!;
   }

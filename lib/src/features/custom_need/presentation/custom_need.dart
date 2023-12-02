@@ -217,19 +217,21 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
 
               return Expanded(
                 child: ListView.separated(
-                  key: UniqueKey(), // Add a key to the ListView itself
                   itemCount: items.length,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 5,
                   ),
-                  itemBuilder: (context, index) => CreateItemWidget(
-                    item: items[index],
-                    deleteItemCallback: (item) {
-                      ref.read(itemsProvider).remove(item);
-                      debugPrint('The Item After Removed Is $items');
-                      setState(() {});
-                      //TODO:use state management instead setState
-                    },
+                  itemBuilder: (context, index) => Dismissible(
+                    key: Key(items[index].toString()),
+                    direction: DismissDirection.none,
+                    child: CreateItemWidget(
+                      item: items[index],
+                      deleteItemCallback: (item) {
+                        ref.read(itemsProvider).remove(item);
+                        debugPrint('The Item After Removed Is $items');
+                        setState(() {});
+                      },
+                    ),
                   ),
                 ),
               );
@@ -306,7 +308,6 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
   @override
   Widget build(BuildContext context) {
     final _selectedDate = useState(DateTime.now());
-
 
     return Consumer(
       builder: (context, ref, child) => GestureDetector(
