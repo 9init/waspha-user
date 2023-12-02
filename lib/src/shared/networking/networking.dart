@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:waspha/src/shared/networking/dio_interceptor.dart';
 import 'package:waspha/src/shared/networking/request_method.dart';
 import 'package:waspha/src/shared/networking/results.dart';
 
@@ -17,6 +18,7 @@ class Networking {
   static const String BASE_URL = "https://api.waspha.com/user";
 
   static BaseOptions options = BaseOptions(
+
     baseUrl: BASE_URL,
     responseType: ResponseType.json,
     receiveDataWhenStatusError: true,
@@ -37,6 +39,10 @@ class Networking {
     final instance = Networking._();
     await instance._prepareJar();
     _self = instance;
+    // Add the AppInterceptors to the Dio instance
+    instance._dio.interceptors.add(
+      AppInterceptors(),
+    );
 
     return _self!;
   }
