@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final selectedTimeProvider = StateProvider<String>((ref) => '');
 
-class SelectDateScreen extends HookWidget {
+class SelectDateScreen extends ConsumerStatefulWidget {
   const SelectDateScreen({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SelectDateScreen();
+}
+
+class _SelectDateScreen extends ConsumerState<SelectDateScreen> {
   @override
   Widget build(BuildContext context) {
     final _focusedDate = useState(DateTime.now());
@@ -41,17 +45,31 @@ class SelectDateScreen extends HookWidget {
               builder: (context, ref, child) => ElevatedButton(
                 onPressed: () {
                   showTimePicker(context: context, initialTime: TimeOfDay.now())
-                      .then((value) {
-                    var time = value?.format(context);
-                    String formattedDate =
-                        DateFormat.yMd().format(_selectedDate.value);
-                    String timeString = "${formattedDate} $time";
-                    print(timeString);
-                    ref
-                        .watch(selectedTimeProvider.notifier)
-                        .update((state) => timeString);
-                    context.pop();
-                  });
+                      .then(
+                        (value) {
+                      if (value != null) {
+                        String time = value.format(context);
+                        String formattedDate = DateFormat.yMd().format(_selectedDate.value);
+                        String timeString = "${formattedDate} $time";
+                        debugPrint(timeString);
+                        debugPrint('The Selection Time Is $time');
+                        debugPrint('The Selection Time In String Is $timeString');
+                        ref.watch(selectedTimeProvider.notifier).update((state) => timeString);
+                        debugPrint('selectedTimeProvider $selectedTimeProvider');
+                      } else {
+                        // Handle the case when the user cancels the time picker
+                        // Provide a default time, for example, the current time
+                        String defaultTime = TimeOfDay.now().format(context);
+                        String formattedDate = DateFormat.yMd().format(_selectedDate.value);
+                        String defaultTimeString = "${formattedDate} $defaultTime";
+                        debugPrint(defaultTimeString);
+                        debugPrint('The Default Time Is $defaultTime');
+                        debugPrint('The Default Time In String Is $defaultTimeString');
+                        ref.watch(selectedTimeProvider.notifier).update((state) => defaultTimeString);
+                        debugPrint('selectedTimeProvider $selectedTimeProvider');
+                      }
+                    },
+                  );
                 },
                 child: Text("Next"),
               ),
@@ -60,5 +78,6 @@ class SelectDateScreen extends HookWidget {
         ),
       )),
     );
+
   }
 }
