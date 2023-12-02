@@ -1,6 +1,8 @@
 
 class Item {
-  int? id;
+  static int _idCounter = 0;
+
+  final int? id; // Add an identifier to uniquely identify items
   String? name;
   String? additional_notes;
   int quantity;
@@ -8,15 +10,16 @@ class Item {
   String? image;
   String? requirements;
   int? product_id;
-  Item(
-      {this.id,
-      this.name,
-      this.additional_notes,
-      this.quantity = 1,
-      this.image,
-      this.requirements,
-      this.deleteCallback,
-      this.product_id});
+
+  Item({
+    this.name,
+    this.additional_notes,
+    this.quantity = 1,
+    this.image,
+    this.requirements,
+    this.deleteCallback,
+    this.product_id
+  }) : id =_idCounter++;
 
   @override
   String toString() {
@@ -24,10 +27,11 @@ class Item {
   }
 
   delete() {
-    deleteCallback?.call(this);
+    return deleteCallback?.call(this);
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "product_id": product_id,
         "name": name,
         "additional_notes": additional_notes,

@@ -9,10 +9,11 @@ class CreateItemWidget extends HookWidget {
   CreateItemWidget({
     super.key,
     required this.item,
+    required this.deleteItemCallback,
   });
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Item item;
+  final void Function(Item item) deleteItemCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -37,53 +38,53 @@ class CreateItemWidget extends HookWidget {
             : null,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Visibility(
-                  visible: !isCollapsed.value,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 3,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          child: Icon(Icons.delete),
-                          onTap: () {
-                            item.delete();
-                          },
+          child: Column(
+            children: [
+              Visibility(
+                visible: !isCollapsed.value,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 3,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        child: Icon(Icons.delete),
+                        onTap: () {
+                          deleteItemCallback(
+                              item); // Invoke the callback with the item parameter
+                        },
+                      ),
+                      GestureDetector(
+                        onTap: () => isCollapsed.value = true,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 13,
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.arrow_drop_up,
+                              size: 25,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                        GestureDetector(
-                            onTap: () => isCollapsed.value = true,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                shape: BoxShape.circle,
-                              ),
-                              child: CircleAvatar(
-                                  radius: 13,
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.arrow_drop_up,
-                                    size: 25,
-                                    color: Colors.black,
-                                  )),
-                            )),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                isCollapsed.value
-                    ? ItemWidgetCollapsed(
-                        isCollapsed: isCollapsed,
-                        item: item,
-                      )
-                    : ItemWidgetExpanded(item: item)
-              ],
-            ),
+              ),
+              isCollapsed.value
+                  ? ItemWidgetCollapsed(
+                      isCollapsed: isCollapsed,
+                      item: item,
+                    )
+                  : ItemWidgetExpanded(item: item)
+            ],
           ),
         ),
       ),
