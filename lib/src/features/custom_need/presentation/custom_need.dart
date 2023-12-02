@@ -1,10 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:waspha/src/features/custom_need/presentation/pickup_confirmation_dialog.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
@@ -98,27 +100,30 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                     final category = ref.watch(categoryProvider);
 
                     return RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: "${capitalize(method)} direct request \n",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      TextSpan(
-                          text: "${category["name"]}",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      WidgetSpan(child: Icon(Icons.arrow_forward)),
-                      TextSpan(
-                          text: "${subCategory["name"]} \n",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ]));
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: "${capitalize(method)} direct request \n",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: "${category["name"]}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                          WidgetSpan(child: Icon(Icons.arrow_forward)),
+                          TextSpan(
+                              text: "${subCategory["name"]} \n",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    );
                   },
                 ),
               ],
@@ -177,11 +182,16 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                       final items = ref.watch(itemsProvider);
                       return GestureDetector(
                         onTap: () {
+                          debugPrint('The Item Before Removed Is $items');
+
                           items.insert(0, new Item(deleteCallback: (item) {
                             items.remove(item);
                             ref.invalidate(itemsProvider);
+                            debugPrint('The Item After Removed Is $items');
                           }));
                           setState(() {});
+                          //TODO:use state management instead setState
+                          debugPrint('The Item After Removed Is $items');
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -207,12 +217,19 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
 
               return Expanded(
                 child: ListView.separated(
+                  key: UniqueKey(), // Add a key to the ListView itself
                   itemCount: items.length,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 5,
                   ),
                   itemBuilder: (context, index) => CreateItemWidget(
                     item: items[index],
+                    deleteItemCallback: (item) {
+                      ref.read(itemsProvider).remove(item);
+                      debugPrint('The Item After Removed Is $items');
+                      setState(() {});
+                      //TODO:use state management instead setState
+                    },
                   ),
                 ),
               );
@@ -271,7 +288,7 @@ class CustomBackButton extends StatelessWidget {
   }
 }
 
-class ReadyRequestButton extends StatelessWidget {
+class ReadyRequestButton extends StatefulHookWidget {
   const ReadyRequestButton({
     super.key,
     required this.items,
@@ -282,11 +299,19 @@ class ReadyRequestButton extends StatelessWidget {
   final ValueNotifier<bool> isScheduled;
 
   @override
+  State<ReadyRequestButton> createState() => _ReadyRequestButtonState();
+}
+
+class _ReadyRequestButtonState extends State<ReadyRequestButton> {
+  @override
   Widget build(BuildContext context) {
+    final _selectedDate = useState(DateTime.now());
+
+
     return Consumer(
       builder: (context, ref, child) => GestureDetector(
         onTap: () {
-          if (items.length == 0) {
+          if (widget.items.length == 0) {
             return;
           }
           showDialog(
@@ -294,24 +319,24 @@ class ReadyRequestButton extends StatelessWidget {
               builder: (context) {
                 final method = ref.watch(methodProvider);
                 final itemsJsonList =
-                    items.map((item) => item.toJson()).toList();
+                    widget.items.map((item) => item.toJson()).toList();
                 final currentPlace = ref.watch(currentPlaceDescription);
 
                 if (method == "delivery")
                   return DeliveryConfirmationDialog(
                       consumer: ref,
-                      items: items,
+                      items: widget.items,
                       method: method,
                       currentPlace: currentPlace,
-                      isScheduled: isScheduled,
+                      isScheduled: widget.isScheduled,
                       itemsJsonList: itemsJsonList);
 
                 return PickupConfirmationDialog(
                     consumer: ref,
-                    items: items,
+                    items: widget.items,
                     method: method,
                     currentPlace: currentPlace,
-                    isScheduled: isScheduled,
+                    isScheduled: widget.isScheduled,
                     itemsJsonList: itemsJsonList);
               });
           // final itemsJsonList =
@@ -332,11 +357,11 @@ class ReadyRequestButton extends StatelessWidget {
                   children: [
                     Flexible(
                         fit: FlexFit.tight,
-                        flex: isScheduled.value ? 3 : 6,
+                        flex: widget.isScheduled.value ? 3 : 6,
                         child: SizedBox(
                           child: Center(
                             child: Text(
-                              isScheduled.value
+                              widget.isScheduled.value
                                   ? 'Schedule'
                                   : 'Ready for request',
                               style: TextStyle(color: Colors.white),
@@ -345,7 +370,7 @@ class ReadyRequestButton extends StatelessWidget {
                         )),
                     Flexible(
                       fit: FlexFit.tight,
-                      flex: isScheduled.value ? 6 : 3,
+                      flex: widget.isScheduled.value ? 6 : 3,
                       child: Consumer(
                         builder: (context, ref, child) => Container(
                           decoration: BoxDecoration(
@@ -366,7 +391,7 @@ class ReadyRequestButton extends StatelessWidget {
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(20),
                                       bottomRight: Radius.circular(20)),
-                                  value: isScheduled.value
+                                  value: widget.isScheduled.value
                                       ? ref.watch(selectedTimeProvider)
                                       : "Now",
                                   hint: Text("df"),
@@ -376,24 +401,55 @@ class ReadyRequestButton extends StatelessWidget {
                                       child: Center(child: Text("Now")),
                                     ),
                                     DropdownMenuItem(
-                                      value: isScheduled.value
+                                      value: widget.isScheduled.value
                                           ? ref.watch(selectedTimeProvider)
                                           : "Scheduled",
                                       child: Center(
                                         child: Text(
-                                          isScheduled.value
+                                          widget.isScheduled.value
                                               ? ref.watch(selectedTimeProvider)
                                               : 'Scheduled',
                                         ),
                                       ),
                                     ),
                                   ],
-                                  onChanged: (value) {
+                                  onChanged: (value) async {
                                     if (value == "Scheduled") {
-                                      isScheduled.value = true;
-                                      context.push('/select_date');
+                                      widget.isScheduled.value = true;
+                                      final pickedDate =
+                                          await DatePicker.showDateTimePicker(
+                                        context,
+                                        onChanged: (date) {
+                                          // Handle date changes if needed
+                                        },
+                                        onConfirm: (date) {
+                                          setState(() {
+                                            _selectedDate.value =
+                                                date; // Update the selected start date
+                                            String formattedDate = DateFormat(
+                                                    'yyyy/MM/dd,HH:mm')
+                                                .format(_selectedDate.value);
+
+                                            ref
+                                                .watch(selectedTimeProvider
+                                                    .notifier)
+                                                .update(
+                                                    (state) => formattedDate);
+                                            debugPrint(
+                                                'The Selected Date Is ${_selectedDate.value} ');
+                                          });
+                                        },
+                                        currentTime: _selectedDate
+                                            .value, // Use the selected start date
+                                      );
+
+                                      if (pickedDate == null) {
+                                        debugPrint('Something went wrong');
+                                      }
+
+                                      // context.push('/select_date');
                                     } else {
-                                      isScheduled.value = false;
+                                      widget.isScheduled.value = false;
                                     }
                                   }),
                             ),
