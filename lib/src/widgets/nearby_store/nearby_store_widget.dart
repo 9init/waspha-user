@@ -497,10 +497,24 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                     .read(isPickingLocationProvider.notifier)
                                     .update((state) => false);
 
-                                ref.invalidate(getNearbyStoresProvider(
+                                ref.invalidate(
+                                  getNearbyStoresProvider(
+                                      context: context,
+                                      isBottomSheetOpen:
+                                          widget.isBottomSheetOpen),
+                                );
+                                ref.watch(
+                                  getNearbyStoresStreamProvider(
                                     context: context,
-                                    isBottomSheetOpen:
-                                        widget.isBottomSheetOpen));
+                                    isBottomSheetOpen: widget.isBottomSheetOpen,
+                                  ).future,
+                                );
+                                ref.refresh(
+                                  getNearbyStoresStreamProvider(
+                                    context: context,
+                                    isBottomSheetOpen: widget.isBottomSheetOpen,
+                                  ).stream,
+                                );
                               },
                               child: Text("Confirm Location")),
                         ),
