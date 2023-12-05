@@ -103,6 +103,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   @override
   Widget build(BuildContext context) {
     final isBottomSheetOpen = useState(false);
+
     return Scaffold(body: Consumer(builder: (context, ref, child) {
       final nearbyStores = ref.watch(getNearbyStoresStreamProvider(
         context: context,
@@ -159,6 +160,8 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       });
 
       return nearbyStores.when(data: (data) {
+        debugPrint('Inside Success');
+
         markers.clear();
 
         final String message = data["message"];
@@ -196,6 +199,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             message: message,
             categoryName: categories,
             markers: [...locationMarkers, ...markers].toSet());
+        // return Container(color: Colors.green,width: 200,height: 200,);
       }, error: (error, stackTrace) {
         log("Nearby Error: ", error: error, level: 4, stackTrace: stackTrace);
 

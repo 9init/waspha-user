@@ -20,12 +20,28 @@ import 'package:image/image.dart' as img;
 import '../../../routes/routes.dart';
 import '../../get_location/domain/get_location_domain.dart';
 import '../presentation/rounded_marker.dart';
-part 'stores_repository.g.dart';
 
-final methodProvider = StateProvider<String>((ref) {
-  return "delivery";
+part 'stores_repository.g.dart';
+// active_screen_notifier.dart
+
+class ActiveScreenNotifier extends StateNotifier<String?> {
+  ActiveScreenNotifier() : super(null);
+
+  void setActiveScreen(String screen) {
+    state = screen;
+  }
+}
+
+final activeScreenProvider =
+    StateNotifierProvider<ActiveScreenNotifier, String?>((ref) {
+  return ActiveScreenNotifier();
 });
 
+final methodProvider = StateProvider<String>(
+  (ref) {
+    return "delivery";
+  },
+);
 final getStoresProvider = StateProvider<List<dynamic>>((ref) => []);
 
 class NearbyData {
@@ -40,12 +56,12 @@ class NearbyData {
 
 @riverpod
 Stream<dynamic> getNearbyStoresStream(
-  Ref ref, {
-  required BuildContext context,
-  required ValueNotifier<bool> isBottomSheetOpen,
-}) async* {
+    Ref ref, {
+      required BuildContext context,
+      required ValueNotifier<bool> isBottomSheetOpen,
+    }) async* {
   while (true) {
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 10));
     yield await getNearbyStores(
       ref,
       context: context,
@@ -53,17 +69,28 @@ Stream<dynamic> getNearbyStoresStream(
     );
   }
 }
-
 @riverpod
 Future<dynamic> getNearbyStores(
   Ref ref, {
   required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
+  bool makeRequest = true, // Default to true, meaning the request will be made
 }) async {
+
   final url = "/get-nearby-stores";
   final location = (await ref.read(userLocationProvider.future))!;
-  final range = ref.read(pickupRadiusProvider).pickupRadius;
+  debugPrint("Initial Location: $location");
 
+  final range = ref.read(pickupRadiusProvider).pickupRadius;
+  if (!makeRequest) {
+    return {
+      "lat": location.latitude,
+      "lng": location.longitude,
+      "message": "Stores not found",
+      "stores": [],
+      "categories": []
+    };
+  }
   final payload = {
     "location": {
       "lat": location.latitude,
