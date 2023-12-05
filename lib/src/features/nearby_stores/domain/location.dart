@@ -38,7 +38,7 @@ Future<LocationData> getLocation() async {
 }
 
 void _determinePosition(
-    StreamController<location.LocationData?> streamController) async {
+    StreamController<location.LocationData> streamController) async {
   streamController.add(await getLocation());
   Timer.periodic(Duration(seconds: 5), (_) async {
     final result = await getLocation();

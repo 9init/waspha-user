@@ -27,7 +27,6 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   LatLng? currentLocation;
   final List<Marker> markers = [];
   List menuCategories = [];
-  final List<Marker> locationMarkers = [];
 
   Future<void> showCustomTrackingDialog(BuildContext context) async {
     await showDialog<void>(
@@ -102,8 +101,9 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isBottomSheetOpen = useState(false);
+    final locationMarkers = useState<List<Marker>>([]);
 
+    final isBottomSheetOpen = useState(false);
     return Scaffold(body: Consumer(builder: (context, ref, child) {
       final nearbyStores = ref.watch(getNearbyStoresStreamProvider(
         context: context,
@@ -123,8 +123,9 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
 
       Future(() async {
         if (!isPicking && markerLocation != null) {
-          locationMarkers.removeWhere((item) => item.markerId.value == 'user');
-          locationMarkers.add(
+          final clonedLocation = [...locationMarkers.value];
+          clonedLocation.removeWhere((item) => item.markerId.value == 'user');
+          clonedLocation.add(
             Marker(
               markerId: MarkerId("user"),
               position: markerLocation,
@@ -136,32 +137,30 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
               ),
             ),
           );
+          locationMarkers.value = clonedLocation;
         }
       });
 
-      Future(() {
-        ref.watch(locationStreamProvider).whenData((value) async {
-          debugPrint("Location is $value");
-          locationMarkers.removeWhere(
-              (element) => element.markerId.value == "gpsLocation");
-          locationMarkers.add(
-            Marker(
-              markerId: MarkerId("gpsLocation"),
-              position: LatLng(value.latitude!, value.longitude!),
-              infoWindow:
-                  InfoWindow(title: "Your Location", snippet: "You are here"),
-              icon: BitmapDescriptor.fromBytes(await assetToUint8List(
-                "assets/images/map_markers/user.png",
-                300.w.toInt(),
-              )),
-            ),
-          );
-        });
+      ref.watch(locationStreamProvider).whenData((value) async {
+        final clonedLocation = [...locationMarkers.value];
+        clonedLocation
+            .removeWhere((element) => element.markerId.value == "gpsLocation");
+        clonedLocation.add(
+          Marker(
+            markerId: MarkerId("gpsLocation"),
+            position: LatLng(value.latitude!, value.longitude!),
+            infoWindow:
+                InfoWindow(title: "Your Location", snippet: "You are here"),
+            icon: BitmapDescriptor.fromBytes(await assetToUint8List(
+              "assets/images/map_markers/user.png",
+              300.w.toInt(),
+            )),
+          ),
+        );
+        locationMarkers.value = clonedLocation;
       });
 
       return nearbyStores.when(data: (data) {
-        debugPrint('Inside Success');
-
         markers.clear();
 
         final String message = data["message"];
@@ -190,6 +189,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             ),
           );
         }
+
         return NearbyStoreMap(
             isBottomSheetOpen: isBottomSheetOpen,
             initialLocation: LatLng(data["lat"], data["lng"]),
@@ -198,14 +198,12 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             onMapCreated: (controller) {},
             message: message,
             categoryName: categories,
-            markers: [...locationMarkers, ...markers].toSet());
-        // return Container(color: Colors.green,width: 200,height: 200,);
+            markers: [...locationMarkers.value, ...markers].toSet());
       }, error: (error, stackTrace) {
         log("Nearby Error: ", error: error, level: 4, stackTrace: stackTrace);
 
         return SnackBar(content: Text("Error Happened"));
       }, loading: () {
-        log("Nearby: Im in loading state");
         return NearbyStoreMap(
             isBottomSheetOpen: false,
             stores: [],
@@ -214,7 +212,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
             onMapCreated: (controller) => {},
             message: "Loading...",
             categoryName: [],
-            markers: locationMarkers.toSet());
+            markers: locationMarkers.value.toSet());
       });
     }));
   }
