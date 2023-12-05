@@ -201,6 +201,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
 
         return SnackBar(content: Text("Error Happened"));
       }, loading: () {
+        log("Nearby: Im in loading state");
         return NearbyStoreMap(
             isBottomSheetOpen: false,
             stores: [],
