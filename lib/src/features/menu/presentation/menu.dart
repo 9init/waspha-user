@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -46,24 +47,22 @@ class MenuScreen extends StatelessWidget {
                 //     Center(child: Text("Find Provider")),
                 //   ],
                 // ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 20),
                 Container(
                   child: ListView.separated(
-                      itemCount: data.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) => SizedBox(
-                            height: 20,
-                          ),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () => context.push('/menu-detail',
-                              extra: data[index].id),
-                          child: Consumer(builder: (context, ref, child) {
+                    itemCount: data.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) => SizedBox(height: 20),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () =>
+                            context.push('/menu-detail', extra: data[index].id),
+                        child: Consumer(
+                          builder: (context, ref, child) {
                             return MenuCard(
                               rating: data[index].average_rating,
+                              isListView: true,
                               onFavored: () async {
                                 if (data[index].is_favorite) {
                                   await ref.read(deleteStoreFavProvider(
@@ -87,9 +86,11 @@ class MenuScreen extends StatelessWidget {
                               imageURl: data[index].image,
                               companyName: data[index].business_name["en"],
                             );
-                          }),
-                        );
-                      }),
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),
@@ -118,6 +119,7 @@ class MenuCard extends StatelessWidget {
     this.favWidth = 250,
     this.isProvider = false,
     this.isFavored = false,
+    this.isListView = false,
     this.rating = 0,
   });
 
@@ -127,15 +129,18 @@ class MenuCard extends StatelessWidget {
   final double width, favWidth;
   final void Function()? onFavored;
   final bool isFavored;
+  final bool isListView;
   final double rating;
 
-  double dynamicWidth() {
+  double dynamicWidth(BuildContext context) {
     if (isOffer) {
       return 150;
     } else if (isProvider) {
-      return 311;
+      return 1040.w;
+    } else if (isListView) {
+      return 1290.w;
     }
-    return 370;
+    return 1100.w;
   }
 
   @override
@@ -145,7 +150,7 @@ class MenuCard extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: dynamicWidth(),
+            width: dynamicWidth(context),
             height: isOffer ? 150 : 200,
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -161,7 +166,7 @@ class MenuCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      width: dynamicWidth(),
+                      width: dynamicWidth(context),
                       height: 50,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.5),

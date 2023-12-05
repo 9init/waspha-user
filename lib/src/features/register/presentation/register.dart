@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/register/domain/register_domain.dart';
 import 'package:waspha/src/widgets/auth_btn/auth_btn.dart';
 import 'package:waspha/src/widgets/auth_container/auth_container.dart';
@@ -54,9 +55,11 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
               height: 10,
             ),
             SocialMedia(
-              googleOnTap: () {},
+              googleOnTap: () =>
+                  ref.read(singInWithGoogleProvider(context: context)),
               facebookOnTap: () {},
-              appleOnTap: () {},
+              appleOnTap: () =>
+                  ref.watch(singInWithAppleProvider(context: context)),
             ),
             SizedBox(
               height: 10,

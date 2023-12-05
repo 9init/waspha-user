@@ -200,31 +200,30 @@ class LikesBody extends StatelessWidget {
                                         width: 400,
                                         height: 200,
                                         child: ListView.builder(
-                                            padding: EdgeInsets.zero,
-                                            itemCount: data.length,
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              return MenuCard(
-                                                imageURl: data[index]["store"]
-                                                        ["image"] ??
-                                                    "",
-                                                companyName: data[index]
-                                                        ["store"]
-                                                    ["business_name"]["en"],
-                                                width: 0.8,
-                                                favWidth: 200,
-                                                isProvider: true,
-                                                onFavored: () async {
-                                                  ref.read(
-                                                      deleteStoreFavProvider(
-                                                          id: data[index]
-                                                              ["store"]["id"]));
-                                                  ref.invalidate(
-                                                      getFavStoresProvider);
-                                                },
-                                                isFavored: true,
-                                              );
-                                            }),
+                                          padding: EdgeInsets.zero,
+                                          itemCount: data.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return MenuCard(
+                                              imageURl: data[index]["store"]
+                                                      ["image"] ??
+                                                  "",
+                                              companyName: data[index]["store"]
+                                                  ["business_name"]["en"],
+                                              width: 0.8,
+                                              favWidth: 200,
+                                              isProvider: true,
+                                              onFavored: () async {
+                                                ref.read(deleteStoreFavProvider(
+                                                    id: data[index]["store"]
+                                                        ["id"]));
+                                                ref.invalidate(
+                                                    getFavStoresProvider);
+                                              },
+                                              isFavored: true,
+                                            );
+                                          },
+                                        ),
                                       ),
                                     );
                             },

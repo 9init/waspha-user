@@ -190,7 +190,6 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                             debugPrint('The Item After Removed Is $items');
                           }));
                           setState(() {});
-                          //TODO:use state management instead setState
                           debugPrint('The Item After Removed Is $items');
                         },
                         child: Column(

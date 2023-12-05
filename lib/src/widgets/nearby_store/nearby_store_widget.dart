@@ -588,56 +588,53 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                   child: Column(
                     children: [
                       ElevatedButton(
-                          onPressed: () {
-                            context.push('/menu-screen', extra: widget.stores);
-                          },
-                          child: Text("List View")),
+                        onPressed: () {
+                          context.push('/menu-screen', extra: widget.stores);
+                        },
+                        child: Text("List View"),
+                      ),
                       SizedBox(
                         height: 5,
                       ),
                       Container(
-                        width: 400,
                         height: 200,
                         child: ListView.separated(
                             padding: EdgeInsets.zero,
                             itemCount: widget.stores.length,
                             scrollDirection: Axis.horizontal,
-                            separatorBuilder: (context, index) => SizedBox(
-                                  width: 15,
-                                ),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(width: 15),
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
                                   ref.read(itemsProvider).clear();
-
                                   context.push('/menu-detail',
                                       extra: widget.stores[index].id);
                                 },
                                 child: MenuCard(
-                                    onFavored: () async {
-                                      if (widget.stores[index]?.is_favorite) {
-                                        widget.stores[index].is_favorite =
-                                            false;
-                                        ref.read(deleteStoreFavProvider(
-                                            id: widget.stores[index].id));
-                                        print("Deleted" +
-                                            widget.stores[index].id.toString());
-                                        ref.invalidate(getFavStoresProvider);
-                                      } else {
-                                        widget.stores[index].is_favorite = true;
-                                        await ref.read(addStoreFavProvider(
-                                            id: widget.stores[index].id));
-                                        ref.invalidate(getFavStoresProvider);
-                                      }
-                                    },
-                                    isFavored:
-                                        widget.stores[index].is_favorite ??
-                                            false,
-                                    imageURl: widget.stores[index].image,
-                                    rating: widget.stores[index].average_rating,
-                                    favWidth: 270,
-                                    companyName: widget
-                                        .stores[index].business_name["en"]),
+                                  onFavored: () async {
+                                    if (widget.stores[index]?.is_favorite) {
+                                      widget.stores[index].is_favorite = false;
+                                      ref.read(deleteStoreFavProvider(
+                                          id: widget.stores[index].id));
+                                      print("Deleted" +
+                                          widget.stores[index].id.toString());
+                                      ref.invalidate(getFavStoresProvider);
+                                    } else {
+                                      widget.stores[index].is_favorite = true;
+                                      await ref.read(addStoreFavProvider(
+                                          id: widget.stores[index].id));
+                                      ref.invalidate(getFavStoresProvider);
+                                    }
+                                  },
+                                  isFavored:
+                                      widget.stores[index].is_favorite ?? false,
+                                  imageURl: widget.stores[index].image,
+                                  rating: widget.stores[index].average_rating,
+                                  favWidth: 270,
+                                  companyName:
+                                      widget.stores[index].business_name["en"],
+                                ),
                               );
                             }),
                       ),
@@ -676,21 +673,23 @@ class ProfileAppBar extends StatelessWidget {
           builder: (context, ref, child) {
             final userData = ref.watch(getUserAvatarProvider);
             return userData.when(
-                data: (data) {
-                  return GestureDetector(
-                    onTap: () => context.push('/profile'),
-                    child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(data ??
-                          "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"),
-                    ),
-                  );
-                },
-                error: (e, s) {
-                  return Text("Error");
-                },
-                loading: () => CircleAvatar(
-                      child: Icon(Icons.person),
-                    ));
+              data: (data) {
+                return GestureDetector(
+                  onTap: () => context.push('/profile'),
+                  child: CircleAvatar(
+                    backgroundImage: CachedNetworkImageProvider(data ??
+                        "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"),
+                  ),
+                );
+              },
+              error: (e, s) {
+                return Text("Error");
+              },
+              loading: () => GestureDetector(
+                onTap: () => context.push('/profile'),
+                child: CircleAvatar(child: Icon(Icons.person)),
+              ),
+            );
           },
         )
       ],

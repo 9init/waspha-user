@@ -106,11 +106,12 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
               children: [
                 Text("Don't have an account?"),
                 TextButton(
-                    onPressed: () => context.go("/register"),
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(color: Colors.blue),
-                    ))
+                  onPressed: () => context.go("/register"),
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                )
               ],
             )
           ],
