@@ -208,6 +208,8 @@ class LikesBody extends StatelessWidget {
                                               imageURl: data[index]["store"]
                                                       ["image"] ??
                                                   "",
+                                              rating: data[index]["store"]
+                                                  ["avg_rating"],
                                               companyName: data[index]["store"]
                                                   ["business_name"]["en"],
                                               width: 0.8,
