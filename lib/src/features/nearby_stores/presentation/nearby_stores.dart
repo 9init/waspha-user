@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -27,6 +28,8 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   LatLng? currentLocation;
   final List<Marker> markers = [];
   List menuCategories = [];
+  final List<Marker> locationMarkers = [];
+  StreamSubscription<dynamic>? nearbyStoresSubscription;
 
   Future<void> showCustomTrackingDialog(BuildContext context) async {
     await showDialog<void>(
@@ -97,124 +100,141 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
         if (!isDenied) showPermissionDialog(context);
       }
     });
+    isNearbyStoreScreenActive.value = true;
+
   }
 
   @override
   Widget build(BuildContext context) {
-    final locationMarkers = useState<List<Marker>>([]);
-
+    isNearbyStoreScreenActive.value = true;
     final isBottomSheetOpen = useState(false);
-    return Scaffold(body: Consumer(builder: (context, ref, child) {
-      final nearbyStores = ref.watch(getNearbyStoresStreamProvider(
-        context: context,
-        isBottomSheetOpen: isBottomSheetOpen,
-      ));
-      final isPicking = false; // ref.watch(isPickingLocationProvider);
-      final markerLocation = ref.watch(getUserLocation);
+    return Scaffold(
+      body: Consumer(
+        builder: (context, ref, child) {
+          final nearbyStores = ref.watch(
+            getNearbyStoresStreamProvider(
+              isBottomSheetOpen: isBottomSheetOpen,
+            ),
+          );
+          final isPicking = false; // ref.watch(isPickingLocationProvider);
+          final markerLocation = ref.watch(getUserLocation);
 
-      double? latitude =
-          ref.watch(locationStreamProvider).asData?.value.latitude;
-      double? longitude =
-          ref.watch(locationStreamProvider).asData?.value.longitude;
+          double? latitude =
+              ref.watch(locationStreamProvider).asData?.value.latitude;
+          double? longitude =
+              ref.watch(locationStreamProvider).asData?.value.longitude;
 
-      if (latitude == null || longitude == null) {
-        return Container();
-      }
+          if (latitude == null || longitude == null) {
+            return Container();
+          }
 
-      Future(() async {
-        if (!isPicking && markerLocation != null) {
-          final clonedLocation = [...locationMarkers.value];
-          clonedLocation.removeWhere((item) => item.markerId.value == 'user');
-          clonedLocation.add(
-            Marker(
-              markerId: MarkerId("user"),
-              position: markerLocation,
-              icon: BitmapDescriptor.fromBytes(
-                await assetToUint8List(
-                  "assets/images/map_markers/location.png",
-                  135,
+          Future(() async {
+            if (!isPicking && markerLocation != null) {
+              locationMarkers
+                  .removeWhere((item) => item.markerId.value == 'user');
+              locationMarkers.add(
+                Marker(
+                  markerId: MarkerId("user"),
+                  position: markerLocation,
+                  icon: BitmapDescriptor.fromBytes(
+                    await assetToUint8List(
+                      "assets/images/map_markers/location.png",
+                      135,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-          locationMarkers.value = clonedLocation;
-        }
-      });
+              );
+            }
+          });
 
-      ref.watch(locationStreamProvider).whenData((value) async {
-        final clonedLocation = [...locationMarkers.value];
-        clonedLocation
-            .removeWhere((element) => element.markerId.value == "gpsLocation");
-        clonedLocation.add(
-          Marker(
-            markerId: MarkerId("gpsLocation"),
-            position: LatLng(value.latitude!, value.longitude!),
-            infoWindow:
-                InfoWindow(title: "Your Location", snippet: "You are here"),
-            icon: BitmapDescriptor.fromBytes(await assetToUint8List(
-              "assets/images/map_markers/user.png",
-              300.w.toInt(),
-            )),
-          ),
-        );
-        locationMarkers.value = clonedLocation;
-      });
+          Future(() {
+            ref.watch(locationStreamProvider).whenData((value) async {
+              debugPrint("Location is $value");
+              locationMarkers.removeWhere(
+                  (element) => element.markerId.value == "gpsLocation");
+              locationMarkers.add(
+                Marker(
+                  markerId: MarkerId("gpsLocation"),
+                  position: LatLng(value.latitude!, value.longitude!),
+                  infoWindow: InfoWindow(
+                      title: "Your Location", snippet: "You are here"),
+                  icon: BitmapDescriptor.fromBytes(await assetToUint8List(
+                    "assets/images/map_markers/user.png",
+                    300.w.toInt(),
+                  )),
+                ),
+              );
+            });
+          });
 
-      return nearbyStores.when(data: (data) {
-        markers.clear();
+          return nearbyStores.when(
+              skipLoadingOnReload: false,
+              skipLoadingOnRefresh: false,
+              data: (data) {
+                debugPrint('Inside Success');
+                markers.clear();
+                final String message = data["message"];
+                final List<dynamic> stores = data["stores"] ?? [];
+                List categories = data["categories"];
 
-        final String message = data["message"];
-        final List<dynamic> stores = data["stores"] ?? [];
-        List categories = data["categories"];
+                Future(() {
+                  ref
+                      .watch(getStoresProvider.notifier)
+                      .update((state) => stores);
+                });
 
-        Future(() {
-          ref.watch(getStoresProvider.notifier).update((state) => stores);
-        });
+                for (var store in stores.toSet()) {
+                  final image =
+                      ref.watch(imageBytesProvider(store.image)).value;
 
-        for (var store in stores.toSet()) {
-          final image = ref.watch(imageBytesProvider(store.image)).value;
+                  markers.add(
+                    Marker(
+                      icon: image != null
+                          ? image
+                          : BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueViolet),
+                      markerId: MarkerId(store.id.toString()),
+                      position: LatLng(store.lat, store.lng),
+                      infoWindow: InfoWindow(
+                        title: store.business_name["en"],
+                        snippet: store.average_rating.toString(),
+                      ),
+                    ),
+                  );
+                }
+                return NearbyStoreMap(
+                    isBottomSheetOpen: isBottomSheetOpen,
+                    initialLocation: LatLng(data["lat"], data["lng"]),
+                    dataLength: categories.length,
+                    stores:
+                        stores.where((cat) => cat.has_menu == true).toList(),
+                    onMapCreated: (controller) {},
+                    message: message,
+                    categoryName: categories,
+                    markers: [...locationMarkers, ...markers].toSet());
+                // return Container(color: Colors.green,width: 200,height: 200,);
+              },
+              error: (error, stackTrace) {
+                log("Nearby Error: ",
+                    error: error, level: 4, stackTrace: stackTrace);
 
-          markers.add(
-            Marker(
-              icon: image != null
-                  ? image
-                  : BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueViolet),
-              markerId: MarkerId(store.id.toString()),
-              position: LatLng(store.lat, store.lng),
-              infoWindow: InfoWindow(
-                title: store.business_name["en"],
-                snippet: store.average_rating.toString(),
-              ),
-            ),
-          );
-        }
-
-        return NearbyStoreMap(
-            isBottomSheetOpen: isBottomSheetOpen,
-            initialLocation: LatLng(data["lat"], data["lng"]),
-            dataLength: categories.length,
-            stores: stores.where((cat) => cat.has_menu == true).toList(),
-            onMapCreated: (controller) {},
-            message: message,
-            categoryName: categories,
-            markers: [...locationMarkers.value, ...markers].toSet());
-      }, error: (error, stackTrace) {
-        log("Nearby Error: ", error: error, level: 4, stackTrace: stackTrace);
-
-        return SnackBar(content: Text("Error Happened"));
-      }, loading: () {
-        return NearbyStoreMap(
-            isBottomSheetOpen: false,
-            stores: [],
-            initialLocation: LatLng(latitude!, longitude!),
-            dataLength: 0,
-            onMapCreated: (controller) => {},
-            message: "Loading...",
-            categoryName: [],
-            markers: locationMarkers.value.toSet());
-      });
-    }));
+                return SnackBar(content: Text("Error Happened"));
+              },
+              loading: () {
+                debugPrint('Inside Loading');
+                return NearbyStoreMap(
+                    isBottomSheetOpen: false,
+                    stores: [],
+                    initialLocation: LatLng(latitude, longitude),
+                    dataLength: 0,
+                    onMapCreated: (controller) => {},
+                    message: "Loading...",
+                    categoryName: [],
+                    markers: locationMarkers.toSet());
+              });
+        },
+      ),
+    );
   }
 }
 

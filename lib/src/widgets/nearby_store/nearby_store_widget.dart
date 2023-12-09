@@ -77,11 +77,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final isPicking = ref.watch(isPickingLocationProvider);
     final isNearbyClicked = useState(false);
     final mapType = useState<MapType>(MapType.normal);
-    ref.listen(
-        getUserLocationTempProvider,
-        (_, newValue) => mapController?.animateCamera(
-            CameraUpdate.newCameraPosition(
-                CameraPosition(target: newValue, zoom: 14.74))));
+    ref.listen(getUserLocationTempProvider, (_, newValue) => mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: newValue, zoom: 14.74))));
 
     return SafeArea(
       child: Stack(
@@ -180,7 +176,6 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                             await ref
                                                 .refresh(
                                                     getNearbyStoresStreamProvider(
-                                                  context: context,
                                                   isBottomSheetOpen:
                                                       widget.isBottomSheetOpen,
                                                 ))
@@ -489,22 +484,14 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                           width: MediaQuery.of(context).size.width * 0.8,
                           height: 50,
                           child: ElevatedButton(
-                              onPressed: () async {
-                                ref
-                                    .watch(getUserLocation.notifier)
-                                    .update((state) => userLocation.value);
-                                ref
-                                    .read(isPickingLocationProvider.notifier)
-                                    .update((state) => false);
-                                ref.watch(
-                                  getNearbyStoresStreamProvider(
-                                    context: context,
-                                    isBottomSheetOpen: widget.isBottomSheetOpen,
-                                  ).future,
-                                );
-                                ref.invalidate(getNearbyStoresStreamProvider);
-                              },
-                              child: Text("Confirm Location")),
+                            onPressed: () async {
+                              ref.watch(getUserLocation.notifier).update((state) => userLocation.value);
+                              ref.read(isPickingLocationProvider.notifier).update((state) => false);
+                              ref.watch(getNearbyStoresStreamProvider( isBottomSheetOpen: widget.isBottomSheetOpen,).future,);
+                              ref.invalidate(getNearbyStoresStreamProvider);
+                            },
+                            child: Text("Confirm Location"),
+                          ),
                         ),
                       ),
                     ),
