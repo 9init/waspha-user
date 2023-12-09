@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:waspha/src/colors/colors.dart';
 
 import '../../login/presentation/custom_clip.dart';
-import '../colors/colors.dart';
 
 class WasphaHeader extends StatelessWidget {
   const WasphaHeader({
