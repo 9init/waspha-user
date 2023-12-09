@@ -46,7 +46,8 @@ Future<String> addLocation(
 
   return switch (result) {
     Success(value: final value) => value.data["message"],
-    Failure() => "",
+    Failure() => "Some Thing Went Wrong",
+    //Todo://added toast for every failure api call
     Error() => "",
   };
 }
