@@ -206,7 +206,8 @@ class MenuCard extends StatelessWidget {
             ),
           ),
           !isOffer
-              ? Padding(
+              ? Container(
+                  width: dynamicWidth(context),
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,9 +216,6 @@ class MenuCard extends StatelessWidget {
                         radius: 20,
                         backgroundColor: Colors.white,
                         child: Text("$rating"),
-                      ),
-                      SizedBox(
-                        width: favWidth,
                       ),
                       IconButton(
                         icon: Icon(
