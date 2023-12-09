@@ -5,21 +5,13 @@ import 'package:waspha/src/features/custom_need/presentation/item_widget_expande
 
 import '../data/item_data.dart';
 
-class CreateItemWidget extends StatefulHookWidget {
+class CreateItemWidget extends HookWidget {
   CreateItemWidget({
     super.key,
     required this.item,
-    required this.deleteItemCallback,
+    // required this.deleteItemCallback,
   });
-
   final Item item;
-  final void Function(Item item) deleteItemCallback;
-
-  @override
-  State<StatefulWidget> createState() => _CreateItemWidget();
-}
-
-class _CreateItemWidget extends State<CreateItemWidget> {
   @override
   Widget build(BuildContext context) {
     final isCollapsed = useState(false);
@@ -57,8 +49,7 @@ class _CreateItemWidget extends State<CreateItemWidget> {
                       GestureDetector(
                         child: Icon(Icons.delete),
                         onTap: () {
-                          // Invoke the callback with the item parameter
-                          widget.deleteItemCallback(widget.item);
+                          item.delete();
                         },
                       ),
                       GestureDetector(
@@ -86,9 +77,9 @@ class _CreateItemWidget extends State<CreateItemWidget> {
               isCollapsed.value
                   ? ItemWidgetCollapsed(
                       isCollapsed: isCollapsed,
-                      item: widget.item,
+                      item: item,
                     )
-                  : ItemWidgetExpanded(item: widget.item)
+                  : ItemWidgetExpanded(item: item)
             ],
           ),
         ),
