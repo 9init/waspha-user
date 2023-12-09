@@ -2,14 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:waspha/src/core/di/index.dart';
 import 'package:waspha/src/features/custom_need/presentation/pickup_confirmation_dialog.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
+import 'package:waspha/src/widgets/toast_manager/toast_manager.dart';
 
 import '../../../constants/constants.dart';
 import '../../../widgets/categories/categories_widget.dart';
@@ -33,227 +36,247 @@ class CustomNeedScreen extends StatefulHookConsumerWidget {
   ConsumerState<CustomNeedScreen> createState() => _CustomNeedScreenState();
 }
 
+final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+
 class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
   @override
   Widget build(BuildContext context) {
     final isScheduled = useState(false);
     final isLogged = ref.watch(isLoggedInProvider);
-    return isLogged.when(data: (data) {
-      if (data == false) {
-        return NeedLoginScreen();
-      }
+    return isLogged.when(
+      data: (data) {
+        if (data == false) {
+          return NeedLoginScreen();
+        }
 
-      return Scaffold(
+        return Scaffold(
           body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CustomBackButton(),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
+              shrinkWrap: true,
               children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Consumer(
-                    builder: (context, ref, child) {
-                      final subCategory = ref.watch(subCategoryProvider);
-                      final category = ref.watch(categoryProvider);
-
-                      return Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Image.network(
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                  '${category["image"]}'),
-                            ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 20,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Image.network(
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                  '${subCategory["image"]}'),
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: CustomBackButton(),
                 ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final method = ref.watch(methodProvider);
-                    final subCategory = ref.watch(subCategoryProvider);
-                    final category = ref.watch(categoryProvider);
-
-                    return RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: "${capitalize(method)} direct request \n",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
-                          TextSpan(
-                              text: "${category["name"]}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
-                          WidgetSpan(child: Icon(Icons.arrow_forward)),
-                          TextSpan(
-                              text: "${subCategory["name"]} \n",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            Container(
-              width: 370,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(25)),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 1,
-                    ),
-                    Text(
-                      "Craft your request",
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    Spacer(),
-                    Visibility(
-                      visible: widget.isMenu,
-                      child: Consumer(builder: (context, ref, child) {
-                        final storeID = ref.watch(storeIDProvider);
-                        print("ID: $storeID");
-                        return GestureDetector(
-                          onTap: () {
-                            context.push('/menu-offer', extra: storeID);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      width: 100,
+                      height: 100,
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final subCategory = ref.watch(subCategoryProvider);
+                          final category = ref.watch(categoryProvider);
+
+                          return Stack(
                             children: [
-                              Image.asset('assets/images/nearby/menu.png'),
-                              Text("Menu")
+                              Positioned(
+                                left: 0,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.network(
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                      '${category["image"]}'),
+                                ),
+                              ),
+                              Positioned(
+                                top: 10,
+                                left: 20,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.network(
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                      '${subCategory["image"]}'),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final method = ref.watch(methodProvider);
+                        final subCategory = ref.watch(subCategoryProvider);
+                        final category = ref.watch(categoryProvider);
+
+                        return RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text:
+                                      "${capitalize(method)} direct request \n",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: "${category["name"]}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              WidgetSpan(child: Icon(Icons.arrow_forward)),
+                              TextSpan(
+                                  text: "${subCategory["name"]} \n",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                         );
-                      }),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Consumer(builder: (context, ref, child) {
-                      final items = ref.watch(itemsProvider);
-                      return GestureDetector(
-                        onTap: () {
-                          debugPrint('The Item Before Removed Is $items');
-
-                          items.insert(0, new Item(deleteCallback: (item) {
-                            items.remove(item);
-                            ref.invalidate(itemsProvider);
-                            debugPrint('The Item After Removed Is $items');
-                          }));
-                          setState(() {});
-                          debugPrint('The Item After Removed Is $items');
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/nearby/menu.png'),
-                            Text("new")
-                          ],
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      width: 1,
+                      },
                     ),
                   ],
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Consumer(builder: (context, ref, child) {
-              final items = ref.watch(itemsProvider);
+                Container(
+                  width: 370,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(25)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 1,
+                        ),
+                        Text(
+                          "Craft your request",
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                        Spacer(),
+                        Visibility(
+                          visible: widget.isMenu,
+                          child: Consumer(builder: (context, ref, child) {
+                            final storeID = ref.watch(storeIDProvider);
+                            print("ID: $storeID");
+                            return GestureDetector(
+                              onTap: () {
+                                context.push('/menu-offer', extra: storeID);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/images/nearby/menu.png'),
+                                  Text("Menu")
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Consumer(builder: (context, ref, child) {
+                          final items = ref.watch(itemsProvider);
 
-              return Expanded(
-                child: ListView.separated(
-                  itemCount: items.length,
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 5,
-                  ),
-                  itemBuilder: (context, index) => Dismissible(
-                    key: Key(items[index].toString()),
-                    direction: DismissDirection.none,
-                    child: CreateItemWidget(
-                      item: items[index],
-                      deleteItemCallback: (item) {
-                        ref.read(itemsProvider).remove(item);
-                        debugPrint('The Item After Removed Is $items');
-                        setState(() {});
-                      },
+                          return GestureDetector(
+                            onTap: () {
+                              String newItemId = UniqueKey().toString();
+                              items.insert(
+                                0,
+                                new Item(
+                                    id: newItemId,
+                                    deleteCallback: (item) {
+                                      items.remove(item);
+                                      debugPrint(
+                                          'The Item After Removed Is $items');
+                                      setState(() {});
+                                    }),
+                              );
+                              setState(() {});
+                              debugPrint('The Item Before Removed Is $items');
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/nearby/menu.png'),
+                                Text("new")
+                              ],
+                            ),
+                          );
+                        }),
+                        SizedBox(
+                          width: 1,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              );
-            }),
-            SizedBox(
-              height: 20,
+                SizedBox(
+                  height: 20,
+                ),
+                Consumer(builder: (context, ref, child) {
+                  final items = ref.watch(itemsProvider);
+                  return FormBuilder(
+                    child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      itemCount: items.length,
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 5,
+                      ),
+                      itemBuilder: (context, index) => FormBuilder(
+                        key: _formKey,
+                        child: CreateItemWidget(
+                          item: items[index],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Visibility(
+                  child: Consumer(builder: (context, ref, child) {
+                    final items = ref.watch(itemsProvider);
+                    return Visibility(
+                      visible: items.isNotEmpty,
+                      child: ReadyRequestButton(
+                        items: items,
+                        isScheduled: isScheduled,
+                        formKey: _formKey,
+                      ),
+                    );
+                  }),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
-            Consumer(builder: (context, ref, child) {
-              final items = ref.watch(itemsProvider);
-
-              return ReadyRequestButton(items: items, isScheduled: isScheduled);
-            }),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-      ));
-    }, error: (e, s) {
-      return Text("Error");
-    }, loading: () {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
-    });
+          ),
+        );
+      },
+      error: (e, s) {
+        return Text("Error");
+      },
+      loading: () {
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
+      },
+    );
   }
 }
 
@@ -294,10 +317,12 @@ class ReadyRequestButton extends StatefulHookWidget {
     super.key,
     required this.items,
     required this.isScheduled,
+    required this.formKey,
   });
 
   final List<Item> items;
   final ValueNotifier<bool> isScheduled;
+  final GlobalKey<FormBuilderState> formKey;
 
   @override
   State<ReadyRequestButton> createState() => _ReadyRequestButtonState();
@@ -311,37 +336,43 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
     return Consumer(
       builder: (context, ref, child) => GestureDetector(
         onTap: () {
-          if (widget.items.length == 0) {
-            return;
-          }
-          showDialog(
-              context: context,
-              builder: (context) {
-                final method = ref.watch(methodProvider);
-                final itemsJsonList =
-                    widget.items.map((item) => item.toJson()).toList();
-                final currentPlace = ref.watch(currentPlaceDescription);
+          if (widget.items.isEmpty ||
+              widget.items.any((item) => !item.isValid())) {
+            debugPrint('Complete All Items First');
+            if (!widget.formKey.currentState!.validate()) {
+            }
+            di<ToastManager>().error('Nek Nafsk Ya 3abeet');
 
-                if (method == "delivery")
-                  return DeliveryConfirmationDialog(
+          } else {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  final method = ref.watch(methodProvider);
+                  final itemsJsonList =
+                      widget.items.map((item) => item.toJson()).toList();
+                  final currentPlace = ref.watch(currentPlaceDescription);
+
+                  if (method == "delivery")
+                    return DeliveryConfirmationDialog(
+                        consumer: ref,
+                        items: widget.items,
+                        method: method,
+                        currentPlace: currentPlace,
+                        isScheduled: widget.isScheduled,
+                        itemsJsonList: itemsJsonList);
+
+                  return PickupConfirmationDialog(
                       consumer: ref,
                       items: widget.items,
                       method: method,
                       currentPlace: currentPlace,
                       isScheduled: widget.isScheduled,
                       itemsJsonList: itemsJsonList);
-
-                return PickupConfirmationDialog(
-                    consumer: ref,
-                    items: widget.items,
-                    method: method,
-                    currentPlace: currentPlace,
-                    isScheduled: widget.isScheduled,
-                    itemsJsonList: itemsJsonList);
-              });
-          // final itemsJsonList =
-          //     items.value.map((item) => item.toJson()).toList();
-          // print(itemsJsonList);
+                });
+            // final itemsJsonList =
+            //     items.value.map((item) => item.toJson()).toList();
+            // print(itemsJsonList);
+          }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
