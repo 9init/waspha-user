@@ -16,7 +16,6 @@ import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart'
 
 import '../domain/likes_domain.dart';
 import 'choose_location.dart';
-import 'contact_list.dart';
 
 class AddAddressScreen extends StatefulHookConsumerWidget {
   AddAddressScreen({super.key});
@@ -40,9 +39,10 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   Map<int, bool> homeChecked = {0: true, 1: false, 2: false};
 
   _initMap(WidgetRef ref) {
-    final location = ref.watch(getChosenLocationProvider);
+    final location = ref.watch(getChosenLocationProvider.notifier).state;
     final userLocation = ref.read(userLocationProvider.future);
-
+    debugPrint('The Location From Init Map Is$location');
+    debugPrint('The Location From Init Map Is${location?['lat'].toString()}');
     final Completer<GoogleMapController> _controller =
         Completer<GoogleMapController>();
 
@@ -62,8 +62,8 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
     if (location != null) {
       final position = LatLng(
-        location["lat"],
-        location["lng"],
+        location["lat"] ?? 0.0, // Replace 0.0 with your default value
+        location["lng"] ?? 0.0, // Replace 0.0 with your default value
       );
       CameraPosition _kGooglePlex = CameraPosition(
         target: position,
@@ -127,6 +127,8 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
     ref.listen(getContactProvider, (prev, next) {
       _phoneController.value = PhoneNumber(isoCode: IsoCode.KW, nsn: next);
     });
+    final location = ref.watch(getChosenLocationProvider.notifier).state;
+    debugPrint('The Location From Init Map Is$location ');
 
     final isMeChecked = useState(true);
     final isOtherChecked = useState(false);
@@ -242,118 +244,85 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: TextFormField(
-                                        controller: _titleController,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Title is required";
-                                          }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: "Address Title",
-                                          hintText: "Enter title",
-                                          border: UnderlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text("Used phone no.",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    ListTile(
-                                      onTap: () {
-                                        isMeChecked.value = true;
-                                        isOtherChecked.value = false;
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: TextFormField(
+                                      controller: _titleController,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return "Title is required";
+                                        }
+                                        return null;
                                       },
-                                      leading: Transform.scale(
-                                        scale: 0.8,
-                                        child: SizedBox(
-                                          width: 10,
-                                          child: Checkbox(
-                                              shape: CircleBorder(),
-                                              value: isMeChecked.value,
-                                              onChanged: (v) {
-                                                isMeChecked.value = v!;
-                                                isOtherChecked.value = !v;
-                                              }),
-                                        ),
-                                      ),
-                                      title: Text("me"),
-                                    ),
-                                    ListTile(
-                                      onTap: () {
-                                        isOtherChecked.value = true;
-                                        isMeChecked.value = false;
-                                      },
-                                      leading: Transform.scale(
-                                        scale: 0.8,
-                                        child: SizedBox(
-                                          width: 10,
-                                          child: Checkbox(
-                                              value: isOtherChecked.value,
-                                              shape: CircleBorder(),
-                                              onChanged: (v) {
-                                                isOtherChecked.value = v!;
-                                                isMeChecked.value = !v;
-                                              }),
-                                        ),
-                                      ),
-                                      title: Text("other",
-                                          style: TextStyle(fontSize: 16)),
-                                      trailing: SizedBox(
-                                        width: 150,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 10,
-                                                    spreadRadius: 1)
-                                              ]),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                            child: TextFormField(
-                                              controller: _userNameController,
-                                              validator: (value) {
-                                                if (isOtherChecked.value &&
-                                                    value!.isEmpty) {
-                                                  return "User name is required";
-                                                }
-                                                return null;
-                                              },
-                                              decoration: InputDecoration(
-                                                  hintText: "Name",
-                                                  border: InputBorder.none),
-                                            ),
-                                          ),
+                                      decoration: InputDecoration(
+                                        labelText: "Address Title",
+                                        hintText: "Enter title",
+                                        border: UnderlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Used phone no.",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  ListTile(
+                                    onTap: () {
+                                      isMeChecked.value = true;
+                                      isOtherChecked.value = false;
+                                    },
+                                    leading: Transform.scale(
+                                      scale: 0.8,
+                                      child: SizedBox(
+                                        width: 10,
+                                        child: Checkbox(
+                                            shape: CircleBorder(),
+                                            value: isMeChecked.value,
+                                            onChanged: (v) {
+                                              isMeChecked.value = v!;
+                                              isOtherChecked.value = !v;
+                                            }),
+                                      ),
+                                    ),
+                                    title: Text("me"),
+                                  ),
+                                  ListTile(
+                                    onTap: () {
+                                      isOtherChecked.value = true;
+                                      isMeChecked.value = false;
+                                    },
+                                    leading: Transform.scale(
+                                      scale: 0.8,
+                                      child: SizedBox(
+                                        width: 10,
+                                        child: Checkbox(
+                                            value: isOtherChecked.value,
+                                            shape: CircleBorder(),
+                                            onChanged: (v) {
+                                              isOtherChecked.value = v!;
+                                              isMeChecked.value = !v;
+                                            }),
+                                      ),
+                                    ),
+                                    title: Text("other",
+                                        style: TextStyle(fontSize: 16)),
+                                    trailing: SizedBox(
+                                      width: 150,
                                       child: Container(
                                         decoration: BoxDecoration(
                                             color: Colors.white,
@@ -364,206 +333,229 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                   blurRadius: 10,
                                                   spreadRadius: 1)
                                             ]),
-                                        child: PhoneFormField(
-                                          controller: _phoneController,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none),
-                                          showFlagInInput: true,
-                                          defaultCountry: IsoCode.KW,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          if (await FlutterContacts
-                                              .requestPermission()) {
-                                            List<Contact> contacts =
-                                                await FlutterContacts
-                                                    .getContacts(
-                                              withProperties: true,
-                                            );
-                                            context.push('/contacts',
-                                                extra: contacts);
-                                          }
-                                        },
-                                        child: Container(
-                                            width: 244,
-                                            height: 44,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF663399),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Pick from contact list",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 250,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
                                           child: TextFormField(
-                                            controller: _landmarkController,
+                                            controller: _userNameController,
                                             validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return "Landmark is required";
+                                              if (isOtherChecked.value &&
+                                                  value!.isEmpty) {
+                                                return "User name is required";
                                               }
                                               return null;
                                             },
                                             decoration: InputDecoration(
-                                              labelText: "Landmark",
-                                              hintText: "Landmark",
-                                              border: UnderlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
+                                                hintText: "Name",
+                                                border: InputBorder.none),
                                           ),
-                                        ),
-                                        Icon(Icons.info)
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text("Location",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          )),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        context.push('/choose_location');
-                                      },
-                                      child: Container(
-                                        height: 100,
-                                        child: Stack(
-                                          children: [
-                                            _initMap(ref),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 30,
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Location"),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  () {
-                                                    final details = ref.watch(
-                                                        getChosenLocationProvider);
-
-                                                    final text = details?[
-                                                                "address"] ==
-                                                            null
-                                                        ? "Choose location"
-                                                        : details?["address"];
-
-                                                    return Text(text);
-                                                  }()
-                                                ],
-                                              ),
-                                            )
-                                          ],
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
+                                                blurRadius: 10,
+                                                spreadRadius: 1)
+                                          ]),
+                                      child: PhoneFormField(
+                                        controller: _phoneController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none),
+                                        showFlagInInput: true,
+                                        defaultCountry: IsoCode.KW,
+                                      ),
                                     ),
-                                    Consumer(
-                                      builder: (context, ref, child) {
-                                        return SizedBox(
-                                          height: 50,
-                                          width: double.infinity,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              shape: MaterialStatePropertyAll(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15))),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color(0xFF663399)),
-                                            ),
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                String locationType = "HOME";
-                                                if (homeChecked[1]!) {
-                                                  locationType = "WORK";
-                                                } else if (homeChecked[2]!) {
-                                                  locationType = "COAST";
-                                                }
-
-                                                final userName = isOtherChecked
-                                                        .value
-                                                    ? _userNameController.text
-                                                    : null;
-                                                ref
-                                                    .read(addLocationProvider(
-                                                            landmark:
-                                                                _landmarkController
-                                                                    .text,
-                                                            title:
-                                                                _titleController
-                                                                    .text,
-                                                            phone: isOtherChecked
-                                                                    .value
-                                                                ? _phoneController
-                                                                    .value!
-                                                                    .international
-                                                                    .toString()
-                                                                : null,
-                                                            userName: userName,
-                                                            locationType:
-                                                                locationType)
-                                                        .future)
-                                                    .then(
-                                                      (value) =>
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                        SnackBar(
-                                                          content: Text(value),
-                                                        ),
-                                                      ),
-                                                    );
-                                              }
-                                            },
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          context.push('/contacts',),
+                                      child: Container(
+                                          width: 244,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF663399),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
                                             child: Text(
-                                              "Save",
+                                              "Pick from contact list",
                                               style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 17),
+                                                  color: Colors.white),
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 250,
+                                        child: TextFormField(
+                                          controller: _landmarkController,
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return "Landmark is required";
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            labelText: "Landmark",
+                                            hintText: "Landmark",
+                                            border: UnderlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                           ),
-                                        );
-                                      },
-                                    )
-                                  ],
-                                )),
+                                        ),
+                                      ),
+                                      Icon(Icons.info)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Location",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      context.push('/choose_location');
+                                    },
+                                    child: Container(
+                                      height: 100,
+                                      child: Stack(
+                                        children: [
+                                          _initMap(ref),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 30,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Location"),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                () {
+                                                  final details = ref.watch(
+                                                      getChosenLocationProvider);
+                                                  final text =
+                                                      details?["address"] ==
+                                                              null
+                                                          ? "Choose location"
+                                                          : details?["address"];
+
+                                                  return Text(text);
+                                                }()
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      return SizedBox(
+                                        height: 50,
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStatePropertyAll(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Color(0xFF663399)),
+                                          ),
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              String locationType = "HOME";
+                                              if (homeChecked[1]!) {
+                                                locationType = "WORK";
+                                              } else if (homeChecked[2]!) {
+                                                locationType = "COAST";
+                                              }
+                                              debugPrint(
+                                                  'The Phone Picked Is ${_phoneController}');
+                                              final userName =
+                                                  isOtherChecked.value
+                                                      ? _userNameController.text
+                                                      : null;
+                                              ref
+                                                  .read(addLocationProvider(
+                                                          landmark:
+                                                              _landmarkController
+                                                                  .text,
+                                                          title:
+                                                              _titleController
+                                                                  .text,
+                                                          phone: isOtherChecked
+                                                                  .value
+                                                              ? _phoneController
+                                                                  .value!
+                                                                  .international
+                                                                  .toString()
+                                                              : null,
+                                                          userName: userName,
+                                                          locationType:
+                                                              locationType)
+                                                      .future)
+                                                  .then(
+                                                    (value) =>
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(value),
+                                                      ),
+                                                    ),
+                                                  );
+                                            }
+                                          },
+                                          child: Text(
+                                            "Save",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
                           )
                         ],
                       ),
