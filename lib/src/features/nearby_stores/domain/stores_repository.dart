@@ -54,29 +54,43 @@ class NearbyData {
   });
 }
 
+final isNearbyStoreScreenActive = ValueNotifier<bool>(true);
+
 @riverpod
 Stream<dynamic> getNearbyStoresStream(
     Ref ref, {
-      required BuildContext context,
       required ValueNotifier<bool> isBottomSheetOpen,
     }) async* {
-  while (true) {
-    await Future.delayed(Duration(seconds: 10));
-    yield await getNearbyStores(
-      ref,
-      context: context,
-      isBottomSheetOpen: isBottomSheetOpen,
-    );
+  bool initialCall = true;
+
+  while (isNearbyStoreScreenActive.value) {
+    debugPrint('isNearbyStoreScreenActive.value: ${isNearbyStoreScreenActive.value}');
+
+    if (initialCall) {
+      debugPrint('Initial call, yielding immediately');
+      initialCall = false;
+      yield await getNearbyStores(
+        ref,
+        isBottomSheetOpen: isBottomSheetOpen,
+      );
+    } else {
+      debugPrint('Subsequent call, delaying for 5 seconds');
+      await Future.delayed(Duration(seconds: 5));
+      yield await getNearbyStores(
+        ref,
+        isBottomSheetOpen: isBottomSheetOpen,
+      );
+    }
   }
+
+  debugPrint('Stream terminated');
 }
 @riverpod
 Future<dynamic> getNearbyStores(
   Ref ref, {
-  required BuildContext context,
   required ValueNotifier<bool> isBottomSheetOpen,
   bool makeRequest = true, // Default to true, meaning the request will be made
 }) async {
-
   final url = "/get-nearby-stores";
   final location = (await ref.read(userLocationProvider.future))!;
   debugPrint("Initial Location: $location");
@@ -147,7 +161,6 @@ Future<dynamic> getNearbyStores(
                         await ref
                             .refresh(
                               getNearbyStoresProvider(
-                                context: context,
                                 isBottomSheetOpen: isBottomSheetOpen,
                               ),
                             )
@@ -236,7 +249,7 @@ Uint8List addPaddingToImage(Uint8List bitmap, int topPadding, int rightPadding,
   }
 
   // Encode the new image to Uint8List
-  Uint8List result = Uint8List.fromList(img.encodePng(newImage)!);
+  Uint8List result = Uint8List.fromList(img.encodePng(newImage));
 
   return result;
 }
