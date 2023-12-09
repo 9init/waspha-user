@@ -6,4 +6,6 @@ class WasphaColors {
   static const Color tertiary = Color(0xFF002286);
   static const Color error = Colors.red;
   static const Color background = Color(0xFFFDFFF5);
+  static const Color transparent =Colors.transparent;
+  static const Color white =Colors.white;
 }
