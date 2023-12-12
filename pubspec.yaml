@@ -82,7 +82,21 @@ dependencies:
   # Form builder creation of data collection forms in Flutter by removing the boilerplate needed to build a form, validate fields, react to changes and collect final user input.
   flutter_form_builder: ^9.1.1
   flutter_datetime_picker_plus: ^2.1.0
-dev_dependencies:
+  # A toast library for friendly user interfaces message
+  fluttertoast: ^8.2.4
+
+  # Dependency Injection service locator
+  injectable: ^2.3.2
+
+  # Dependency Injection service locator
+  get_it: ^7.6.4
+
+  # A lightweight and blazing fast key-value database for Flutter
+  hive: ^2.2.3
+
+  # Hive database support for Flutter
+  hive_flutter: ^1.1.0
+  dev_dependencies:
   flutter_test:
     sdk: flutter
   change_app_package_name: ^1.1.0
@@ -99,6 +113,8 @@ dev_dependencies:
   json_serializable: ^6.7.1
   riverpod_generator: ^2.2.6
   flutter_launcher_icons: ^0.13.1
+  # Injectable Generator is a generator for injectable.
+  injectable_generator: ^2.4.1
 
 
 
