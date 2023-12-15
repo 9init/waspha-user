@@ -14,6 +14,7 @@ import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.d
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
+import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dart';
 import 'package:waspha/src/features/notification/presentation/notification.dart';
 import 'package:waspha/src/features/pass_reset/pass_reset.dart';
 import 'package:waspha/src/features/profile/presentation/legal.dart';
@@ -85,7 +86,7 @@ final router = Provider<GoRouter>(
                   builder: (context, state) {
                     isNearbyStoreScreenActive.value = true;
                     debugPrint('Inside PageBuilder');
-                    return const ProviderMenuScreen();
+                    return const NearbyStoreScreen();
                   },
                   onExit: (context) {
                     debugPrint('Exiting from Near By Stores');
