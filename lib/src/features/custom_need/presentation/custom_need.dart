@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/core/di/index.dart';
 import 'package:waspha/src/features/custom_need/presentation/pickup_confirmation_dialog.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
@@ -339,36 +340,37 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
           if (widget.items.isEmpty ||
               widget.items.any((item) => !item.isValid())) {
             debugPrint('Complete All Items First');
-            if (!widget.formKey.currentState!.validate()) {
-            }
-            di<ToastManager>().error('Nek Nafsk Ya 3abeet');
-
+            di<ToastManager>()
+                .error(context.localization.please_complete_all_items_first);
           } else {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  final method = ref.watch(methodProvider);
-                  final itemsJsonList =
-                      widget.items.map((item) => item.toJson()).toList();
-                  final currentPlace = ref.watch(currentPlaceDescription);
+            if (!widget.formKey.currentState!.validate()) {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    final method = ref.watch(methodProvider);
+                    final itemsJsonList =
+                        widget.items.map((item) => item.toJson()).toList();
+                    final currentPlace = ref.watch(currentPlaceDescription);
 
-                  if (method == "delivery")
-                    return DeliveryConfirmationDialog(
+                    if (method == "delivery")
+                      return DeliveryConfirmationDialog(
+                          consumer: ref,
+                          items: widget.items,
+                          method: method,
+                          currentPlace: currentPlace,
+                          isScheduled: widget.isScheduled,
+                          itemsJsonList: itemsJsonList);
+
+                    return PickupConfirmationDialog(
                         consumer: ref,
                         items: widget.items,
                         method: method,
                         currentPlace: currentPlace,
                         isScheduled: widget.isScheduled,
                         itemsJsonList: itemsJsonList);
+                  });
+            }
 
-                  return PickupConfirmationDialog(
-                      consumer: ref,
-                      items: widget.items,
-                      method: method,
-                      currentPlace: currentPlace,
-                      isScheduled: widget.isScheduled,
-                      itemsJsonList: itemsJsonList);
-                });
             // final itemsJsonList =
             //     items.value.map((item) => item.toJson()).toList();
             // print(itemsJsonList);

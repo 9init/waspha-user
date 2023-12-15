@@ -191,8 +191,7 @@ class PickupConfirmationDialog extends StatelessWidget {
                                           BorderRadius.circular(13)))),
                       onPressed: () {
                         consumer
-                            .read(createRFPProvider(
-                                    items: itemsJsonList, context: context)
+                            .read(createRFPProvider(items: itemsJsonList, context: context)
                                 .future)
                             .then((value) =>
                                 context.push('/buffer_brand', extra: value));

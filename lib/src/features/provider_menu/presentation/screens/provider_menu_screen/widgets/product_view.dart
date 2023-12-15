@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:waspha/src/colors/colors.dart';
+import 'package:waspha/core/const/colors/colors.dart';
 
 class ProductView extends StatelessWidget {
   const ProductView(

@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:waspha/src/core/di/index.dart';
+import 'package:waspha/core/const/cahce_keys/cache_keys.dart';
 
 import '../../nearby_stores/domain/stores_repository.dart';
 
@@ -37,13 +36,11 @@ class _ChooseLocationState extends State<ChooseLocation> {
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
         final location = ref.read(userLocationProvider);
-        final userLocationBox = Hive.box('user_location');
+        final userLocationBox = Hive.box(CacheKeys.userLocation);
 
         final currentLocation = ref.read(userLocationProvider).asData?.value;
-        final savedLatitude =
-            userLocationBox.get('latitude', defaultValue: 0.0);
-        final savedLongitude =
-            userLocationBox.get('longitude', defaultValue: 0.0);
+        final savedLatitude = userLocationBox.get('latitude', defaultValue: 0.0);
+        final savedLongitude = userLocationBox.get('longitude', defaultValue: 0.0);
         final savedAddress = userLocationBox.get('address', defaultValue: '');
         debugPrint('The Saved Value Is $savedLatitude');
         debugPrint('The Saved Value Is $savedLongitude');
@@ -171,18 +168,12 @@ class _ChooseLocationState extends State<ChooseLocation> {
                             onPressed: () async {
                               final details = await getPlaceDetails(ref,
                                   location: userLocation.value);
-                              ref
-                                  .read(getChosenLocationProvider.notifier)
-                                  .state = {
-                                "lat": userLocation.value.latitude,
-                                "lng": userLocation.value.longitude,
-                                "address": details
+                              ref.read(getChosenLocationProvider.notifier)
+                                  .state = {"lat": userLocation.value.latitude, "lng": userLocation.value.longitude, "address": details
                               };
-                              userLocationBox.put(
-                                  'latitude', userLocation.value.latitude);
-                              userLocationBox.put(
-                                  'longitude', userLocation.value.longitude);
-                              userLocationBox.put('address', details);
+                              userLocationBox.put(CacheKeys.userLatitude, userLocation.value.latitude);
+                              userLocationBox.put(CacheKeys.userLongitude, userLocation.value.longitude);
+                              userLocationBox.put(CacheKeys.userAddress, details);
 
                               debugPrint(
                                   'The Saved Value After Click Saved Is ${userLocationBox.put('longitude', userLocation.value.longitude)}');

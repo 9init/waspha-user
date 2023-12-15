@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:state_notifier/state_notifier.dart';
 import 'package:waspha/src/models/phone/phone_model.dart';
 import 'package:waspha/src/repository/auth/password_reset.dart';
 

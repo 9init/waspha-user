@@ -8,7 +8,6 @@ import '../../../widgets/auth_btn/auth_btn.dart';
 import '../../../widgets/auth_container/auth_container.dart';
 import '../../../widgets/custom_field/custom_field.dart';
 import '../../../widgets/social_media/social_media.dart';
-import '../domain/social_service.dart';
 
 class LoginScreen extends StatefulHookConsumerWidget {
   @override

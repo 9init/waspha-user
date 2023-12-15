@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waspha/src/colors/colors.dart';
+import 'package:waspha/core/const/colors/colors.dart';
 
 class AuthButton extends StatelessWidget {
   const AuthButton({

@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:location/location.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
-import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 class GetLocationMapScreen extends HookConsumerWidget {
   final double userLat;
@@ -51,7 +50,7 @@ class GetLocationMapScreen extends HookConsumerWidget {
               rotateGesturesEnabled: true,
               zoomControlsEnabled: false,
               initialCameraPosition: CameraPosition(
-                target: LatLng(data!.latitude!, data!.longitude!),
+                target: LatLng(data.latitude!, data.longitude!),
                 zoom: 14.4746,
               ),
               markers: {

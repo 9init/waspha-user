@@ -43,9 +43,6 @@ class AdditionalNoteForm extends HookWidget {
               minLines: 1,
               labelText: 'Add a note',
               validator: (value){
-                if(value!.isEmpty||value==null){
-                  return'Kaml Ya M3rs';
-                }
                 return null;
               },
             ),

@@ -10,7 +10,6 @@ import 'package:waspha/src/features/profile/presentation/profile.dart';
 
 class NeedLocationPermission extends StatelessWidget {
   const NeedLocationPermission({super.key});
-  @override
   Future<void> showCustomTrackingDialog(BuildContext context) async =>
       await showDialog<void>(
         context: context,
