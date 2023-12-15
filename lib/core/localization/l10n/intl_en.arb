@@ -6,6 +6,8 @@
   "trending_products": "Trending Products",
   "category": "Category",
   "all_products": "All Products",
-
-  "end_provider_menu_screen": "________________________end_provider_menu_screen______________"
+  "end_provider_menu_screen": "________________________end_provider_menu_screen______________",
+  "custom_need_screen": "________________________custom_need_screen______________",
+  "please_complete_all_items_first": "Please complete all items first",
+  "end_custom_need_screen": "________________________end_custom_need_menu_screen______________"
 }

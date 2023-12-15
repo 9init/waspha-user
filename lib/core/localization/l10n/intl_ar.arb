@@ -6,5 +6,9 @@
   "trending_products": "المنتجات الرائجة",
   "category": "الفئة",
   "all_products": "جميع المنتجات",
-  "end_provider_menu_screen": "________________________end_provider_menu_screen______________"
+  "end_provider_menu_screen": "________________________end_provider_menu_screen______________",
+  "custom_need_screen": "________________________custom_need_screen______________",
+  "please_complete_all_items_first": "يرجى إكمال جميع العناصر أولاً",
+  "end_custom_need_screen": "________________________end_custom_need_menu_screen______________"
+
 }
