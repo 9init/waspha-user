@@ -8,4 +8,5 @@ class WasphaColors {
   static const Color background = Color(0xFFFDFFF5);
   static const Color transparent =Colors.transparent;
   static const Color white =Colors.white;
+  static const Color grey =Color(0xFF707070);
 }
