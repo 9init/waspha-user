@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
@@ -23,7 +22,6 @@ import 'package:waspha/src/features/profile/presentation/pickup_radius.dart';
 import 'package:waspha/src/features/profile/presentation/privacy.dart';
 import 'package:waspha/src/features/profile/presentation/settings.dart';
 import 'package:waspha/src/features/profile/presentation/update_profile.dart';
-import 'package:waspha/src/features/provider_menu/presentation/screens/provider_menu_screen/provider_menu_screen.dart';
 import 'package:waspha/src/features/register/presentation/register.dart';
 import 'package:waspha/src/features/resetPass/presentation/reset_pass.dart';
 import 'package:waspha/src/features/reviews/presentation/reviews.dart';
@@ -57,8 +55,7 @@ final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
 final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
 // GoRouter configuration
-final router = Provider<GoRouter>(
-  (ref) => GoRouter(
+final router =  GoRouter(
     debugLogDiagnostics: true,
     initialLocation: '/',
     navigatorKey: rootNavigatorKey,
@@ -360,5 +357,4 @@ final router = Provider<GoRouter>(
         builder: (context, state) => ContactList(),
       ),
     ],
-  ),
-);
+  );
