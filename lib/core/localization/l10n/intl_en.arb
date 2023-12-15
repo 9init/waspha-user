@@ -1,0 +1,11 @@
+{
+  "@@locale": "en",
+  "provider_menu_screen": "________________________provider_menu_screen______________",
+  "offers": "Offers",
+  "see_all": "see all",
+  "trending_products": "Trending Products",
+  "category": "Category",
+  "all_products": "All Products",
+
+  "end_provider_menu_screen": "________________________end_provider_menu_screen______________"
+}
