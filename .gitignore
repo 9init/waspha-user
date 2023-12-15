@@ -16,10 +16,6 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# auto generated freezed files
-*.freezed.dart
-*.g.dart
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -46,3 +42,23 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# lock files
+**/pubspec.lock
+
+# certificate files
+*.cer
+*.p12
+
+# environment variable files (e.g. .env.* files)
+*.env
+
+# generated files
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.gen.dart
+*.auto_mappr.dart
+**/generated
+**/gen
+**/.fvm
