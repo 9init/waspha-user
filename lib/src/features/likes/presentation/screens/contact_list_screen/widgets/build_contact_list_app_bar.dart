@@ -13,17 +13,19 @@ class BuildContactListAppBar extends HookWidget {
     required this.searchController,
     required this.searchedContact,
   }) : super(key: key);
+
   final List<Contact> contactList;
   final TextEditingController searchController;
   final ValueNotifier<List<Contact>> searchedContact;
 
   @override
   Widget build(BuildContext context) {
+    /// Updates the list of searched contacts based on the entered search character.
     void addSearchedCharacterToList(String searchedCharacter) {
       searchedContact.value = contactList
           .where((contact) => contact.displayName
-              .toLowerCase()
-              .startsWith(searchedCharacter.toLowerCase()))
+          .toLowerCase()
+          .startsWith(searchedCharacter.toLowerCase()))
           .toList();
       debugPrint(
           'The Data Get From Search Contact Is ${searchedContact.value}');
@@ -45,20 +47,24 @@ class BuildAppBarActions extends HookWidget {
     required this.searchController,
     required this.isSearching,
   }) : super(key: key);
+
   final TextEditingController searchController;
   final ValueNotifier<bool> isSearching;
 
   @override
   Widget build(BuildContext context) {
+    /// Clears the search text field.
     void _clearSearch() {
       searchController.clear();
     }
 
+    /// Stops the search and clears the search text field.
     void _stopSearching() {
       _clearSearch();
       isSearching.value = false;
     }
 
+    /// Initiates the search and adds a local history entry for proper navigation.
     void _startSearch() {
       ModalRoute.of(context)!
           .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
