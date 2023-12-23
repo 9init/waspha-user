@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:waspha/src/shared/networking/dio_interceptor.dart';
 import 'package:waspha/src/shared/networking/request_method.dart';
@@ -39,7 +40,9 @@ class Networking {
     await instance._prepareJar();
     _self = instance;
     // Add the AppInterceptors to the Dio instance
-    instance._dio.interceptors.add(AppInterceptors());
+    instance._dio.interceptors.add(
+      AppInterceptors(instance._dio),
+    );
 
     return _self!;
   }
@@ -52,6 +55,8 @@ class Networking {
       storage: FileStorage("$appDocPath/.cookies/"),
     );
     _dio.interceptors.add(CookieManager(jar));
+    debugPrint('jar${jar.storage}');
+    debugPrint('appDocPath${appDocPath}');
   }
 
   /// Delete all cookies
