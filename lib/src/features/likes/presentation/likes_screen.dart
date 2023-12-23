@@ -1,6 +1,13 @@
+import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/core/const/colors/colors.dart';
+import 'package:waspha/core/helper_functions/get_location_type/get_location_type.dart';
+import 'package:waspha/src/features/nearby_stores/domain/get_favorite_stores_request_entity.dart';
+import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
+import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
@@ -93,6 +100,7 @@ class LikesBody extends StatelessWidget {
                       Consumer(
                         builder: (context, ref, child) {
                           final locations = ref.watch(getLocationsProvider);
+                          debugPrint('The Data Is $locations');
                           return locations.when(data: (data) {
                             return data.isEmpty
                                 ? Center(
@@ -100,10 +108,18 @@ class LikesBody extends StatelessWidget {
                                   )
                                 : Container(
                                     height: 150,
-                                    child: ListView.builder(
+                                    child: ListView.separated(
                                       itemCount: data.length,
                                       shrinkWrap: true,
                                       itemBuilder: ((context, index) {
+                                        final locationType =
+                                            getLocationTypeFromString(data[
+                                                    index]
+                                                .location_type); // Convert to enum
+                                        final svgImage =
+                                            getSvgImageForLocationType(
+                                                locationType);
+
                                         return Dismissible(
                                           key: UniqueKey(),
                                           onDismissed: (direction) {
@@ -117,12 +133,22 @@ class LikesBody extends StatelessWidget {
                                               "EditLocation",
                                               extra: data[index],
                                             ),
-                                            leading: Icon(Icons.location_on),
+                                            leading: SvgPicture.asset(
+                                              svgImage,
+                                              height: 20,
+                                              width: 20,
+                                            ),
                                             title: Text(data[index].title),
-                                            trailing: Icon(Icons.arrow_forward),
+                                            trailing: Icon(
+                                              Icons.arrow_forward,
+                                              color: WasphaColors.black,
+                                            ),
                                           ),
                                         );
                                       }),
+                                      separatorBuilder:
+                                          (BuildContext context, int index) =>
+                                              Gap(10),
                                     ),
                                   );
                           }, error: (e, s) {
@@ -184,7 +210,23 @@ class LikesBody extends StatelessWidget {
                         height: 10,
                       ),
                       Consumer(builder: (context, ref, child) {
-                        final favStores = ref.watch(getFavStoresProvider);
+                        final userLocation = ref.watch(userLocationProvider);
+                        final range = ref.read(pickupRadiusProvider).pickupRadius;
+
+                        final favStores = ref.watch(
+                          getFavStoresProvider(
+                            getFavoriteStoresRequestEntity:
+                                GetFavoriteStoresRequestEntity(
+                              lat: userLocation.value?.latitude??0.0,
+                              lng: userLocation.value?.longitude??0.0,
+                              radius: range,
+                            ),
+                          ),
+                        );
+                        debugPrint(
+                            'The Location  Chosen By User Latitude Is  ${userLocation.value?.latitude ?? 0.0}');
+                        debugPrint(
+                            'The Location  Chosen By User Longitude Is  ${userLocation.value?.longitude ?? 0.0}');
                         return favStores.when(
                             data: (data) {
                               return data.isEmpty
@@ -208,8 +250,7 @@ class LikesBody extends StatelessWidget {
                                               imageURl: data[index]["store"]
                                                       ["image"] ??
                                                   "",
-                                              rating: data[index]["store"]
-                                                  ["avg_rating"],
+                                              rating: data[index]["store"]["avg_rating"]['rating'],
                                               companyName: data[index]["store"]
                                                   ["business_name"]["en"],
                                               width: 0.8,

@@ -124,7 +124,6 @@ class CreditCardLogged extends StatelessWidget {
                       Consumer(
                         builder: (context, ref, child) {
                           final userCredits = ref.watch(getCreditCardsProvider);
-
                           return userCredits.when(data: (data) {
                             return SizedBox(
                               height: 120,

@@ -3,14 +3,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:waspha/core/const/cahce_keys/cache_keys.dart';
+import 'package:waspha/core/di/index.dart';
+import 'package:waspha/src/features/likes/helpers/get_address_location.dart';
 
+import '../../../../core/const/cahce_keys/cache_keys.dart';
 import '../../nearby_stores/domain/stores_repository.dart';
 
 final getChosenLocationProvider =
-    StateProvider<Map<String, dynamic>?>((ref) => {});
+    StateProvider<Map<String, dynamic>?>((ref) => null);
 
 class ChooseLocation extends StatefulHookWidget {
   const ChooseLocation({super.key});
@@ -32,89 +34,60 @@ class _ChooseLocationState extends State<ChooseLocation> {
   Widget build(BuildContext context) {
     final userLocation = useState(LatLng(0.0, 0.0));
     final mapType = useState<MapType>(MapType.normal);
-    debugPrint('The User Location Is $userLocation');
+    final userLocationBox = Hive.box(CacheKeys.userLocation);
+    final savedLatitude =  di<GetAddressLocation>().savedLatitude ;
+    final savedLongitude =  di<GetAddressLocation>().savedLongitude ;
+    final savedAddress =  di<GetAddressLocation>().savedAddress;
+    debugPrint('The Saved Value Is $savedLatitude');
+    debugPrint('The Saved Value Is $savedLongitude');
+    debugPrint('The Saved Value Is $savedAddress');
+
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
         final location = ref.read(userLocationProvider);
-        final userLocationBox = Hive.box(CacheKeys.userLocation);
-
         final currentLocation = ref.read(userLocationProvider).asData?.value;
-        final savedLatitude = userLocationBox.get('latitude', defaultValue: 0.0);
-        final savedLongitude = userLocationBox.get('longitude', defaultValue: 0.0);
-        final savedAddress = userLocationBox.get('address', defaultValue: '');
-        debugPrint('The Saved Value Is $savedLatitude');
-        debugPrint('The Saved Value Is $savedLongitude');
-        debugPrint('The Saved Value Is $savedAddress');
+
         return location.when(
             data: (data) {
+              debugPrint('The Data Is $data');
               return Stack(
                 alignment: Alignment.center,
                 children: [
-                  savedLatitude == 0.0 && savedLongitude == 0.0
-                      ? GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: data!,
-                            zoom: 14.4746,
-                          ),
-                          myLocationEnabled: false,
-                          mapType: mapType.value,
-                          myLocationButtonEnabled: false,
-                          onMapCreated: (controller) {
-                            _onMapCreated(controller);
-                          },
-                          zoomGesturesEnabled: true,
-                          onCameraMove: (position) =>
-                              userLocation.value = LatLng(
-                            position.target.latitude,
-                            position.target.longitude,
-                          ),
-                          scrollGesturesEnabled: true,
-                          tiltGesturesEnabled: false,
-                          markers: {
-                            Marker(
-                              markerId: MarkerId("user"),
-                              position: data,
-                              icon: BitmapDescriptor.defaultMarkerWithHue(
-                                  BitmapDescriptor.hueBlue),
-                            ),
-                          },
-                          rotateGesturesEnabled: true,
-                          zoomControlsEnabled: false,
-                        )
-                      : GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(savedLatitude, savedLongitude),
-                            zoom: 14.4746,
-                          ),
-                          myLocationEnabled: false,
-                          mapType: mapType.value,
-                          myLocationButtonEnabled: false,
-                          onMapCreated: (controller) {
-                            _onMapCreated(controller);
-                          },
-                          zoomGesturesEnabled: true,
-                          onCameraMove: (position) =>
-                              userLocation.value = LatLng(
-                            position.target.latitude,
-                            position.target.longitude,
-                          ),
-                          scrollGesturesEnabled: true,
-                          tiltGesturesEnabled: false,
-                          markers: {
-                            Marker(
-                              markerId: MarkerId("user"),
-                              position: LatLng(savedLatitude, savedLongitude),
-                              icon: BitmapDescriptor.defaultMarkerWithHue(
-                                  BitmapDescriptor.hueBlue),
-                            ),
-                          },
-                          rotateGesturesEnabled: true,
-                          zoomControlsEnabled: false,
-                        ),
-                  Image.asset(
-                    'assets/images/map_markers/destination.png',
-                    width: 50.w,
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: savedLongitude == 0.0 && savedLatitude == 0.0
+                          ? data!
+                          : LatLng(savedLatitude, savedLongitude),
+                      zoom: 14.4746,
+                    ),
+                    myLocationEnabled: false,
+                    mapType: mapType.value,
+                    myLocationButtonEnabled: false,
+                    onMapCreated: (controller) {
+                      _onMapCreated(controller);
+                    },
+                    zoomGesturesEnabled: true,
+                    onCameraMove: (position) => userLocation.value = LatLng(
+                      position.target.latitude,
+                      position.target.longitude,
+                    ),
+                    scrollGesturesEnabled: true,
+                    tiltGesturesEnabled: false,
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("user"),
+                        position: savedLongitude == 0.0 && savedLatitude == 0.0
+                            ? data!
+                            : LatLng(savedLatitude, savedLongitude),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueBlue),
+                      ),
+                    },
+                    rotateGesturesEnabled: true,
+                    zoomControlsEnabled: false,
                   ),
+                  Image.asset('assets/images/map_markers/destination.png',
+                      width: 50.w),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
@@ -168,25 +141,27 @@ class _ChooseLocationState extends State<ChooseLocation> {
                             onPressed: () async {
                               final details = await getPlaceDetails(ref,
                                   location: userLocation.value);
-                              ref.read(getChosenLocationProvider.notifier)
-                                  .state = {"lat": userLocation.value.latitude, "lng": userLocation.value.longitude, "address": details
+                              ref
+                                  .read(getChosenLocationProvider.notifier)
+                                  .state = {
+                                "lat": userLocation.value.latitude,
+                                "lng": userLocation.value.longitude,
+                                "address": details
                               };
-                              userLocationBox.put(CacheKeys.userLatitude, userLocation.value.latitude);
-                              userLocationBox.put(CacheKeys.userLongitude, userLocation.value.longitude);
-                              userLocationBox.put(CacheKeys.userAddress, details);
-
                               debugPrint(
-                                  'The Saved Value After Click Saved Is ${userLocationBox.put('longitude', userLocation.value.longitude)}');
+                                  'userLocation.value.latitude${userLocation.value.latitude}');
                               debugPrint(
-                                  'The User Selection Lat ${userLocation.value.latitude}');
-                              debugPrint(
-                                  'The User Selection Long  ${userLocation.value.longitude}');
-                              debugPrint(
-                                  'The User Selection details ${details}');
-                              debugPrint(
-                                  'The User Selection details ${getChosenLocationProvider}');
-                              debugPrint(
-                                  'The User From Provider Is  ${ref.read(getChosenLocationProvider.notifier).state}');
+                                  'userLocation.value.longitude${userLocation.value.longitude}');
+                              // di<SharedPreferences>()
+                              await userLocationBox.put(CacheKeys.userLatitude,
+                                  userLocation.value.latitude);
+                              await userLocationBox.put(CacheKeys.userLongitude,
+                                  userLocation.value.longitude);
+                              await userLocationBox.put(
+                                  CacheKeys.userAddress, details);
+                           di<GetAddressLocation>().savedLatitude = userLocation.value.latitude;
+                           di<GetAddressLocation>().savedLongitude = userLocation.value.longitude;
+                           di<GetAddressLocation>().savedAddress = details;
                               context.pop();
                             },
                             child: Text("Confirm Location"),

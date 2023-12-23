@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:waspha/core/const/dimension/dimensions.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
+import 'package:gap/gap.dart';
 
 class ActivityOffers extends StatelessWidget {
   const ActivityOffers({super.key});
@@ -213,6 +216,7 @@ class ActivityOffers extends StatelessWidget {
 
 class OfferBodyHeaders extends StatelessWidget {
   const OfferBodyHeaders({super.key, required this.text});
+
   final String text;
 
   @override
@@ -230,6 +234,7 @@ class RatingsWidget extends StatelessWidget {
       this.count = 90,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.text = 4.02});
+
   final bool isRating;
   final double text;
   final int count;
@@ -241,12 +246,27 @@ class RatingsWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       children: [
-        Icon(Icons.star,size: 15,),
-        SizedBox(
-          width: 2,
+        Icon(
+          Icons.star,
+          size: 15,
         ),
-        Text("${text.toDouble()} "),
-        isRating ? Text("( ${count.toInt()} ratings )") : Container(),
+        Gap(2.w),
+        Text(
+          "${text.toDouble()} ",
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(fontWeight: AppDimensions.regular),
+        ),
+        isRating
+            ? Text(
+                "( ${count.toInt()} ratings )",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontWeight: AppDimensions.regular),
+              )
+            : Container(),
       ],
     );
   }

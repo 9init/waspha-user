@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/core/const/colors/colors.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
@@ -65,6 +67,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final isClicked = useState(false);
     final method = ref.watch(methodProvider);
     final category = useState(0);
+    final address = useState('');
     final radius = ref.watch(pickupRadiusProvider).pickupRadius * 1000;
     final isCategoryClicked = useState(false);
     final isSubCategoryClicked = useState(false);
@@ -77,7 +80,11 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
     final isPicking = ref.watch(isPickingLocationProvider);
     final isNearbyClicked = useState(false);
     final mapType = useState<MapType>(MapType.normal);
-    ref.listen(getUserLocationTempProvider, (_, newValue) => mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: newValue, zoom: 14.74))));
+    ref.listen(
+        getUserLocationTempProvider,
+        (_, newValue) => mapController?.animateCamera(
+            CameraUpdate.newCameraPosition(
+                CameraPosition(target: newValue, zoom: 14.74))));
 
     return SafeArea(
       child: Stack(
@@ -485,10 +492,24 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () async {
-                              ref.watch(getUserLocation.notifier).update((state) => userLocation.value);
-                              ref.read(isPickingLocationProvider.notifier).update((state) => false);
-                              ref.watch(getNearbyStoresStreamProvider( isBottomSheetOpen: widget.isBottomSheetOpen,).future,);
+                              ref
+                                  .watch(getUserLocation.notifier)
+                                  .update((state) => userLocation.value);
+                              ref
+                                  .read(isPickingLocationProvider.notifier)
+                                  .update((state) => false);
+                              ref.watch(
+                                getNearbyStoresStreamProvider(
+                                  isBottomSheetOpen: widget.isBottomSheetOpen,
+                                ).future,
+                              );
                               ref.invalidate(getNearbyStoresStreamProvider);
+                              debugPrint(
+                                  ' isSubCategoryClicked.value${isSubCategoryClicked.value}');
+                              debugPrint(
+                                  '   isNearbyClicked.value${isNearbyClicked.value}');
+                              debugPrint(
+                                  ' isNearbyClicked.value${isNearbyClicked.value}');
                             },
                             child: Text("Confirm Location"),
                           ),
@@ -496,6 +517,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                       ),
                     ),
                     //TODO : flex: isSubCategoryClicked.value ? 0 : 1,
+                    //                  visible: !isPicking && !isNearbyClicked.value,
                     Visibility(
                         visible: isSubCategoryClicked.value &&
                             isClicked.value &&
@@ -558,8 +580,18 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          Text("Nearby"),
-                                          Icon(Icons.arrow_forward)
+                                          Text(
+                                            context.localization.nearby,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .displaySmall!
+                                                .copyWith(
+                                                    color: WasphaColors.black),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            color: WasphaColors.black,
+                                          )
                                         ],
                                       ),
                                     ),

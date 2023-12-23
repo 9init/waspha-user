@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/menu/menu_detail/domain/menu_detail.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ final storeIDProvider = StateProvider<int>((ref) => 0);
 
 class MenuDetailScreen extends ConsumerWidget {
   final id;
+
   const MenuDetailScreen({super.key, required this.id});
 
   @override
@@ -43,6 +45,7 @@ class MenuDetailsBody extends HookWidget {
   const MenuDetailsBody({super.key, required this.store});
 
   final store;
+
   String convertTimeToAMPM(String timeString) {
     // Parse the time string into a DateTime object
     final DateTime time = DateTime.parse('1970-01-01 ' + timeString);
@@ -118,20 +121,39 @@ class MenuDetailsBody extends HookWidget {
                             showAdaptiveDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                      title: Text('Login'),
+                                      title: Text(
+                                        context.localization.login,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
                                       content: Text(
-                                          'You need to login to add this store to your favorites'),
+                                          context.localization
+                                              .you_need_to_login_to_add_this_store_to_your_favorites,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall),
                                       actions: [
                                         TextButton(
-                                            onPressed: () {
-                                              context.push('/login');
-                                            },
-                                            child: Text('Login')),
+                                          onPressed: () {
+                                            context.push('/login');
+                                          },
+                                          child: Text(
+                                              context.localization.login,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall),
+                                        ),
                                         TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Cancel')),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                              context.localization.cancel,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall),
+                                        ),
                                       ],
                                     ));
                             return;
@@ -180,24 +202,32 @@ class MenuDetailsBody extends HookWidget {
               IconButton(
                   onPressed: () {
                     showAdaptiveDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Text('Report'),
-                              content: Text(
-                                  'Are you sure you want to report this store?'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      context.pop();
-                                    },
-                                    child: Text('Yes')),
-                                TextButton(
-                                    onPressed: () {
-                                      context.pop();
-                                    },
-                                    child: Text('No')),
-                              ],
-                            ));
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(context.localization.report,
+                            style: Theme.of(context).textTheme.titleSmall),
+                        content: Text(
+                            context.localization
+                                .are_you_sure_you_want_to_report_this_store,
+                            style: Theme.of(context).textTheme.titleSmall),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            child: Text(context.localization.yes,
+                                style: Theme.of(context).textTheme.titleSmall),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            child: Text(context.localization.no,
+                                style: Theme.of(context).textTheme.titleSmall),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   icon: Icon(Icons.report))
             ],
@@ -335,9 +365,11 @@ class DetailsCard extends StatelessWidget {
     required this.text,
     this.onPressed,
   });
+
   final Widget widget;
   final String text;
   final Function()? onPressed;
+
   @override
   Widget build(BuildContext context) {
     return Column(

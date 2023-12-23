@@ -45,3 +45,4 @@ class Phone with _$Phone {
   }) = _Phone;
   factory Phone.fromJson(Map<String, dynamic> json) => _$PhoneFromJson(json);
 }
+

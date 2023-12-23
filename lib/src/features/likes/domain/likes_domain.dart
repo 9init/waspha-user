@@ -22,7 +22,6 @@ Future<String> addLocation(
   final url = '/add-location-to-fav';
   final details = ref.watch(getChosenLocationProvider);
   if (details == null) return "Please add location";
-
   final payload = {
     "title": title,
     "landmark": landmark,
@@ -33,7 +32,8 @@ Future<String> addLocation(
       "address": details["address"],
       "lat": details["lat"],
       "lng": details["lng"],
-    }
+    },
+    if (phone != null) "phone": phone,
   };
   if (phone != null) {
     payload["phone"] = phone;

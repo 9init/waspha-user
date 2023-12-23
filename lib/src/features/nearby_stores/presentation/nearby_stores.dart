@@ -101,7 +101,6 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
       }
     });
     isNearbyStoreScreenActive.value = true;
-
   }
 
   @override
@@ -186,6 +185,7 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                 for (var store in stores.toSet()) {
                   final image =
                       ref.watch(imageBytesProvider(store.image)).value;
+                   String address = store.address;
 
                   markers.add(
                     Marker(

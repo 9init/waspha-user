@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import 'package:waspha/core/const/colors/colors.dart';
+import 'package:waspha/src/widgets/search/search_widget.dart';
+import 'package:gap/gap.dart';
 import '../../../widgets/nearby_store/domain/nearby_domain.dart';
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends ConsumerWidget {
   const MenuScreen({super.key, required this.data});
+
   final data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userAddress = ref.watch(currentPlaceDescription.notifier).state;
+    debugPrint('The User Address Is $userAddress');
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -34,7 +40,15 @@ class MenuScreen extends StatelessWidget {
               children: [
                 MenuContainer(
                   rowWidgets: [
-                    Center(child: Text("El Dokki, Giza, Egypt")),
+                    Center(
+                      child: SizedBox(
+                        width: 270.w,
+                        child: Text(
+                          userAddress ??'',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                     Icon(Icons.settings),
                   ],
                 ),
@@ -52,7 +66,7 @@ class MenuScreen extends StatelessWidget {
                   child: ListView.separated(
                     itemCount: data.length,
                     physics: NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) => SizedBox(height: 20),
+                    separatorBuilder: (context, index) => Gap(20),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -130,17 +144,17 @@ class MenuCard extends StatelessWidget {
   final void Function()? onFavored;
   final bool isFavored;
   final bool isListView;
-  final double rating;
+  final num rating;
 
   double dynamicWidth(BuildContext context) {
     if (isOffer) {
       return 150;
     } else if (isProvider) {
-      return 1040.w;
+      return 300.w;
     } else if (isListView) {
-      return 1290.w;
+      return 348.w;
     }
-    return 1100.w;
+    return 300.w;
   }
 
   @override
@@ -167,9 +181,9 @@ class MenuCard extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: dynamicWidth(context),
-                      height: 50,
+                      height: 63.h,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
+                        color: WasphaColors.white.withOpacity(0.4),
                         borderRadius: isProvider
                             ? BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
@@ -185,7 +199,19 @@ class MenuCard extends StatelessWidget {
                               ? MainAxisAlignment.spaceAround
                               : MainAxisAlignment.start,
                           children: [
-                            !isOffer ? Icon(Icons.abc) : Container(),
+                            // !isOffer ? Icon(Icons.abc) : Container(),
+                            Container(
+                              height: 40.h,
+                              width: 40.w,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    imageURl,
+                                  ),
+                                ),
+                                shape: BoxShape.circle
+                              ),
+                            ),
                             Container(
                               width: 130,
                               child: Text(
@@ -213,9 +239,15 @@ class MenuCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
-                        radius: 20,
+                        radius: 25.r,
                         backgroundColor: Colors.white,
-                        child: Text("$rating"),
+                        child: Text(
+                          "$rating",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(color: WasphaColors.black),
+                        ),
                       ),
                       IconButton(
                         icon: Icon(
