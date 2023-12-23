@@ -15,6 +15,7 @@ class CustomTextFromField extends StatelessWidget {
     this.maxLines,
     this.minLines,
     this.textInputAction,
+    this.hintText,
   }) : super(key: key);
   final TextEditingController textEditingController;
   final Function(String?)? onChanged;
@@ -26,6 +27,8 @@ class CustomTextFromField extends StatelessWidget {
   final String? fieldName;
   final int? maxLines;
   final int? minLines;
+  final String? hintText;
+
   final TextInputAction? textInputAction;
 
   @override
@@ -41,6 +44,8 @@ class CustomTextFromField extends StatelessWidget {
       decoration: InputDecoration(
         border: InputBorder.none,
         labelText: labelText,
+        hintText: hintText,
+        hintStyle: Theme.of(context).textTheme.labelSmall,
       ),
     );
   }

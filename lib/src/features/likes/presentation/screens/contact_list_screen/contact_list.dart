@@ -13,7 +13,8 @@ class ContactList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = useTextEditingController();
+    final TextEditingController searchController =
+        useTextEditingController();
     final ValueNotifier<bool> isSearching = useState(false);
     final ValueNotifier<List<Contact>> _contacts = useState([]);
     final ValueNotifier<bool> _permissionDenied = useState(false);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:waspha/core/enums/constants_enums.dart';
 import 'package:waspha/src/shared/networking/networking.dart';
 import 'package:waspha/src/shared/networking/results.dart';
 
@@ -16,11 +17,6 @@ class AddCardResponse {
     required this.result,
     required this.message,
   });
-}
-enum AddCardResult {
-  success,
-  failure,
-  error,
 }
 
 @riverpod

@@ -1,5 +1,5 @@
 import 'package:waspha/core/assets_gen/assets.gen.dart';
-import 'package:waspha/core/enums/location_type.dart';
+import 'package:waspha/core/enums/constants_enums.dart';
 
 
 LocationType getLocationTypeFromString(String? typeString) {

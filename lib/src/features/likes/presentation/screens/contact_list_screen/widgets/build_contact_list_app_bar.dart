@@ -3,6 +3,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:waspha/core/const/colors/colors.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/widgets/custom_text_form_field/custom_text_form_field.dart';
 
 class BuildContactListAppBar extends HookWidget {
@@ -14,16 +15,18 @@ class BuildContactListAppBar extends HookWidget {
   }) : super(key: key);
   final List<Contact> contactList;
   final TextEditingController searchController;
-  final ValueNotifier<List<Contact>> searchedContact ;
+  final ValueNotifier<List<Contact>> searchedContact;
 
   @override
   Widget build(BuildContext context) {
     void addSearchedCharacterToList(String searchedCharacter) {
       searchedContact.value = contactList
-          .where((contact) => contact.displayName.startsWith(searchedCharacter))
+          .where((contact) => contact.displayName
+              .toLowerCase()
+              .startsWith(searchedCharacter.toLowerCase()))
           .toList();
-      debugPrint('The Data Get From Search Contact Is ${searchedContact.value}');
-
+      debugPrint(
+          'The Data Get From Search Contact Is ${searchedContact.value}');
     }
 
     return CustomTextFromField(
@@ -31,12 +34,13 @@ class BuildContactListAppBar extends HookWidget {
       onChanged: (String? searchedContact) {
         addSearchedCharacterToList(searchedContact ?? '');
       },
+      hintText: context.localization.search_contacts,
     );
   }
 }
 
 class BuildAppBarActions extends HookWidget {
-  const BuildAppBarActions( {
+  const BuildAppBarActions({
     Key? key,
     required this.searchController,
     required this.isSearching,

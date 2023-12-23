@@ -38,12 +38,12 @@ class CustomTextTheme {
           fontWeight: AppDimensions.regular,
           fontFamily: MyFontFamily.openSans,
           color: WasphaColors.white),
-      // labelSmall: TextStyle(
-      //   fontSize: ScreenUtil().setSp(16),
-      //   fontWeight: regular,
-      //   fontFamily: MyFontFamily.openSans,
-      //
-      // ),
+      labelSmall: TextStyle(
+          fontSize: ScreenUtil().setSp(16),
+          fontWeight: AppDimensions.regular,
+          fontFamily: MyFontFamily.openSans,
+          color: WasphaColors.grey200),
+
       // headlineMedium: TextStyle(
       //   fontSize: ScreenUtil().setSp(20),
       //   fontWeight: normalBold,
