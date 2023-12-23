@@ -111,6 +111,11 @@ dev_dependencies:
   flutter_gen_runner: ^5.3.2
   # `dart run intl_utils:generate`
   intl_utils: ^2.8.6
+  #easily adding gaps inside Flex widgets such as Columns and Rows or scrolling views and voiding SizedBox(height and width)it handling it internally
+  gap: ^3.0.1
+  #A package provides an easy way to add skeleton effect
+  shimmer: ^3.0.0
+
 
 
 

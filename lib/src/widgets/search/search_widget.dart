@@ -54,12 +54,12 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
                   //     .update((state) => LatLng(lat, lng));
                 },
                 itemClick: (Prediction prediction) async {
-                  await ref
-                      .read(currentPlaceDescription.notifier)
+                  await ref.read(currentPlaceDescription.notifier)
                       .update((state) => prediction.description ?? "");
                   await ref
                       .read(isPickingLocationProvider.notifier)
                       .update((state) => true);
+                  debugPrint('The Location Des Is ${ref.watch(currentPlaceDescription.notifier).state}');
                   if (context.mounted) context.pop();
                 },
                 itemBuilder: (context, index, prediction) {

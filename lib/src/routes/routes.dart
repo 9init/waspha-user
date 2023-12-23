@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 import 'package:waspha/src/features/buffer_brand/presentation/buffer_brand.dart';
@@ -8,7 +9,7 @@ import 'package:waspha/src/features/forget_password/viewmodel.dart';
 import 'package:waspha/src/features/forget_password_otp/forget_password_otp.dart';
 import 'package:waspha/src/features/likes/data/likes_data.dart';
 import 'package:waspha/src/features/likes/presentation/choose_location.dart';
-import 'package:waspha/src/features/likes/presentation/contact_list.dart';
+import 'package:waspha/src/features/likes/presentation/screens/contact_list_screen/contact_list.dart';
 import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
@@ -55,7 +56,8 @@ final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
 final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
 // GoRouter configuration
-final router =  GoRouter(
+final router = Provider<GoRouter>(
+  (ref) => GoRouter(
     debugLogDiagnostics: true,
     initialLocation: '/',
     navigatorKey: rootNavigatorKey,
@@ -69,13 +71,14 @@ final router =  GoRouter(
             StatefulShellBranch(
               navigatorKey: _shellNavigatorAKey,
               routes: [
-                // top route inside branch
                 GoRoute(
                   path: '/',
                   redirect: (context, state) {
                     if (state.path == "/") {
+                      debugPrint('The New Path Is ${state.path}');
                       isNearbyStoreScreenActive.value = true;
                     } else {
+                      debugPrint('The New Path Is ${state.path}');
                       isNearbyStoreScreenActive.value = false;
                     }
                     return null;
@@ -196,6 +199,15 @@ final router =  GoRouter(
         ),
       ),
       GoRoute(
+        redirect: (context, state) {
+          if (state.path == '/custom_need_screen') {
+            debugPrint('The New Path Is ${state.path}');
+            isNearbyStoreScreenActive.value = false;
+          } else {             debugPrint('The New Path Is ${state.path}');
+            isNearbyStoreScreenActive.value = true;
+          }
+          return null;
+        },
         parentNavigatorKey: rootNavigatorKey,
         path: '/custom_need_screen',
         builder: (context, state) => CustomNeedScreen(isMenu: state.extra!),
@@ -357,4 +369,5 @@ final router =  GoRouter(
         builder: (context, state) => ContactList(),
       ),
     ],
-  );
+  ),
+);

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/core/const/cahce_keys/cache_keys.dart';
-import 'package:waspha/src/core/di/index.dart';
+import 'package:waspha/core/di/index.dart';
 
 import 'firebase_options.dart';
 import 'src/app.dart';

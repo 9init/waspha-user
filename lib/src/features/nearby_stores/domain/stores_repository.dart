@@ -65,7 +65,6 @@ Stream<dynamic> getNearbyStoresStream(
 
   while (isNearbyStoreScreenActive.value) {
     debugPrint('isNearbyStoreScreenActive.value: ${isNearbyStoreScreenActive.value}');
-
     if (initialCall) {
       debugPrint('Initial call, yielding immediately');
       initialCall = false;
@@ -133,6 +132,7 @@ Future<dynamic> getNearbyStores(
         "categories":
             categoriesList.map((job) => Categories.fromJson(job)).toList(),
       };
+
     case Failure():
       if (!isBottomSheetOpen.value) {
         isBottomSheetOpen.value = true;
@@ -193,7 +193,7 @@ final imageBytesProvider = FutureProvider.family<BitmapDescriptor, String>(
     (ref, String imageURL) async {
   return await imageBytes(imageURL: imageURL);
 });
-
+final userAddress=StateProvider<String>((ref) => '');
 Future<BitmapDescriptor> imageBytes({required String imageURL}) async {
   Bitmap bitmap = await Bitmap.fromProvider(NetworkImage(imageURL));
   Bitmap resizedBitmap = bitmap.apply(BitmapResize.to(width: 100, height: 100));

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
-import 'package:waspha/src/features/likes/presentation/contact_list.dart';
+import 'package:waspha/src/features/likes/presentation/screens/contact_list_screen/contact_list.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 
 import '../domain/likes_domain.dart';
@@ -26,7 +25,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
   static final _formKey = GlobalKey<FormState>();
 
   TextEditingController _titleController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController(text: '');
   TextEditingController _landmarkController = TextEditingController();
 
   final List<String> iconsImages = [
@@ -52,16 +51,20 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
     Future<void> moveCamera(LatLng position) async {
       final GoogleMapController controller = await _controller.future;
-      controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: position,
-        zoom: 14.4746,
-      )));
+      controller.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: position,
+            zoom: 14.4746,
+          ),
+        ),
+      );
     }
 
     if (location != null) {
       final position = LatLng(
-        location["lat"] ?? 0.0, // Replace 0.0 with your default value
-        location["lng"] ?? 0.0, // Replace 0.0 with your default value
+        location["lat"],
+        location["lng"],
       );
       CameraPosition _kGooglePlex = CameraPosition(
         target: position,
@@ -83,9 +86,9 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
         future: userLocation,
         builder: (BuildContext context, AsyncSnapshot<LatLng?> data) {
           final location = data.data;
+          debugPrint('The Location Is $location');
           if (location == null)
             return Center(child: CircularProgressIndicator());
-
           CameraPosition _kGooglePlex = CameraPosition(
             target: location,
             zoom: 14.4746,
@@ -125,6 +128,10 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
     ref.listen(getContactProvider, (prev, next) {
       _phoneController.value = PhoneNumber(isoCode: IsoCode.KW, nsn: next);
     });
+    ref.listen(getUserNameContactProvider, (prev, next) {
+      _userNameController.text = next;
+    });
+
     final location = ref.watch(getChosenLocationProvider.notifier).state;
     debugPrint('The Location From Init Map Is$location ');
 
@@ -379,8 +386,9 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          context.push('/contacts',),
+                                      onTap: () => context.push(
+                                        '/contacts',
+                                      ),
                                       child: Container(
                                           width: 244,
                                           height: 44,
@@ -505,40 +513,35 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                                                 locationType = "COAST";
                                               }
                                               debugPrint(
-                                                  'The Phone Picked Is ${_phoneController}');
+                                                  'The Phone Picked Is ${_phoneController.value!.international.toString()}');
                                               final userName =
                                                   isOtherChecked.value
                                                       ? _userNameController.text
                                                       : null;
                                               ref
                                                   .read(addLocationProvider(
-                                                          landmark:
-                                                              _landmarkController
-                                                                  .text,
-                                                          title:
-                                                              _titleController
-                                                                  .text,
-                                                          phone: isOtherChecked
-                                                                  .value
-                                                              ? _phoneController
-                                                                  .value!
-                                                                  .international
-                                                                  .toString()
-                                                              : null,
-                                                          userName: userName,
-                                                          locationType:
-                                                              locationType)
-                                                      .future)
-                                                  .then(
-                                                    (value) =>
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(value),
-                                                      ),
-                                                    ),
-                                                  );
+                                                landmark:
+                                                    _landmarkController.text,
+                                                title: _titleController.text,
+                                                phone: isOtherChecked.value
+                                                    ? _phoneController
+                                                        .value!.international
+                                                        .toString()
+                                                    : null,
+                                                userName: userName,
+                                                locationType: locationType,
+                                              ).future)
+                                                  .then((value) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(value),
+                                                  ),
+                                                );
+                                                ref.invalidate(getLocationsProvider);
+                                                context.pop();
+
+                                              });
                                             }
                                           },
                                           child: Text(

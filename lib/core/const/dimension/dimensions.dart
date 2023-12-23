@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppDimensions {
@@ -24,4 +25,11 @@ class AppDimensions {
   static double borderMedium = 25.r;
   static double borderLarge = 60.r;
   static double borderExtraLarge = 80.r;
+  //font Weight
+  static FontWeight medium = FontWeight.w600;
+  static FontWeight regular = FontWeight.w400;
+  static FontWeight normal = FontWeight.w500;
+  static FontWeight normalBold = FontWeight.w700;
+  static FontWeight bold = FontWeight.w800;
+
 }
