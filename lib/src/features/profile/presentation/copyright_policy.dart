@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../custom_need/presentation/custom_need.dart';
 import '../domain/legal_domain.dart';
+import 'package:gap/gap.dart';
 
 class CopyRightPolicyScreen extends StatelessWidget {
   const CopyRightPolicyScreen({super.key});
@@ -14,29 +16,27 @@ class CopyRightPolicyScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(alignment: Alignment.topLeft, child: CustomBackButton()),
-                SizedBox(
-                  height: 20,
-                ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final terms = ref.watch(getCopyRightPolicyProvider);
-                    return terms.when(
-                        data: (data) {
-                          return Html(data: data["en"]);
-                        },
-                        error: (e, s) {
-                          return Text("Error");
-                        },
-                        loading: () => CircularProgressIndicator());
-                  },
-                )
-              ],
-            ),
+          child: ListView(
+            children: [
+              Align(alignment: Alignment.topLeft, child: CustomBackButton()),
+              Gap(20.h),
+              Consumer(
+                builder: (context, ref, child) {
+                  final terms = ref.watch(getCopyRightPolicyProvider);
+                  return terms.when(
+                    data: (data) {
+                      return Html(data: data["en"]);
+                    },
+                    error: (e, s) {
+                      return Text("Error");
+                    },
+                    loading: () => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              )
+            ],
           ),
         ),
       ),
