@@ -6,9 +6,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/core/di/index.dart';
 import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/creditcard/domain/credit_domain.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
+import 'package:waspha/src/widgets/toast_manager/toast_manager.dart';
 
 import '../../../widgets/auth_btn/auth_btn.dart';
 
@@ -143,7 +145,8 @@ class AddCreditCard extends HookWidget {
               },
               cardHolderValidator: (String? cardHolderName) {
                 if (cardHolderName!.isEmpty) {
-                  return context.localization.please_enter_a_valid_card_holder_name;
+                  return context
+                      .localization.please_enter_a_valid_card_holder_name;
                 }
                 return null;
               },
@@ -194,30 +197,47 @@ class AddCreditCard extends HookWidget {
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
                       await ref
-                          .read(addCreditCardProvider(
-                                  cardNumber: cardNumber.value,
-                                  cardName: cardHolder.value,
-                                  cvv: cvv.value,
-                                  expMonth: int.parse(
-                                      expiredData.value.split("/")[0]),
-                                  expYear: int.parse(
-                                      expiredData.value.split("/")[1]))
-                              .future)
-                          .then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(value),
-                          ),
-                        );
-                        ref.invalidate(getCreditCardsProvider);
-                        context.pop();
-                      });
+                          .read(
+                        addCreditCardProvider(
+                          cardNumber: cardNumber.value.replaceAll(' ', ''),
+                          cardName: cardHolder.value,
+                          cvv: cvv.value,
+                          expMonth: int.parse(expiredData.value.split("/")[0]),
+                          expYear: int.parse(expiredData.value.split("/")[1]),
+                        ).future,
+                      )
+                          .then(
+                        (response) {
+                          switch (response.result) {
+                            case AddCardResult.success:
+                              debugPrint(
+                                  'Add card success. Message: ${response.message}');
+                              ref.invalidate(getCreditCardsProvider);
+                              di<ToastManager>().success(response.message);
+                              context.pop();
+
+                              break;
+                            case AddCardResult.failure:
+                              debugPrint(
+                                  'Failed to add credit card. Message: ${response.message}');
+                              di<ToastManager>()
+                                  .error('Failed to add credit card');
+
+                              break;
+                            case AddCardResult.error:
+                              debugPrint(
+                                  'An error occurred. Message: ${response.message}');
+                              break;
+                          }
+                        },
+                      );
                     }
+                    ;
                   },
                   text: "Add card",
                 );
               },
-            )
+            ),
           ],
         ),
       ),

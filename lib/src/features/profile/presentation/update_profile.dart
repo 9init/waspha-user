@@ -163,54 +163,54 @@ class UpdateDOB extends HookWidget {
     return Scaffold(
       body: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-
-            children: [
-              Align(alignment: Alignment.topLeft, child: CustomBackButton()),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Update Date of Birth",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TableCalendar(
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: _focusedDate.value,
-                selectedDayPredicate: (day) =>
-                    isSameDay(day, _selectedDate.value),
-                onPageChanged: (focusedDay) {
-                  _focusedDate.value = focusedDay;
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  print(selectedDay.toUtc());
-                  _focusedDate.value = focusedDay;
-                  _selectedDate.value = selectedDay;
-                  debugPrint('The Date Of Birth Is ${_selectedDate.value}');
-                },
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Consumer(
-                builder: (context, ref, child) => WasphaButton(
-                  onTap: () {
-                    ref.read(editProfileProvider(
-                        userName: '',
-                        dob: "${_selectedDate.value.toUtc()}",
-                        context: context));
-                    ref.refresh(getProfileDataProvider(context)).value;
-                  },
-                  text: "Continue",
-                ),
-              ),
-              Gap(AppDimensions.heightSmall),
-            ],
-          )),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        children: [
+          Align(alignment: Alignment.topLeft, child: CustomBackButton()),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Update Date of Birth",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TableCalendar(
+            firstDay: DateTime.utc(2010, 10, 16),
+            lastDay: DateTime.utc(2030, 3, 14),
+            focusedDay: _focusedDate.value,
+            selectedDayPredicate: (day) => isSameDay(day, _selectedDate.value),
+            onPageChanged: (focusedDay) {
+              _focusedDate.value = focusedDay;
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              print(selectedDay.toUtc());
+              _focusedDate.value = focusedDay;
+              _selectedDate.value = selectedDay;
+              debugPrint('The Date Of Birth Is ${_selectedDate.value}');
+            },
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Consumer(
+            builder: (context, ref, child) => WasphaButton(
+              onTap: () {
+                ref.read(
+                  editProfileProvider(
+                      userName: '',
+                      dob: "${_selectedDate.value.toUtc()}",
+                      context: context),
+                );
+                ref.refresh(getProfileDataProvider(context)).value;
+              },
+              text: "Continue",
+            ),
+          ),
+          Gap(AppDimensions.heightSmall),
+        ],
+      )),
     );
   }
 }
