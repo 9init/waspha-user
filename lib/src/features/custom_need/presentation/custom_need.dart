@@ -8,9 +8,11 @@ import 'package:go_router/go_router.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:waspha/core/const/dimension/dimensions.dart';
+import 'package:waspha/core/di/index.dart';
 import 'package:waspha/core/localization/localization.dart';
-import 'package:waspha/src/core/di/index.dart';
 import 'package:waspha/src/features/custom_need/presentation/pickup_confirmation_dialog.dart';
+import 'package:waspha/src/widgets/custom_cached_network_image/custom_cached_network_image.dart';
 import 'package:waspha/src/widgets/nearby_store/nearby_store_widget.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 import 'package:waspha/src/widgets/toast_manager/toast_manager.dart';
@@ -77,11 +79,12 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                                 left: 0,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: Image.network(
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                      '${category["image"]}'),
+                                  child: CachedNetworkImageWidget(
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                    imageUrl: '${category["image"]}',
+                                  ),
                                 ),
                               ),
                               Positioned(
@@ -89,11 +92,11 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                                 left: 20,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: Image.network(
+                                  child: CachedNetworkImageWidget(
                                       width: 50,
                                       height: 50,
                                       fit: BoxFit.cover,
-                                      '${subCategory["image"]}'),
+                                      imageUrl: '${subCategory["image"]}'),
                                 ),
                               )
                             ],
@@ -160,10 +163,8 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                         SizedBox(
                           width: 1,
                         ),
-                        Text(
-                          "Craft your request",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
+                        Text(context.localization.craft_your_request,
+                            style: Theme.of(context).textTheme.titleSmall),
                         Spacer(),
                         Visibility(
                           visible: widget.isMenu,
@@ -211,7 +212,10 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset('assets/images/nearby/menu.png'),
-                                Text("new")
+                                Text(
+                                  context.localization.add_new_item_button,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                )
                               ],
                             ),
                           );
@@ -238,11 +242,8 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
                       separatorBuilder: (context, index) => SizedBox(
                         height: 5,
                       ),
-                      itemBuilder: (context, index) => FormBuilder(
-                        key: _formKey,
-                        child: CreateItemWidget(
-                          item: items[index],
-                        ),
+                      itemBuilder: (context, index) => CreateItemWidget(
+                        item: items[index],
                       ),
                     ),
                   );
@@ -343,33 +344,31 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
             di<ToastManager>()
                 .error(context.localization.please_complete_all_items_first);
           } else {
-            if (!widget.formKey.currentState!.validate()) {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    final method = ref.watch(methodProvider);
-                    final itemsJsonList =
-                        widget.items.map((item) => item.toJson()).toList();
-                    final currentPlace = ref.watch(currentPlaceDescription);
+            showDialog(
+                context: context,
+                builder: (context) {
+                  final method = ref.watch(methodProvider);
+                  final itemsJsonList =
+                      widget.items.map((item) => item.toJson()).toList();
+                  final currentPlace = ref.watch(currentPlaceDescription);
 
-                    if (method == "delivery")
-                      return DeliveryConfirmationDialog(
-                          consumer: ref,
-                          items: widget.items,
-                          method: method,
-                          currentPlace: currentPlace,
-                          isScheduled: widget.isScheduled,
-                          itemsJsonList: itemsJsonList);
-
-                    return PickupConfirmationDialog(
+                  if (method == "delivery")
+                    return DeliveryConfirmationDialog(
                         consumer: ref,
                         items: widget.items,
                         method: method,
                         currentPlace: currentPlace,
                         isScheduled: widget.isScheduled,
                         itemsJsonList: itemsJsonList);
-                  });
-            }
+
+                  return PickupConfirmationDialog(
+                      consumer: ref,
+                      items: widget.items,
+                      method: method,
+                      currentPlace: currentPlace,
+                      isScheduled: widget.isScheduled,
+                      itemsJsonList: itemsJsonList);
+                });
 
             // final itemsJsonList =
             //     items.value.map((item) => item.toJson()).toList();
@@ -394,11 +393,11 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
                         child: SizedBox(
                           child: Center(
                             child: Text(
-                              widget.isScheduled.value
-                                  ? 'Schedule'
-                                  : 'Ready for request',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                                widget.isScheduled.value
+                                    ? context.localization.schedule
+                                    : context.localization.ready_for_request,
+                                style:
+                                    Theme.of(context).textTheme.displaySmall),
                           ),
                         )),
                     Flexible(
@@ -426,28 +425,47 @@ class _ReadyRequestButtonState extends State<ReadyRequestButton> {
                                       bottomRight: Radius.circular(20)),
                                   value: widget.isScheduled.value
                                       ? ref.watch(selectedTimeProvider)
-                                      : "Now",
+                                      : context.localization.now,
                                   hint: Text("df"),
                                   items: [
                                     DropdownMenuItem(
-                                      value: "Now",
-                                      child: Center(child: Text("Now")),
+                                      value: context.localization.now,
+                                      child: Center(
+                                        child: Text(
+                                          context.localization.now,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!
+                                              .copyWith(
+                                                fontWeight:
+                                                    AppDimensions.regular,
+                                              ),
+                                        ),
+                                      ),
                                     ),
                                     DropdownMenuItem(
                                       value: widget.isScheduled.value
                                           ? ref.watch(selectedTimeProvider)
-                                          : "Scheduled",
+                                          : context.localization.scheduled,
                                       child: Center(
                                         child: Text(
                                           widget.isScheduled.value
                                               ? ref.watch(selectedTimeProvider)
-                                              : 'Scheduled',
+                                              : context.localization.scheduled,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!
+                                              .copyWith(
+                                                fontWeight:
+                                                    AppDimensions.regular,
+                                              ),
                                         ),
                                       ),
                                     ),
                                   ],
                                   onChanged: (value) async {
-                                    if (value == "Scheduled") {
+                                    if (value ==
+                                        context.localization.scheduled) {
                                       widget.isScheduled.value = true;
                                       final pickedDate =
                                           await DatePicker.showDateTimePicker(

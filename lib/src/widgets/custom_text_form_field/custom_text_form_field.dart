@@ -10,7 +10,7 @@ class CustomTextFromField extends StatelessWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.validator,
-    required this.labelText,
+    this.labelText,
     this.fieldName,
     this.maxLines,
     this.minLines,
@@ -22,7 +22,7 @@ class CustomTextFromField extends StatelessWidget {
   final ValueChanged<String?>? onFieldSubmitted;
   final Function(String?)? onSaved;
   final String? Function(String?)? validator;
-  final String labelText;
+  final String? labelText;
   final String? fieldName;
   final int? maxLines;
   final int? minLines;

@@ -8,10 +8,10 @@ class AdditionalNoteForm extends HookWidget {
   final Item item;
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nameController =
+     TextEditingController _nameController =
         useTextEditingController(text: item.name == null ? "" : item.name);
 
-    final TextEditingController _noteController = useTextEditingController(
+     TextEditingController _noteController = useTextEditingController(
         text: item.additional_notes == null ? "" : item.additional_notes);
     return Expanded(
       child: Padding(
@@ -26,12 +26,6 @@ class AdditionalNoteForm extends HookWidget {
                 item.name = value;
               },
               labelText: 'Item Summary',
-              validator: (String?value){
-                if(value!.isEmpty){
-                  return'Kaml Ya M3rs';
-                }
-                return null;
-              },
             ),
             CustomTextFromField(
               textEditingController: _noteController,
