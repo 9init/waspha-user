@@ -3,19 +3,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:waspha/core/const/dimension/dimensions.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/profile/domain/profile_domain.dart';
-
+import 'package:gap/gap.dart';
 import '../../../widgets/auth_btn/auth_btn.dart';
 
-class UpdateProfile extends StatelessWidget {
+class UpdateProfile extends HookWidget {
   final data;
+
   UpdateProfile({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _controller =
-        TextEditingController(text: data["name"] ?? "");
+    final TextEditingController _userNamecontroller =
+        useTextEditingController(text: data["name"] ?? "");
     final TextEditingController _emailcontroller =
         TextEditingController(text: data["name"] ?? "");
     final PhoneController mobileController = PhoneController(PhoneNumber(
@@ -50,7 +52,7 @@ class UpdateProfile extends StatelessWidget {
                           : TextFormField(
                               controller: data["isEmail"] == true
                                   ? _emailcontroller
-                                  : _controller,
+                                  : _userNamecontroller,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: data["isEmail"] == true
@@ -71,11 +73,15 @@ class UpdateProfile extends StatelessWidget {
                       Consumer(
                         builder: (context, ref, child) => WasphaButton(
                           onTap: () {
-                            ref.read(editProfileProvider(
-                                userName: _controller.text,
-                                dob: "1990-09-20T00:00:00.000Z",
-                                context: context));
+                            ref.read(
+                              editProfileProvider(
+                                  userName: _userNamecontroller.text,
+                                  dob: "1990-09-20T00:00:00.000Z",
+                                  context: context),
+                            );
+
                             ref.refresh(getProfileDataProvider(context)).value;
+                            ref.invalidate(getProfileDataProvider);
                           },
                           text: "Continue",
                         ),
@@ -156,54 +162,55 @@ class UpdateDOB extends HookWidget {
     final _selectedDate = useState(DateTime.now());
     return Scaffold(
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Align(alignment: Alignment.topLeft, child: CustomBackButton()),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Update Date of Birth",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: _focusedDate.value,
-              selectedDayPredicate: (day) =>
-                  isSameDay(day, _selectedDate.value),
-              onPageChanged: (focusedDay) {
-                _focusedDate.value = focusedDay;
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                print(selectedDay.toUtc());
-                _focusedDate.value = focusedDay;
-                _selectedDate.value = selectedDay;
-              },
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Consumer(
-              builder: (context, ref, child) => WasphaButton(
-                onTap: () {
-                  ref.read(editProfileProvider(
-                      userName: '',
-                      dob: "${_selectedDate.value.toUtc()}",
-                      context: context));
-                  ref.refresh(getProfileDataProvider(context)).value;
-                },
-                text: "Continue",
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+
+            children: [
+              Align(alignment: Alignment.topLeft, child: CustomBackButton()),
+              SizedBox(
+                height: 20,
               ),
-            ),
-          ],
-        ),
-      )),
+              Text(
+                "Update Date of Birth",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TableCalendar(
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: _focusedDate.value,
+                selectedDayPredicate: (day) =>
+                    isSameDay(day, _selectedDate.value),
+                onPageChanged: (focusedDay) {
+                  _focusedDate.value = focusedDay;
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  print(selectedDay.toUtc());
+                  _focusedDate.value = focusedDay;
+                  _selectedDate.value = selectedDay;
+                  debugPrint('The Date Of Birth Is ${_selectedDate.value}');
+                },
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Consumer(
+                builder: (context, ref, child) => WasphaButton(
+                  onTap: () {
+                    ref.read(editProfileProvider(
+                        userName: '',
+                        dob: "${_selectedDate.value.toUtc()}",
+                        context: context));
+                    ref.refresh(getProfileDataProvider(context)).value;
+                  },
+                  text: "Continue",
+                ),
+              ),
+              Gap(AppDimensions.heightSmall),
+            ],
+          )),
     );
   }
 }

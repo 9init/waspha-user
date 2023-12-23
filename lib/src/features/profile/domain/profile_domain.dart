@@ -77,12 +77,16 @@ Future<bool> editProfile(Ref ref,
 
   switch (result) {
     case Success():
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Profile Updated"),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Profile Updated"),
+        ),
+      );
+      context.pop();
       return true;
     case Failure(failure: final f):
       debugPrint("EDIT PROFILE ERROR ${f.message}");
+
       return false;
     case Error(exception: final e):
       debugPrint("EDIT PROFILE ERROR ${e}");
