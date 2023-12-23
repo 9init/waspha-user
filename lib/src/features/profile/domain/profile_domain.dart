@@ -92,7 +92,7 @@ Future<bool> editProfile(Ref ref,
 
 final updateImageProvider =
     FutureProvider.family<bool, String>((ref, filePath) async {
-  final String url = 'user/edit-avatar';
+  final String url = '/edit-avatar';
   FormData formData = FormData.fromMap({
     "file": await MultipartFile.fromFile(filePath),
   });

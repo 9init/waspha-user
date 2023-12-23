@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:waspha/src/core/di/di.config.dart';
+import 'package:waspha/core/di/di.config.dart';
 
 final di = GetIt.instance;
 
