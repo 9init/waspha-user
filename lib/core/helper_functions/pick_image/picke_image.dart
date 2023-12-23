@@ -4,19 +4,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+
 @LazySingleton()
-class ImagePickerProvider{
+class ImagePickerProvider {
   final ImagePicker picker = ImagePicker();
   bool isImageChosen = false;
-  String chossenImage = '';
+  String chosenImageString = '';
+  String chosenImagePath = '';
+
   Future<void> chooseImageSource(String pickerType) async {
     final pickedImage = await _pickImage(pickerType);
     if (pickedImage != null) {
-      chossenImage = base64Encode(pickedImage);
+      chosenImagePath = pickedImage.path;
+      chosenImageString = base64Encode(await pickedImage.readAsBytes());
       isImageChosen = true;
     }
   }
-  Future<List<int>?> _pickImage(String pickerType) async {
+
+  Future<File?> _pickImage(String pickerType) async {
     XFile? pickedImage;
     switch (pickerType) {
       case 'Gallery':
@@ -30,8 +35,7 @@ class ImagePickerProvider{
     if (pickedImage != null) {
       try {
         final file = File(pickedImage.path);
-        final imageBytes = await file.readAsBytes();
-        return imageBytes;
+        return file;
       } catch (e) {
         debugPrint('Error reading image file: $e');
         return null;

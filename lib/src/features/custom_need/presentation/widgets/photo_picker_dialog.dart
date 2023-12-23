@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:waspha/core/const/colors/colors.dart';
-import 'package:waspha/src/core/di/index.dart';
-import 'package:waspha/src/features/custom_need/data/item_data.dart';
-import 'package:waspha/src/features/custom_need/presentation/notifier/picker_notifire.dart';
+import 'package:waspha/core/di/index.dart';
+import 'package:waspha/core/helper_functions/pick_image/picke_image.dart';
 
 class PhotoPickerDialog extends HookWidget {
   const PhotoPickerDialog({
     Key? key,
-    required this.item,
   }) : super(key: key);
-  final Item item;
 
   @override
   Widget build(BuildContext context) {
-
     final choosePickedImage = di<ImagePickerProvider>();
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: WasphaColors.white,
-      content: Container(
+      elevation: 0,
+
+      content: SizedBox(
+        height: 180.h,
+        width: 220.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,8 +30,6 @@ class PhotoPickerDialog extends HookWidget {
               onTap: () async => await choosePickedImage
                   .chooseImageSource('Gallery')
                   .then((value) {
-                item.image = choosePickedImage.chossenImage;
-
                 Navigator.of(context).pop();
               }),
             ),
@@ -40,8 +39,6 @@ class PhotoPickerDialog extends HookWidget {
               onTap: () async => await choosePickedImage
                   .chooseImageSource('Camera')
                   .then((value) {
-                item.image = choosePickedImage.chossenImage;
-
                 Navigator.of(context).pop();
               }),
             ),
