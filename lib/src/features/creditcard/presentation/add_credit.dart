@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/creditcard/domain/credit_domain.dart';
 import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 
@@ -12,6 +14,7 @@ import '../../../widgets/auth_btn/auth_btn.dart';
 
 class AddCreditCard extends HookWidget {
   AddCreditCard({super.key});
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>>? cvvCodeKey =
       GlobalKey<FormFieldState<String>>();
@@ -56,10 +59,11 @@ class AddCreditCard extends HookWidget {
         child: Column(
           children: [
             CreditCardWidget(
+              isHolderNameVisible: true,
               cardNumber: cardNumber.value,
-              expiryDate: expiredData.value, // Required
-              cardHolderName: cardHolder.value, // Required
-              cvvCode: cvv.value, // Required
+              expiryDate: expiredData.value,
+              cardHolderName: cardHolder.value,
+              cvvCode: cvv.value,
               showBackView: isBack.value,
               onCreditCardWidgetChange: (CreditCardBrand brand) {},
               enableFloatingCard: true,
@@ -75,66 +79,71 @@ class AddCreditCard extends HookWidget {
               labelCardHolder: 'CARD HOLDER',
               height: 175,
               cardType: getCardType(cardNumber.value),
-
               width: MediaQuery.of(context).size.width,
               padding: 16,
               customCardTypeIcons: [
                 CustomCardTypeIcon(
-                    cardType: CardType.otherBrand,
-                    cardImage: SvgPicture.asset(
-                        "assets/images/credit/meeza.svg",
-                        width: 30))
+                  cardType: CardType.otherBrand,
+                  cardImage: SvgPicture.asset("assets/images/credit/meeza.svg",
+                      width: 30),
+                )
               ],
             ),
             CreditCardForm(
-              formKey: formKey, // Required
-              cardNumber: cardNumber.value, // Required
-              expiryDate: expiredData.value, // Required
-              cardHolderName: cardHolder.value, // Required
-              cvvCode: cvv.value, // Required
+              formKey: formKey,
+              // Required
+              cardNumber: cardNumber.value,
+              // Required
+              expiryDate: expiredData.value,
+              // Required
+              cardHolderName: cardHolder.value,
+              // Required
+              cvvCode: cvv.value,
+              // Required
               onCreditCardModelChange: (CreditCardModel data) {
                 cardNumber.value = data.cardNumber;
-
                 expiredData.value = data.expiryDate;
                 cvv.value = data.cvvCode;
                 cardHolder.value = data.cardHolderName;
                 // ignore: invalid_use_of_protected_member
-                cvvCodeKey!.currentState!.setState(() {
-                  isBack.value = data.isCvvFocused;
-                });
-              }, // Required
+                cvvCodeKey!.currentState!.setState(
+                  () {
+                    isBack.value = data.isCvvFocused;
+                  },
+                );
+              },
+              // Required
               obscureCvv: true,
               obscureNumber: true,
               isHolderNameVisible: true,
               isCardNumberVisible: true,
               isExpiryDateVisible: true,
               enableCvv: true,
-
               cvvCodeKey: cvvCodeKey,
               cvvValidationMessage: 'Please input a valid CVV',
               dateValidationMessage: 'Please input a valid date',
               numberValidationMessage: 'Please input a valid number',
               cardNumberValidator: (String? cardNumber) {
                 if (cardNumber!.isEmpty) {
-                  return 'Please enter a valid card number';
+                  return context.localization.please_enter_a_valid_card_number;
                 }
                 return null;
               },
               expiryDateValidator: (String? expiryDate) {
                 if (expiryDate!.isEmpty) {
-                  return 'Please enter a valid expiry date';
+                  return context.localization.please_enter_a_valid_expiry_date;
                 }
                 return null;
               },
               cvvValidator: (String? cvv) {
                 if (cvv!.isEmpty) {
-                  return 'Please enter a valid CVV';
+                  return context.localization.please_enter_a_valid_cvv;
                 }
                 return null;
               },
               cardHolderValidator: (String? cardHolderName) {
                 if (cardHolderName!.isEmpty) {
-                  return 'Please enter a valid card holder name';
+                  return context.localization.please_enter_a_valid_card_holder_name;
                 }
                 return null;
               },
@@ -194,8 +203,15 @@ class AddCreditCard extends HookWidget {
                                   expYear: int.parse(
                                       expiredData.value.split("/")[1]))
                               .future)
-                          .then((value) => ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(value))));
+                          .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(value),
+                          ),
+                        );
+                        ref.invalidate(getCreditCardsProvider);
+                        context.pop();
+                      });
                     }
                   },
                   text: "Add card",
