@@ -14,29 +14,26 @@ class TermsScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(alignment: Alignment.topLeft, child: CustomBackButton()),
-                SizedBox(
-                  height: 20,
-                ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final terms = ref.watch(getTermsProvider);
-                    return terms.when(
-                        data: (data) {
-                          return Html(data: data["en"]);
-                        },
-                        error: (e, s) {
-                          return Text("Error");
-                        },
-                        loading: () => CircularProgressIndicator());
-                  },
-                )
-              ],
-            ),
+          child: ListView(
+            children: [
+              Align(alignment: Alignment.topLeft, child: CustomBackButton()),
+              SizedBox(
+                height: 20,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final terms = ref.watch(getTermsProvider);
+                  return terms.when(
+                      data: (data) {
+                        return Html(data: data["en"]);
+                      },
+                      error: (e, s) {
+                        return Text("Error");
+                      },
+                      loading: () => Center(child: CircularProgressIndicator()));
+                },
+              )
+            ],
           ),
         ),
       ),
