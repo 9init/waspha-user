@@ -1,18 +1,29 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:waspha/core/di/index.dart';
+import 'package:waspha/core/helper_functions/pick_image/picke_image.dart';
+import 'package:waspha/src/features/custom_need/presentation/widgets/photo_picker_dialog.dart';
 
 import '../../custom_need/presentation/custom_need.dart';
 import '../domain/profile_domain.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
   @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  @override
   Widget build(BuildContext context) {
+    final choosePickedImage = di<ImagePickerProvider>();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -42,7 +53,7 @@ class EditProfile extends StatelessWidget {
             final dob =
                 DateFormat.yMd().format(DateTime.parse(data.dob.toString()));
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   Stack(
@@ -50,27 +61,35 @@ class EditProfile extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage: NetworkImage(data.avatar ?? ""),
+                        backgroundImage:
+                            choosePickedImage.chosenImagePath.isNotEmpty
+                                ? Image.file(
+                                    File(choosePickedImage.chosenImagePath),
+                                  ).image
+                                : CachedNetworkImageProvider(
+                                    data.avatar ??
+                                        '', // Replace with a placeholder image URL
+                                  ),
                       ),
                       CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 15,
                         child: IconButton(
                           onPressed: () async {
-                            final ImagePicker picker = ImagePicker();
-// Pick an image.
-                            final XFile? image = await picker.pickImage(
-                                maxHeight: 800,
-                                maxWidth: 800,
-                                source: ImageSource.gallery);
-                            final imageSize = (await image?.length())! / 1024;
-                            final imagePath = await image?.path;
-                            if (imageSize > 500) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Image too large")));
-                            } else {
-                              await ref
-                                  .watch(updateImageProvider(imagePath!).future)
+                            showAdaptiveDialog(
+                              context: context,
+                              builder: (context) => PhotoPickerDialog(),
+                            ).then((value) {
+                              debugPrint(
+                                  'The Image Taken Is ${choosePickedImage.chosenImagePath}');
+
+                              // This setState will trigger a rebuild when the dialog is closed
+                              setState(() {});
+                              //TODO//:Remove That setState After Finishing Study Riverpod Migration
+                              ref
+                                  .watch(updateImageProvider(
+                                          choosePickedImage.chosenImagePath)
+                                      .future)
                                   .whenComplete(() {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text("Image Updated")));
@@ -78,7 +97,24 @@ class EditProfile extends StatelessWidget {
                               ref
                                   .refresh(getProfileDataProvider(context))
                                   .value;
-                            }
+                            });
+
+//                             final choosePickedImage = di<ImagePickerProvider>();
+//                             final ImagePicker picker = ImagePicker();
+// // Pick an image.
+//                             final XFile? image = await picker.pickImage(
+//                                 maxHeight: 800,
+//                                 maxWidth: 800,
+//                                 source: ImageSource.gallery);
+//                             final imageSize = (await image?.length())! / 1024;
+//                             final imagePath = await image?.path;
+//                             if (imageSize > 500) {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                   SnackBar(content: Text("Image too large")));
+//                             }
+//                             else {
+//
+//                             }
                           },
                           icon: Icon(Icons.edit),
                           padding: EdgeInsets.zero,
