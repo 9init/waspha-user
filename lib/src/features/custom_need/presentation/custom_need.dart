@@ -59,7 +59,7 @@ class _CustomNeedScreenState extends ConsumerState<CustomNeedScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: CustomBackButton(),
+                  child: CustomBackButton(isGoFromMainScreen:true,),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -287,30 +287,34 @@ class CustomBackButton extends StatelessWidget {
     super.key,
     this.backgroundColor = Colors.black,
     this.foregroundColor = Colors.white,
+    this.isGoFromMainScreen=false,
   });
 
   final Color backgroundColor, foregroundColor;
+  final bool? isGoFromMainScreen;
 
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.topLeft,
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            shape: BoxShape.circle,
+      alignment: Alignment.topLeft,
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          shape: BoxShape.circle,
+        ),
+        width: 42,
+        height: 42,
+        child: IconButton(
+          iconSize: 18,
+          padding: EdgeInsets.zero,
+          onPressed: isGoFromMainScreen==true?()=>context.go('/'):() => context.pop(),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: foregroundColor,
           ),
-          width: 42,
-          height: 42,
-          child: IconButton(
-              iconSize: 18,
-              padding: EdgeInsets.zero,
-              onPressed: () => context.pop(),
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                color: foregroundColor,
-              )),
-        ));
+        ),
+      ),
+    );
   }
 }
 

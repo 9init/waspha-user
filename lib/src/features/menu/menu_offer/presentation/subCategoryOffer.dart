@@ -205,7 +205,7 @@ class SubCategoryOffer extends HookWidget {
             height: 10,
           ),
           GestureDetector(
-            onTap: () => context.push('/custom_need_screen', extra: true),
+            onTap: () => context.go('/custom_need_screen', extra: true),
             child: Center(
               child: Container(
                 width: 350,

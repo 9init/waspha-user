@@ -209,72 +209,79 @@ class LikesBody extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Consumer(builder: (context, ref, child) {
-                        final userLocation = ref.watch(userLocationProvider);
-                        final range = ref.read(pickupRadiusProvider).pickupRadius;
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final userLocation = ref.watch(userLocationProvider);
+                          final range =
+                              ref.read(pickupRadiusProvider).pickupRadius;
 
-                        final favStores = ref.watch(
-                          getFavStoresProvider(
-                            getFavoriteStoresRequestEntity:
-                                GetFavoriteStoresRequestEntity(
-                              lat: userLocation.value?.latitude??0.0,
-                              lng: userLocation.value?.longitude??0.0,
-                              radius: range,
-                            ),
-                          ),
-                        );
-                        debugPrint(
-                            'The Location  Chosen By User Latitude Is  ${userLocation.value?.latitude ?? 0.0}');
-                        debugPrint(
-                            'The Location  Chosen By User Longitude Is  ${userLocation.value?.longitude ?? 0.0}');
-                        return favStores.when(
-                            data: (data) {
-                              return data.isEmpty
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
-                                      child: Center(
-                                        child: Text("No providers found"),
-                                      ),
-                                    )
-                                  : Center(
-                                      child: Container(
-                                        width: 400,
-                                        height: 200,
-                                        child: ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          itemCount: data.length,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return MenuCard(
-                                              imageURl: data[index]["store"]
-                                                      ["image"] ??
-                                                  "",
-                                              rating: data[index]["store"]["avg_rating"]['rating'],
-                                              companyName: data[index]["store"]
-                                                  ["business_name"]["en"],
-                                              width: 0.8,
-                                              favWidth: 200,
-                                              isProvider: true,
-                                              onFavored: () async {
-                                                ref.read(deleteStoreFavProvider(
-                                                    id: data[index]["store"]
-                                                        ["id"]));
-                                                ref.invalidate(
-                                                    getFavStoresProvider);
-                                              },
-                                              isFavored: true,
-                                            );
-                                          },
+                            final favStores = ref.watch(
+                              getFavStoresProvider(
+                                getFavoriteStoresRequestEntity:
+                                    GetFavoriteStoresRequestEntity(
+                                  lat: userLocation.value!.latitude,
+                                  lng: userLocation.value!.longitude,
+                                  radius: range,
+                                ),
+                              ),
+                            );
+
+                          debugPrint(
+                              'The Location  Chosen By User Latitude Is  ${userLocation.value?.latitude ?? 0.0}');
+                          debugPrint(
+                              'The Location  Chosen By User Longitude Is  ${userLocation.value?.longitude ?? 0.0}');
+                          return favStores.when(
+                              data: (data) {
+                                return data.isEmpty
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: Center(
+                                          child: Text("No providers found"),
                                         ),
-                                      ),
-                                    );
-                            },
-                            error: (e, s) {
-                              return Text("Error");
-                            },
-                            loading: () => CircularProgressIndicator());
-                      }),
+                                      )
+                                    : Center(
+                                        child: Container(
+                                          width: 400,
+                                          height: 200,
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: data.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return MenuCard(
+                                                imageURl: data[index]["store"]
+                                                        ["image"] ??
+                                                    "",
+                                                rating: data[index]["store"]
+                                                    ["avg_rating"]['rating'],
+                                                companyName: data[index]
+                                                        ["store"]
+                                                    ["business_name"]["en"],
+                                                width: 0.8,
+                                                favWidth: 200,
+                                                isProvider: true,
+                                                onFavored: () async {
+                                                  ref.read(
+                                                      deleteStoreFavProvider(
+                                                          id: data[index]
+                                                              ["store"]["id"]));
+                                                  ref.invalidate(
+                                                      getFavStoresProvider);
+                                                },
+                                                isFavored: true,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      );
+                              },
+                              error: (e, s) {
+                                return Text("Error");
+                              },
+                              loading: () => CircularProgressIndicator());
+                        },
+                      ),
                     ],
                   ),
                 ),

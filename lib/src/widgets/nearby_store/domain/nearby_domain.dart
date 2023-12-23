@@ -32,6 +32,8 @@ Future<dynamic> getFavStores(Ref ref,
     lng: getFavoriteStoresRequestEntity.lng,
     radius: getFavoriteStoresRequestEntity.radius,
   ).toJson();
+  debugPrint('The Payload Sent Is $payload');
+
   final result = await Networking.post(
     url,
     payload['location'],

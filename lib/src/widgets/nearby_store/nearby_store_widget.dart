@@ -8,6 +8,7 @@ import 'package:waspha/core/const/colors/colors.dart';
 import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
+import 'package:waspha/src/features/nearby_stores/domain/get_favorite_stores_request_entity.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
@@ -503,7 +504,18 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                                   isBottomSheetOpen: widget.isBottomSheetOpen,
                                 ).future,
                               );
+
                               ref.invalidate(getNearbyStoresStreamProvider);
+                               ref.refresh(
+                                getFavStoresProvider(
+                                  getFavoriteStoresRequestEntity:
+                                  GetFavoriteStoresRequestEntity(
+                                    lat: userLocation.value!.latitude,
+                                    lng: userLocation.value!.longitude,
+                                    radius: 5,
+                                  ),
+                                ),
+                              );
                               debugPrint(
                                   ' isSubCategoryClicked.value${isSubCategoryClicked.value}');
                               debugPrint(
@@ -511,6 +523,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                               debugPrint(
                                   ' isNearbyClicked.value${isNearbyClicked.value}');
                             },
+
                             child: Text("Confirm Location"),
                           ),
                         ),
@@ -532,7 +545,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                           child: Row(
                             children: [
                               GestureDetector(
-                                onTap: () => context.push('/custom_need_screen',
+                                onTap: () => context.go('/custom_need_screen',
                                     extra: false),
                                 child: Column(
                                   children: [

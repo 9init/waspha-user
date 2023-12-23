@@ -199,15 +199,6 @@ final router = Provider<GoRouter>(
         ),
       ),
       GoRoute(
-        redirect: (context, state) {
-          if (state.path == '/custom_need_screen') {
-            debugPrint('The New Path Is ${state.path}');
-            isNearbyStoreScreenActive.value = false;
-          } else {             debugPrint('The New Path Is ${state.path}');
-            isNearbyStoreScreenActive.value = true;
-          }
-          return null;
-        },
         parentNavigatorKey: rootNavigatorKey,
         path: '/custom_need_screen',
         builder: (context, state) => CustomNeedScreen(isMenu: state.extra!),
