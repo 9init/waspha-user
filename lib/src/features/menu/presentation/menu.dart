@@ -44,7 +44,7 @@ class MenuScreen extends ConsumerWidget {
                       child: SizedBox(
                         width: 270.w,
                         child: Text(
-                          userAddress ??'',
+                          userAddress ?? '',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -82,18 +82,20 @@ class MenuScreen extends ConsumerWidget {
                                   await ref.read(deleteStoreFavProvider(
                                       id: data[index].id));
                                   ref.invalidate(getFavStoresProvider);
-                                  print("Removed from favs");
+                                  debugPrint("Removed from favs");
                                 } else {
                                   await ref
                                       .read(addStoreFavProvider(
                                               id: data[index].id)
                                           .future)
-                                      .then((value) {
-                                    if (value) {
-                                      print("Added to favs");
-                                      ref.invalidate(getFavStoresProvider);
-                                    }
-                                  });
+                                      .then(
+                                    (value) {
+                                      if (value) {
+                                        debugPrint("Added to favs");
+                                        ref.invalidate(getFavStoresProvider);
+                                      }
+                                    },
+                                  );
                                 }
                               },
                               isFavored: data[index].is_favorite ?? false,
@@ -204,13 +206,12 @@ class MenuCard extends StatelessWidget {
                               height: 40.h,
                               width: 40.w,
                               decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: CachedNetworkImageProvider(
-                                    imageURl,
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      imageURl,
+                                    ),
                                   ),
-                                ),
-                                shape: BoxShape.circle
-                              ),
+                                  shape: BoxShape.circle),
                             ),
                             Container(
                               width: 130,
