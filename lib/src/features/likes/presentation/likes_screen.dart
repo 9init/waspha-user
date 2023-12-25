@@ -5,9 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/core/const/colors/colors.dart';
 import 'package:waspha/core/helper_functions/get_location_type/get_location_type.dart';
-import 'package:waspha/src/features/nearby_stores/domain/get_favorite_stores_request_entity.dart';
-import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
-import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 
 import '../../../widgets/nearby_store/nearby_store_widget.dart';
@@ -211,75 +208,52 @@ class LikesBody extends StatelessWidget {
                       ),
                       Consumer(
                         builder: (context, ref, child) {
-                          final userLocation = ref.watch(userLocationProvider);
-                          final range =
-                              ref.read(pickupRadiusProvider).pickupRadius;
-
-                            final favStores = ref.watch(
-                              getFavStoresProvider(
-                                getFavoriteStoresRequestEntity:
-                                    GetFavoriteStoresRequestEntity(
-                                  lat: userLocation.value!.latitude,
-                                  lng: userLocation.value!.longitude,
-                                  radius: range,
-                                ),
-                              ),
-                            );
-
-                          debugPrint(
-                              'The Location  Chosen By User Latitude Is  ${userLocation.value?.latitude ?? 0.0}');
-                          debugPrint(
-                              'The Location  Chosen By User Longitude Is  ${userLocation.value?.longitude ?? 0.0}');
-                          return favStores.when(
-                              data: (data) {
-                                return data.isEmpty
-                                    ? Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
-                                        child: Center(
-                                          child: Text("No providers found"),
+                          final favStores =
+                              ref.watch(getFavStoresProvider).valueOrNull;
+                          return favStores != null
+                              ? favStores.isEmpty
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: Center(
+                                        child: Text("No providers found"),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Container(
+                                        width: 400,
+                                        height: 200,
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          itemCount: favStores.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return MenuCard(
+                                              imageURl: favStores[index]
+                                                      ["store"]["image"] ??
+                                                  "",
+                                              rating: favStores[index]["store"]
+                                                  ["avg_rating"]['rating'],
+                                              companyName: favStores[index]
+                                                      ["store"]["business_name"]
+                                                  ["en"],
+                                              width: 0.8,
+                                              favWidth: 200,
+                                              isProvider: true,
+                                              onFavored: () async {
+                                                ref.read(deleteStoreFavProvider(
+                                                    id: favStores[index]
+                                                        ["store"]["id"]));
+                                                ref.invalidate(
+                                                    getFavStoresProvider);
+                                              },
+                                              isFavored: true,
+                                            );
+                                          },
                                         ),
-                                      )
-                                    : Center(
-                                        child: Container(
-                                          width: 400,
-                                          height: 200,
-                                          child: ListView.builder(
-                                            padding: EdgeInsets.zero,
-                                            itemCount: data.length,
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              return MenuCard(
-                                                imageURl: data[index]["store"]
-                                                        ["image"] ??
-                                                    "",
-                                                rating: data[index]["store"]
-                                                    ["avg_rating"]['rating'],
-                                                companyName: data[index]
-                                                        ["store"]
-                                                    ["business_name"]["en"],
-                                                width: 0.8,
-                                                favWidth: 200,
-                                                isProvider: true,
-                                                onFavored: () async {
-                                                  ref.read(
-                                                      deleteStoreFavProvider(
-                                                          id: data[index]
-                                                              ["store"]["id"]));
-                                                  ref.invalidate(
-                                                      getFavStoresProvider);
-                                                },
-                                                isFavored: true,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      );
-                              },
-                              error: (e, s) {
-                                return Text("Error");
-                              },
-                              loading: () => CircularProgressIndicator());
+                                      ),
+                                    )
+                              : CircularProgressIndicator();
                         },
                       ),
                     ],

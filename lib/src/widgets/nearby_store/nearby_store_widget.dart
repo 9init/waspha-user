@@ -506,16 +506,6 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                               );
 
                               ref.invalidate(getNearbyStoresStreamProvider);
-                               ref.refresh(
-                                getFavStoresProvider(
-                                  getFavoriteStoresRequestEntity:
-                                  GetFavoriteStoresRequestEntity(
-                                    lat: userLocation.value!.latitude,
-                                    lng: userLocation.value!.longitude,
-                                    radius: 5,
-                                  ),
-                                ),
-                              );
                               debugPrint(
                                   ' isSubCategoryClicked.value${isSubCategoryClicked.value}');
                               debugPrint(
@@ -523,7 +513,6 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                               debugPrint(
                                   ' isNearbyClicked.value${isNearbyClicked.value}');
                             },
-
                             child: Text("Confirm Location"),
                           ),
                         ),
