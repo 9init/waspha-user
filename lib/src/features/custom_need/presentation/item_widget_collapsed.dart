@@ -1,25 +1,27 @@
-
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/custom_need/presentation/providers/item_list_provider.dart';
 import 'package:waspha/src/features/custom_need/presentation/widgets/item_image.dart';
 
 import '../data/item_data.dart';
 
 class ItemWidgetCollapsed extends StatelessWidget {
   final ValueNotifier<bool> isCollapsed;
-
-  const ItemWidgetCollapsed(
-      {super.key, required this.isCollapsed, required this.item});
-
   final Item item;
+
+  const ItemWidgetCollapsed({
+    super.key,
+    required this.isCollapsed,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
+    return Consumer(
+      builder: (context, ref, child) {
+        return Dismissible(
           key: ValueKey(item.id),
-          onDismissed: (value) {
-            item.delete();
-            debugPrint('The Item After Removed From Dismissible Is ${item.id}');
-          },
+          onDismissed: (value) => ref.read(itemListProvider.notifier).removeItem(item: item),
           background: Container(
             color: Colors.red,
             child: Icon(
@@ -90,5 +92,8 @@ class ItemWidgetCollapsed extends StatelessWidget {
             ),
           ),
         );
+
+      },
+    );
   }
 }

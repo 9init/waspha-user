@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/nearby_stores/data/get_favorite_stores_request_model.dart';
-import 'package:waspha/src/features/nearby_stores/domain/get_favorite_stores_request_entity.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/shared/networking/networking.dart';

@@ -16,6 +16,8 @@ class CustomTextTheme {
         fontSize: ScreenUtil().setSp(20),
         fontWeight: AppDimensions.bold,
         fontFamily: MyFontFamily.openSans,
+        color: WasphaColors.black,
+
       ),
       titleSmall: TextStyle(
         fontSize: ScreenUtil().setSp(17),

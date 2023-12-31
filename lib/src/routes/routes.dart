@@ -30,7 +30,7 @@ import '../features/category/presentation/category.dart';
 import '../features/creditcard/presentation/add_credit.dart';
 import '../features/creditcard/presentation/creditcard.dart';
 import '../features/creditcard/presentation/creditdetails.dart';
-import '../features/custom_need/presentation/custom_need.dart';
+import '../features/custom_need/presentation/screens/custom_need_screen/custom_need.dart';
 import '../features/custom_need/presentation/select_date.dart';
 import '../features/get_location/presentation/get_location_map.dart';
 import '../features/likes/presentation/add_address.dart';
@@ -201,7 +201,7 @@ final router = Provider<GoRouter>(
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: '/custom_need_screen',
-        builder: (context, state) => CustomNeedScreen(isMenu: state.extra!),
+        builder: (context, state) => CustomNeedScreen(isMenu: state.extra! as bool),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,

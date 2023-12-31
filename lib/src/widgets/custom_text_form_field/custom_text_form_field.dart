@@ -34,6 +34,7 @@ class CustomTextFromField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
+      key: UniqueKey(),
       name: fieldName ?? '',
       textInputAction: textInputAction ?? null,
       controller: textEditingController,

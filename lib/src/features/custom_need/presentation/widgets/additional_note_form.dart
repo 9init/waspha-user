@@ -26,6 +26,7 @@ class AdditionalNoteForm extends HookWidget {
                 item.name = value;
               },
               labelText: 'Item Summary',
+              fieldName: 'itemSummary',
             ),
             CustomTextFromField(
               textEditingController: _noteController,
@@ -39,6 +40,7 @@ class AdditionalNoteForm extends HookWidget {
               validator: (value){
                 return null;
               },
+              fieldName: 'addNote',
             ),
           ],
         ),
