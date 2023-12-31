@@ -57,6 +57,11 @@
   "cvv": "CVV",
   "XXX": "XXX",
   "add_card": "إضافة بطاقة",
+  "end_add_credit_card_screen": "________________________end_add_credit_card_screen______________",
+  "payment_methods_screen": "________________________payment_methods_screen______________",
+  "credit": "بطاقة ائتمان",
+  "payment_methods": "وسائل الدفع",
+  "add_debit_or_credit_card": "إضافة بطاقة الخصم أو الائتمان",
+  "end_payment_methods_screen": "________________________payment_methods_screen______________"
 
-  "end_add_credit_card_screen": "________________________end_add_credit_card_screen______________"
 }

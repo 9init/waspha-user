@@ -5,7 +5,7 @@ class AppDimensions {
   // Text sizes
   static double textSizeSmall = 14.sp;
   static double textSizeMedium = 14.sp;
-  static double textSizeLarge = 14.sp;
+  static double textSizeLarge = 18.sp;
   static double textSizeExtraLarge = 14.sp;
 
   // Heights
@@ -26,7 +26,7 @@ class AppDimensions {
   static double borderLarge = 60.r;
   static double borderExtraLarge = 80.r;
   //font Weight
-  static FontWeight medium = FontWeight.w600;
+  static FontWeight semiBold = FontWeight.w600;
   static FontWeight regular = FontWeight.w400;
   static FontWeight normal = FontWeight.w500;
   static FontWeight normalBold = FontWeight.w700;

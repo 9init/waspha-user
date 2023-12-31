@@ -21,13 +21,13 @@ class CustomTextTheme {
       ),
       titleSmall: TextStyle(
         fontSize: ScreenUtil().setSp(17),
-        fontWeight: AppDimensions.medium,
+        fontWeight: AppDimensions.semiBold,
         fontFamily: MyFontFamily.openSans,
         color: WasphaColors.black,
       ),
       displayLarge: TextStyle(
           fontSize: ScreenUtil().setSp(30),
-          fontWeight: AppDimensions.medium,
+          fontWeight: AppDimensions.semiBold,
           fontFamily: MyFontFamily.openSans,
           color: WasphaColors.black),
       // displayMedium: TextStyle(
