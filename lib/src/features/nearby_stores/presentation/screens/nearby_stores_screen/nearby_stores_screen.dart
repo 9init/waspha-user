@@ -6,16 +6,17 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:waspha/core/assets_gen/assets.gen.dart';
+import 'package:waspha/core/localization/localization.dart';
 import 'package:waspha/src/features/get_location/domain/get_location_domain.dart';
 import 'package:waspha/src/features/nearby_stores/domain/location.dart';
-import 'package:waspha/src/widgets/custom_close_button/custom_close_button.dart';
+import 'package:waspha/src/features/nearby_stores/presentation/screens/widgets/index.dart';
 
-import '../../../widgets/nearby_store/nearby_store_widget.dart';
-import '../domain/stores_repository.dart';
+import '../../../../../widgets/nearby_store/nearby_store_widget.dart';
+import '../../../domain/stores_repository.dart';
 
 class NearbyStoreScreen extends StatefulHookConsumerWidget {
   const NearbyStoreScreen({super.key});
@@ -30,81 +31,29 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
   List menuCategories = [];
   final List<Marker> locationMarkers = [];
   StreamSubscription<dynamic>? nearbyStoresSubscription;
-
-  Future<void> showCustomTrackingDialog(BuildContext context) async {
-    await showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Dear User'),
-        content: const Text(
-          'We care about your privacy and data security. '
-          'We use user tracking to provide personalized advertising. '
-          'By allowing tracking, you help us improve your experience.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              // Wait for dialog popping animation
-              await Future.delayed(const Duration(milliseconds: 200));
-              // Request system's tracking authorization dialog
-              await AppTrackingTransparency.requestTrackingAuthorization();
-
-              bool isDenied = await Permission.location.isDenied &&
-                  !await Permission.location.isRestricted;
-              if (!isDenied) showPermissionDialog(context);
-            },
-            child: const Text('Continue'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> showPermissionDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog.adaptive(
-        title: const Text("Location"),
-        content: Text(
-            "We use your location to find nearby stores, categories and products for you."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Permission.location.request();
-            },
-            child: const Text(
-              "Continue",
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+late LocationPermissionDialog locationPermissionDialog;
   @override
   void initState() {
     super.initState();
-
+    isNearbyStoreScreenActive.value = true;
     Future.delayed(Duration(seconds: 1), () async {
       if (Platform.isIOS &&
           await AppTrackingTransparency.trackingAuthorizationStatus ==
               TrackingStatus.notDetermined) {
-        showCustomTrackingDialog(context);
+        locationPermissionDialog.showCustomTrackingDialog(context);
       } else {
         bool isDenied = await Permission.location.isGranted &&
             !await Permission.location.isRestricted;
         debugPrint("isDenied $isDenied");
-        if (!isDenied) showPermissionDialog(context);
+        if (!isDenied) locationPermissionDialog.showPermissionDialog(context);
       }
     });
-    isNearbyStoreScreenActive.value = true;
   }
+
 
   @override
   Widget build(BuildContext context) {
+
     isNearbyStoreScreenActive.value = true;
     final isBottomSheetOpen = useState(false);
     return Scaffold(
@@ -137,9 +86,10 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                   position: markerLocation,
                   icon: BitmapDescriptor.fromBytes(
                     await assetToUint8List(
-                      "assets/images/map_markers/location.png",
-                      135,
+                      MyAssets.images.mapMarkers.user.path,
+                      20,
                     ),
+                    size: Size(50.w, 50.h),
                   ),
                 ),
               );
@@ -156,11 +106,15 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                   markerId: MarkerId("gpsLocation"),
                   position: LatLng(value.latitude!, value.longitude!),
                   infoWindow: InfoWindow(
-                      title: "Your Location", snippet: "You are here"),
-                  icon: BitmapDescriptor.fromBytes(await assetToUint8List(
-                    "assets/images/map_markers/user.png",
-                    300.w.toInt(),
-                  )),
+                      title: context.localization.your_Location,
+                      snippet: context.localization.you_are_here),
+                  icon: BitmapDescriptor.fromBytes(
+                    await assetToUint8List(
+                      MyAssets.images.mapMarkers.user.path,
+                      170.w.toInt(),
+                    ),
+                    size: Size(170.w, 170.h),
+                  ),
                 ),
               );
             });
@@ -185,7 +139,6 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                 for (var store in stores.toSet()) {
                   final image =
                       ref.watch(imageBytesProvider(store.image)).value;
-                   String address = store.address;
 
                   markers.add(
                     Marker(
@@ -218,7 +171,8 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                 log("Nearby Error: ",
                     error: error, level: 4, stackTrace: stackTrace);
 
-                return SnackBar(content: Text("Error Happened"));
+                return SnackBar(
+                    content: Text(context.localization.error_happened));
               },
               loading: () {
                 debugPrint('Inside Loading');
@@ -228,56 +182,11 @@ class _NearbyStoreScreenState extends ConsumerState<NearbyStoreScreen> {
                     initialLocation: LatLng(latitude, longitude),
                     dataLength: 0,
                     onMapCreated: (controller) => {},
-                    message: "Loading...",
+                    message: context.localization.loading,
                     categoryName: [],
                     markers: locationMarkers.toSet());
               });
         },
-      ),
-    );
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  const CustomDialog({
-    super.key,
-    this.isLogged = false,
-    required this.content,
-  });
-
-  final bool isLogged;
-  final String content;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
-      title: isLogged
-          ? Text("Need login")
-          : Align(alignment: Alignment.topRight, child: CustomCloseButton()),
-      actions: isLogged
-          ? [
-              TextButton(
-                  onPressed: () {
-                    context.go('/login');
-                  },
-                  child: Text(
-                    "Login",
-                    style: TextStyle(color: Colors.black),
-                  )),
-            ]
-          : [],
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Icon(Icons.lightbulb_outline),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Text(content),
-          ),
-        ],
       ),
     );
   }
