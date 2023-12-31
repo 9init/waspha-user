@@ -24,6 +24,9 @@
   "schedule": "Schedule",
   "ready_for_request": "Ready for request",
   "now": "Now",
+  "direct_request": "direct request \n",
+  "menu": "Menu",
+
   "scheduled": "Scheduled",
   "end_custom_need_screen": "________________________end_custom_need_menu_screen______________",
   "add_address_screen": "________________________add_address_screen______________",
