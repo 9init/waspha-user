@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
+import 'package:waspha/src/features/custom_need/presentation/providers/item_list_provider.dart';
+import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 
 import '../domain/menu_offer_domain.dart';
 
@@ -77,7 +78,7 @@ class SubCategoryOffer extends HookWidget {
                                   ),
                                   child:
                                       Consumer(builder: (context, ref, child) {
-                                    final items = ref.watch(itemsProvider);
+                                    final items = ref.watch(itemListProvider);
                                     return CircleAvatar(
                                       radius: 15,
                                       backgroundColor: Colors.black,

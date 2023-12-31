@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:readmore/readmore.dart';
 import 'package:waspha/src/features/notification/domain/notification_domain.dart';
+import 'package:waspha/src/widgets/custom_close_button/custom_close_button.dart';
 
-import '../../custom_need/presentation/custom_need.dart';
 
 class NotificationsScreen extends HookWidget {
   const NotificationsScreen({super.key});

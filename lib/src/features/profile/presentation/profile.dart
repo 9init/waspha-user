@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/core/const/colors/colors.dart';
 import 'package:waspha/core/extensions/custom_padding/custom_padding.dart';
 import 'package:waspha/src/features/activity/offers/presentation/offers.dart';
-import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:gap/gap.dart';
+import 'package:waspha/src/widgets/custom_close_button/custom_close_button.dart';
 import '../domain/profile_domain.dart';
 
 class ProfileScreen extends StatelessWidget {

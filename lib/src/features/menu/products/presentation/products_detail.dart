@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/features/custom_need/presentation/providers/item_list_provider.dart';
+import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 
 import '../../../custom_need/data/item_data.dart';
-import '../../../custom_need/presentation/custom_need.dart';
 
 class ProductDetails extends StatefulHookWidget {
   final data;
@@ -140,7 +141,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Consumer(builder: (context, ref, child) {
-                        final items = ref.watch(itemsProvider);
+                        final items = ref.watch(itemListProvider);
 
                         return GestureDetector(
                           onTap: () {
@@ -170,7 +171,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Item added')));
 
-                            print(ref.read(itemsProvider));
+                            print(ref.read(itemListProvider));
                           },
                           child: Center(
                             child: Container(

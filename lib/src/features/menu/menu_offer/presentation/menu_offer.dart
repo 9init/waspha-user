@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
+import 'package:waspha/src/features/custom_need/presentation/providers/item_list_provider.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
+import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 
 import '../../../../widgets/categories/categories_widget.dart';
 import '../../../../widgets/nearby_store/nearby_store_widget.dart';
@@ -47,7 +48,7 @@ class MenuOffer extends HookWidget {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Consumer(builder: (context, ref, child) {
-                              final items = ref.watch(itemsProvider);
+                              final items = ref.watch(itemListProvider);
                               return CircleAvatar(
                                 radius: 10,
                                 backgroundColor: Colors.black,

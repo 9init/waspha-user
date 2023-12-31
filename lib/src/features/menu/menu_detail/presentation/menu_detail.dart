@@ -4,10 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:waspha/core/const/colors/colors.dart';
 import 'package:waspha/core/localization/localization.dart';
-import 'package:waspha/src/features/custom_need/presentation/custom_need.dart';
 import 'package:waspha/src/features/menu/menu_detail/domain/menu_detail.dart';
 import 'package:flutter/services.dart';
+import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 
 import '../../../../widgets/nearby_store/domain/nearby_domain.dart';
 import '../../../login/domain/login_domain.dart';
@@ -101,8 +102,8 @@ class MenuDetailsBody extends HookWidget {
                         width: 35,
                         height: 35,
                         child: CustomBackButton(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
+                          backgroundColor: WasphaColors.white,
+                          foregroundColor: WasphaColors.black,
                         ),
                       ),
                     ),

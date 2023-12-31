@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 
-import '../../custom_need/presentation/custom_need.dart';
 import '../domain/legal_domain.dart';
 import 'package:gap/gap.dart';
 

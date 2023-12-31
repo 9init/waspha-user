@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
+import 'package:waspha/src/widgets/custom_close_button/custom_close_button.dart';
 
-import '../../custom_need/presentation/custom_need.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

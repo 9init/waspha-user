@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:waspha/src/widgets/custom_close_button/custom_close_button.dart';
 
-import '../../custom_need/presentation/custom_need.dart';
 
 class LegalScreen extends StatelessWidget {
   const LegalScreen({super.key});

@@ -6,14 +6,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:waspha/core/const/colors/colors.dart';
 import 'package:waspha/core/localization/localization.dart';
+import 'package:waspha/src/features/custom_need/presentation/providers/item_list_provider.dart';
 import 'package:waspha/src/features/login/domain/login_domain.dart';
 import 'package:waspha/src/features/menu/presentation/menu.dart';
-import 'package:waspha/src/features/nearby_stores/domain/get_favorite_stores_request_entity.dart';
 import 'package:waspha/src/features/profile/domain/pickup_radius.domain.dart';
 import 'package:waspha/src/widgets/nearby_store/domain/nearby_domain.dart';
 import 'package:waspha/src/widgets/search/search_widget.dart';
 
-import '../../features/custom_need/presentation/custom_need.dart';
 import '../../features/get_location/domain/get_location_domain.dart';
 import '../../features/likes/domain/likes_domain.dart';
 import '../../features/nearby_stores/domain/stores_repository.dart';
@@ -630,7 +629,7 @@ class _NearbyStoryMapState extends ConsumerState<NearbyStoreMap> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  ref.read(itemsProvider).clear();
+                                  ref.read(itemListProvider).clear();
 
                                   context.push('/menu-detail',
                                       extra: widget.stores[index].id);
