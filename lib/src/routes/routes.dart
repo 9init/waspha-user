@@ -14,7 +14,7 @@ import 'package:waspha/src/features/menu/menu_detail/presentation/menu_reviews.d
 import 'package:waspha/src/features/menu/presentation/menu.dart';
 import 'package:waspha/src/features/navigation/navigation.dart';
 import 'package:waspha/src/features/nearby_stores/domain/stores_repository.dart';
-import 'package:waspha/src/features/nearby_stores/presentation/nearby_stores.dart';
+import 'package:waspha/src/features/nearby_stores/presentation/screens/nearby_stores_screen/nearby_stores_screen.dart';
 import 'package:waspha/src/features/notification/presentation/notification.dart';
 import 'package:waspha/src/features/pass_reset/pass_reset.dart';
 import 'package:waspha/src/features/profile/presentation/legal.dart';
@@ -26,6 +26,7 @@ import 'package:waspha/src/features/profile/presentation/update_profile.dart';
 import 'package:waspha/src/features/register/presentation/register.dart';
 import 'package:waspha/src/features/resetPass/presentation/reset_pass.dart';
 import 'package:waspha/src/features/reviews/presentation/reviews.dart';
+import 'package:waspha/src/features/splash/presntation/screens/splash_screen.dart';
 import '../features/category/presentation/category.dart';
 import '../features/creditcard/presentation/screens/add_credit_screen/add_credit_screen.dart';
 import '../features/creditcard/presentation/screens/payment_methods_screen/payment_methods_screen.dart';
@@ -59,7 +60,7 @@ final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
 final router = Provider<GoRouter>(
   (ref) => GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: '/',
+    initialLocation: '/splash',
     navigatorKey: rootNavigatorKey,
     routes: [
       StatefulShellRoute.indexedStack(
@@ -201,7 +202,8 @@ final router = Provider<GoRouter>(
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: '/custom_need_screen',
-        builder: (context, state) => CustomNeedScreen(isMenu: state.extra! as bool),
+        builder: (context, state) =>
+            CustomNeedScreen(isMenu: state.extra! as bool),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
@@ -358,6 +360,11 @@ final router = Provider<GoRouter>(
       GoRoute(
         path: '/contacts',
         builder: (context, state) => ContactList(),
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        path: '/splash',
+        builder: (context, state) => SplashScreen(),
       ),
     ],
   ),

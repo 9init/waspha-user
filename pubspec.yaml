@@ -95,6 +95,11 @@ dependencies:
 
   # Hive database support for Flutter
   hive_flutter: ^1.1.0
+  # Functional error handling in flutter
+  dartz: ^0.10.1
+
+  # helps to implement value based equality without needing to explicitly override == and hashCode.
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -160,6 +165,7 @@ flutter:
   - assets/images/address/
   - assets/images/map_markers/
   - assets/images/provider_menu/
+  - assets/images/app/
   fonts:
     - family: OpenSans
       fonts:

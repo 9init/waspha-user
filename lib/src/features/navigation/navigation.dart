@@ -4,7 +4,7 @@ import 'package:waspha/src/features/activity/presentation/activity.dart';
 
 import '../creditcard/presentation/screens/payment_methods_screen/payment_methods_screen.dart';
 import '../likes/presentation/likes_screen.dart';
-import '../nearby_stores/presentation/nearby_stores.dart';
+import '../nearby_stores/presentation/screens/nearby_stores_screen/nearby_stores_screen.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
