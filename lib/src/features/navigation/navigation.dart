@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:waspha/src/features/activity/presentation/activity.dart';
 
-import '../creditcard/presentation/creditcard.dart';
+import '../creditcard/presentation/screens/payment_methods_screen/payment_methods_screen.dart';
 import '../likes/presentation/likes_screen.dart';
 import '../nearby_stores/presentation/nearby_stores.dart';
 

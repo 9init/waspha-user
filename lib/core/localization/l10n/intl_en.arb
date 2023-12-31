@@ -44,5 +44,17 @@
   "please_enter_a_valid_expiry_date": "Please enter a valid expiry date",
   "please_enter_a_valid_cvv": "Please enter a valid CVV",
   "please_enter_a_valid_card_holder_name": "Please enter a valid card holder name",
+  "valid_thru": "VALID\nTHRU",
+  "card_holder": "CARD HOLDER",
+  "please_input_a_valid_cvv": "Please input a valid CVV",
+  "please_input_a_valid_date": "Please input a valid date",
+  "please_input_a_valid_number": "Please input a valid number",
+  "number": "Number",
+  "XXXX_XXXX_XXXX_XXXX": "XXXX XXXX XXXX XXXX",
+  "expired_date": "Expired Date",
+  "mm_yy": "MM/YY",
+  "cvv": "CVV",
+  "XXX": "XXX",
+  "add_card": "Add card",
   "end_add_credit_card_screen": "________________________end_add_credit_card_screen______________"
 }

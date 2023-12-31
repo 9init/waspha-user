@@ -27,9 +27,9 @@ import 'package:waspha/src/features/register/presentation/register.dart';
 import 'package:waspha/src/features/resetPass/presentation/reset_pass.dart';
 import 'package:waspha/src/features/reviews/presentation/reviews.dart';
 import '../features/category/presentation/category.dart';
-import '../features/creditcard/presentation/add_credit.dart';
-import '../features/creditcard/presentation/creditcard.dart';
-import '../features/creditcard/presentation/creditdetails.dart';
+import '../features/creditcard/presentation/screens/add_credit_screen/add_credit_screen.dart';
+import '../features/creditcard/presentation/screens/payment_methods_screen/payment_methods_screen.dart';
+import '../features/creditcard/presentation/screens/card_details_screen/card_details_screen.dart';
 import '../features/custom_need/presentation/screens/custom_need_screen/custom_need.dart';
 import '../features/custom_need/presentation/select_date.dart';
 import '../features/get_location/presentation/get_location_map.dart';
@@ -345,7 +345,7 @@ final router = Provider<GoRouter>(
       ),
       GoRoute(
         path: '/add_credit_card',
-        builder: (context, state) => AddCreditCard(),
+        builder: (context, state) => AddCreditCardScreen(),
       ),
       GoRoute(
           path: '/edit_location',

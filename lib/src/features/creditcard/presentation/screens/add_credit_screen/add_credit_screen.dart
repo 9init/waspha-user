@@ -3,9 +3,10 @@ import 'package:credit_card_type_detector/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:waspha/core/assets_gen/assets.gen.dart';
 import 'package:waspha/core/di/index.dart';
 import 'package:waspha/core/enums/constants_enums.dart';
 import 'package:waspha/core/localization/localization.dart';
@@ -13,37 +14,37 @@ import 'package:waspha/src/features/creditcard/domain/credit_domain.dart';
 import 'package:waspha/src/widgets/custom_back_button/custom_back_button.dart';
 import 'package:waspha/src/widgets/toast_manager/toast_manager.dart';
 
-import '../../../widgets/auth_btn/auth_btn.dart';
+import '../../../../../widgets/auth_btn/auth_btn.dart';
 
-class AddCreditCard extends HookWidget {
-  AddCreditCard({super.key});
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState<String>>? cvvCodeKey =
-      GlobalKey<FormFieldState<String>>();
-
-  CardType? getCardType(String number) {
-    var types = detectCCType(number);
-    if (types.contains(CreditCardType.visa())) {
-      return CardType.visa;
-    }
-    if (types.contains(CreditCardType.mastercard())) {
-      return CardType.mastercard;
-    }
-    if (types.contains(CreditCardType.americanExpress())) {
-      return CardType.americanExpress;
-    }
-    if (types.contains(CreditCardType.discover())) {
-      return CardType.discover;
-    }
-    if (types.contains(CreditCardType.maestro())) {
-      return CardType.otherBrand;
-    }
-    return null;
-  }
+class AddCreditCardScreen extends HookWidget {
+  AddCreditCardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final GlobalKey<FormFieldState<String>>? cvvCodeKey =
+        GlobalKey<FormFieldState<String>>();
+
+    CardType? getCardType(String number) {
+      var types = detectCCType(number);
+      if (types.contains(CreditCardType.visa())) {
+        return CardType.visa;
+      }
+      if (types.contains(CreditCardType.mastercard())) {
+        return CardType.mastercard;
+      }
+      if (types.contains(CreditCardType.americanExpress())) {
+        return CardType.americanExpress;
+      }
+      if (types.contains(CreditCardType.discover())) {
+        return CardType.discover;
+      }
+      if (types.contains(CreditCardType.maestro())) {
+        return CardType.otherBrand;
+      }
+      return null;
+    }
+
     final cardNumber = useState('');
     final expiredData = useState('');
     final cvv = useState('');
@@ -75,11 +76,11 @@ class AddCreditCard extends HookWidget {
                 isShadowEnabled: true,
                 shadowConfig: FloatingShadowConfig(),
               ),
-              labelValidThru: 'VALID\nTHRU',
+              labelValidThru: context.localization.valid_thru,
               obscureCardNumber: true,
               obscureInitialCardNumber: false,
               obscureCardCvv: true,
-              labelCardHolder: 'CARD HOLDER',
+              labelCardHolder: context.localization.card_holder,
               height: 175,
               cardType: getCardType(cardNumber.value),
               width: MediaQuery.of(context).size.width,
@@ -87,9 +88,8 @@ class AddCreditCard extends HookWidget {
               customCardTypeIcons: [
                 CustomCardTypeIcon(
                   cardType: CardType.otherBrand,
-                  cardImage: SvgPicture.asset("assets/images/credit/meeza.svg",
-                      width: 30),
-                )
+                  cardImage: MyAssets.images.credit.meeza.svg(width: 30.w),
+                ),
               ],
             ),
             CreditCardForm(
@@ -123,9 +123,9 @@ class AddCreditCard extends HookWidget {
               isExpiryDateVisible: true,
               enableCvv: true,
               cvvCodeKey: cvvCodeKey,
-              cvvValidationMessage: 'Please input a valid CVV',
-              dateValidationMessage: 'Please input a valid date',
-              numberValidationMessage: 'Please input a valid number',
+              cvvValidationMessage: context.localization.please_input_a_valid_cvv,
+              dateValidationMessage: context.localization.please_input_a_valid_date,
+              numberValidationMessage: context.localization.please_input_a_valid_number,
               cardNumberValidator: (String? cardNumber) {
                 if (cardNumber!.isEmpty) {
                   return context.localization.please_enter_a_valid_card_number;
@@ -152,23 +152,23 @@ class AddCreditCard extends HookWidget {
                 return null;
               },
 
-              autovalidateMode: AutovalidateMode.always,
+              autovalidateMode: AutovalidateMode.disabled,
               disableCardNumberAutoFillHints: false,
-              inputConfiguration: const InputConfiguration(
+              inputConfiguration:  InputConfiguration(
                 cardNumberDecoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Number',
-                  hintText: 'XXXX XXXX XXXX XXXX',
+                  labelText: context.localization.number,
+                  hintText: context.localization.XXXX_XXXX_XXXX_XXXX,
                 ),
                 expiryDateDecoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Expired Date',
-                  hintText: 'MM/YY',
+                  labelText: context.localization.expired_date,
+                  hintText: context.localization.mm_yy,
                 ),
                 cvvCodeDecoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'CVV',
-                  hintText: 'XXX',
+                  labelText: context.localization.cvv,
+                  hintText: context.localization.XXX,
                 ),
                 cardHolderDecoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -235,7 +235,7 @@ class AddCreditCard extends HookWidget {
                     }
                     ;
                   },
-                  text: "Add card",
+                  text: context.localization.add_card,
                 );
               },
             ),
